@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "989862851610",
+    "project_id": "sporth-c3c47",
+    "storage_bucket": "sporth-c3c47.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989862851610:android:b1c989397f843aea288da3",
+        "android_client_info": {
+          "package_name": "com.diferent.sporth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "989862851610-k9468fsaao8vpqomhh6jmninqkf7g7kr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCx3eN_UUoEc2mS6m7chHAo_QfAM3GkyWA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "989862851610-k9468fsaao8vpqomhh6jmninqkf7g7kr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

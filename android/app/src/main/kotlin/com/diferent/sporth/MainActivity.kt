@@ -1,4 +1,4 @@
-package com.example.sporth
+package com.diferent.sporth
 
 import io.flutter.embedding.android.FlutterActivity
 
