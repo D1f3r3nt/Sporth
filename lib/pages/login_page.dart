@@ -31,12 +31,14 @@ class LoginPage extends StatelessWidget {
                 width: size.width * 0.4,
                 fit: BoxFit.contain,
               ),
+              const SizedBox(height: 20),
               const FormInput(
                 icon: Icon(
                   Icons.email,
                   color: ColorsUtils.black,
                 ),
                 placeholder: 'Email',
+                fillColor: ColorsUtils.lightblue,
               ),
               const SizedBox(height: 20),
               const FormInput(
@@ -45,22 +47,21 @@ class LoginPage extends StatelessWidget {
                   color: ColorsUtils.black,
                 ),
                 placeholder: 'Contraseña',
+                fillColor: ColorsUtils.lightblue,
               ),
               const SizedBox(height: 10),
-              Padding(
+              Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    child: const Text(
-                      'Has olvidado la contraseña?',
-                      style: TextUtils.kanit_16_white,
-                    ),
-                    onPressed: () {},
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  child: const Text(
+                    'Has olvidado la contraseña?',
+                    style: TextUtils.kanit_16_white,
                   ),
+                  onPressed: () {},
                 ),
               ),
-              const SizedBox(height: 30),
+              const Expanded(child: SizedBox()),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: ButtonInput(
@@ -84,12 +85,12 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: ButtonGoogleInput(),
               ),
               const Expanded(child: SizedBox()),
-              Text(
+              const Text(
                 'Desarrollado por Diferent Company.',
                 style: TextUtils.kanit_16_white,
               ),
