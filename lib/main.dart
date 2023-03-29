@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/pages/login_page.dart';
+import 'package:sporth/pages/password_page.dart';
 import 'package:sporth/pages/sing_up_page.dart';
 
 void main() => runApp(const MyApp());
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material App',
-      home: SingUpPage(),
+      home: PasswordPage(),
     );
   }
 }
