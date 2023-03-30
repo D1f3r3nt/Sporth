@@ -42,6 +42,18 @@ class TextUtils {
     color: ColorsUtils.black,
   );
 
+  static const TextStyle kanit_14_black = TextStyle(
+    fontFamily: 'Kanit',
+    fontSize: 14.0,
+    color: ColorsUtils.black,
+  );
+
+  static const TextStyle kanit_12_black = TextStyle(
+    fontFamily: 'Kanit',
+    fontSize: 12.0,
+    color: ColorsUtils.black,
+  );
+
   static const TextStyle kanitBold_18 = TextStyle(
     fontFamily: 'Kanit',
     fontSize: 18.0,
