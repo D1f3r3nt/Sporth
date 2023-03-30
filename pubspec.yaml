@@ -25,6 +25,9 @@ flutter:
   # Assets to your application:
   assets:
     - image/
+    - image/icons/
+    - data/
+
   fonts:
     - family: Kanit
       fonts:
