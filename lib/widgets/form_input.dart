@@ -8,6 +8,7 @@ class FormInput extends StatelessWidget {
   final Icon icon;
   final String placeholder;
   final Color fillColor;
+  final TextStyle styleText;
 
   const FormInput({
     super.key,
@@ -15,6 +16,7 @@ class FormInput extends StatelessWidget {
     required this.icon,
     required this.placeholder,
     required this.fillColor,
+    this.styleText = TextUtils.kanit_18_black,
   });
 
   @override
@@ -41,7 +43,7 @@ class FormInput extends StatelessWidget {
             prefixIcon: icon,
             prefixIconColor: ColorsUtils.black,
             hintText: placeholder,
-            hintStyle: TextUtils.kanit_18_black,
+            hintStyle: styleText,
             fillColor: fillColor,
             filled: true,
           ),
