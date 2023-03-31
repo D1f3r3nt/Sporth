@@ -4,10 +4,14 @@ import 'package:sporth/utils/utils.dart';
 class ButtonInput extends StatelessWidget {
   final String text;
   final Function()? funcion;
+  final Color color;
+  final TextStyle style;
 
   ButtonInput({
     required this.text,
     required this.funcion,
+    this.color = ColorsUtils.black,
+    this.style = TextUtils.kanitItalic_24_white,
   });
 
   @override
@@ -16,7 +20,7 @@ class ButtonInput extends StatelessWidget {
       onTap: funcion,
       child: Container(
         decoration: BoxDecoration(
-          color: ColorsUtils.black,
+          color: color,
           boxShadow: EffectUtils.dropShadow,
           borderRadius: BorderRadius.circular(25.0),
         ),
@@ -24,7 +28,7 @@ class ButtonInput extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: TextUtils.kanitItalic_24_white,
+            style: style,
           ),
         ),
       ),

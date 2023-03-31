@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sporth/pages/home_page.dart';
 import 'package:sporth/pages/login_page.dart';
+import 'package:sporth/pages/search_page.dart';
 import 'package:sporth/pages/user_page.dart';
 import 'package:sporth/providers/dto/bottom_nav_provider.dart';
 import 'package:sporth/utils/color_utils.dart';
@@ -104,6 +105,10 @@ class PrincipalPlantilla extends StatelessWidget {
       case 0:
         {
           return HomePage();
+        }
+      case 1:
+        {
+          return SearchPage();
         }
       case 4:
         {
