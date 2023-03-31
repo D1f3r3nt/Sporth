@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sporth/pages/calendar_page.dart';
 import 'package:sporth/pages/home_page.dart';
 import 'package:sporth/pages/login_page.dart';
 import 'package:sporth/pages/search_page.dart';
@@ -109,6 +110,10 @@ class PrincipalPlantilla extends StatelessWidget {
       case 1:
         {
           return SearchPage();
+        }
+      case 3:
+        {
+          return CalendarPage();
         }
       case 4:
         {
