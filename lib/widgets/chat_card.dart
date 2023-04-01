@@ -1,0 +1,36 @@
+import 'package:flutter/material.dart';
+import 'package:sporth/utils/text_utils.dart';
+
+class ChatCard extends StatelessWidget {
+  final String nombre;
+  final String username;
+  final String image;
+  final Function() onTap;
+
+  const ChatCard({
+    super.key,
+    required this.nombre,
+    required this.username,
+    required this.image,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        nombre,
+        style: TextUtils.kanit_18_black,
+      ),
+      subtitle: Text(
+        username,
+        style: TextUtils.kanit_16_grey,
+      ),
+      leading: CircleAvatar(
+        backgroundImage: NetworkImage(image),
+        radius: 30.0,
+      ),
+      onTap: onTap,
+    );
+  }
+}
