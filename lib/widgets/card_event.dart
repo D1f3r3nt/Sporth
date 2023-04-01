@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/utils/color_utils.dart';
-import 'package:sporth/utils/text_utils.dart';
+import 'package:sporth/utils/utils.dart';
 
 class CardEvent extends StatelessWidget {
   const CardEvent({super.key});

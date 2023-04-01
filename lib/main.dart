@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sporth/pages/gustos_page.dart';
-import 'package:sporth/pages/login_page.dart';
-import 'package:sporth/pages/password_page.dart';
-import 'package:sporth/pages/personal_page.dart';
-import 'package:sporth/pages/principal_plantilla.dart';
-import 'package:sporth/pages/sing_up_page.dart';
-import 'package:sporth/providers/dto/bottom_nav_provider.dart';
-import 'package:sporth/providers/local/deportes_provider.dart';
+import 'package:sporth/providers/providers.dart';
+import 'package:sporth/routes/routes.dart';
 
-void main() => runApp(const AppState());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(const AppState());
+}
 
 class AppState extends StatelessWidget {
   const AppState({super.key});
@@ -34,7 +31,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material App',
-      home: PrincipalPlantilla(),
+      routes: getRoutes,
+      initialRoute: 'home',
     );
   }
 }

@@ -8,4 +8,6 @@ export 'form_input.dart';
 export 'gustos_buttons.dart';
 export 'pop_button.dart';
 export 'search_deporte.dart';
+export 'select_image_bottom.dart';
+export 'text_input.dart';
 export 'toast_card.dart';

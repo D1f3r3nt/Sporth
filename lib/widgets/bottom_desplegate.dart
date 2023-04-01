@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/utils/utils.dart';
-import 'package:sporth/widgets/button_input.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class BottomDesplegate extends StatefulWidget {
@@ -21,7 +20,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
     return SizedBox(
       height: size.height * 0.75,
       child: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0)),
           color: ColorsUtils.white,

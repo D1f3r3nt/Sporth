@@ -18,7 +18,10 @@ class PasswordPage extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              const PopButton(text: 'Atras'),
+              PopButton(
+                text: 'Atras',
+                onPressed: () {},
+              ),
               const SizedBox(height: 15.0),
               Expanded(
                 child: Container(

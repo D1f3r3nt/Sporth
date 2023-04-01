@@ -7,7 +7,8 @@ class ButtonInput extends StatelessWidget {
   final Color color;
   final TextStyle style;
 
-  ButtonInput({
+  const ButtonInput({
+    super.key,
     required this.text,
     required this.funcion,
     this.color = ColorsUtils.black,

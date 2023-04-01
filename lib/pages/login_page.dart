@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/utils/color_utils.dart';
-import 'package:sporth/utils/effect_utils.dart';
-import 'package:sporth/utils/text_utils.dart';
-import 'package:sporth/widgets/button_google_input.dart';
-import 'package:sporth/widgets/button_input.dart';
-import 'package:sporth/widgets/form_input.dart';
+import 'package:sporth/utils/utils.dart';
+import 'package:sporth/widgets/widgets.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});

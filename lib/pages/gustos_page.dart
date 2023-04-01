@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sporth/models/dto/deportes_dto.dart';
-import 'package:sporth/providers/local/deportes_provider.dart';
+import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
-import 'package:sporth/widgets/gustos_buttons.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class GustosPage extends StatefulWidget {
@@ -29,7 +27,10 @@ class _GustosPageState extends State<GustosPage> {
         child: SafeArea(
           child: Column(
             children: [
-              const PopButton(text: 'Entrar'),
+              PopButton(
+                text: 'Entrar',
+                onPressed: () {},
+              ),
               const SizedBox(height: 15.0),
               Container(
                 alignment: Alignment.centerLeft,

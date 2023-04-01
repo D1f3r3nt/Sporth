@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sporth/pages/calendar_page.dart';
-import 'package:sporth/pages/home_page.dart';
-import 'package:sporth/pages/login_page.dart';
-import 'package:sporth/pages/search_page.dart';
-import 'package:sporth/pages/user_page.dart';
-import 'package:sporth/providers/dto/bottom_nav_provider.dart';
-import 'package:sporth/utils/color_utils.dart';
-import 'package:sporth/utils/effect_utils.dart';
-import 'package:sporth/utils/text_utils.dart';
+import 'package:sporth/pages/pages.dart';
+import 'package:sporth/providers/providers.dart';
+import 'package:sporth/utils/utils.dart';
 
 class PrincipalPlantilla extends StatelessWidget {
   const PrincipalPlantilla({super.key});
@@ -58,7 +51,7 @@ class PrincipalPlantilla extends StatelessWidget {
                   ],
                 )
               : null,
-      body: gatewayPages(bottomNavProvider.index),
+      body: gatewayPages(context, bottomNavProvider.index),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: bottomNavProvider.index,
         showSelectedLabels: false,
@@ -96,32 +89,34 @@ class PrincipalPlantilla extends StatelessWidget {
         selectedFontSize: 0.0,
         unselectedFontSize: 0.0,
         type: BottomNavigationBarType.fixed,
-        onTap: (value) => bottomNavProvider.index = value,
+        onTap: (value) {
+          if (value == 2) {
+            Navigator.pushReplacementNamed(context, 'add-page');
+            value = 0;
+          }
+          bottomNavProvider.index = value;
+        },
       ),
     );
   }
 
-  gatewayPages(int index) {
+  gatewayPages(BuildContext context, int index) {
     switch (index) {
       case 0:
         {
-          return HomePage();
+          return const HomePage();
         }
       case 1:
         {
-          return SearchPage();
+          return const SearchPage();
         }
       case 3:
         {
-          return CalendarPage();
+          return const CalendarPage();
         }
       case 4:
         {
-          return UserPage();
-        }
-      default:
-        {
-          return LoginPage();
+          return const UserPage();
         }
     }
   }

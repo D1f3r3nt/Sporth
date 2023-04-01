@@ -1,0 +1,11 @@
+export 'add_page.dart';
+export 'calendar_page.dart';
+export 'gustos_page.dart';
+export 'home_page.dart';
+export 'login_page.dart';
+export 'password_page.dart';
+export 'personal_page.dart';
+export 'principal_plantilla.dart';
+export 'search_page.dart';
+export 'sing_up_page.dart';
+export 'user_page.dart';

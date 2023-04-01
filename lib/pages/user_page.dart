@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sporth/providers/local/deportes_provider.dart';
+import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
-import 'package:sporth/widgets/card_achievement.dart';
-import 'package:sporth/widgets/card_publicacion.dart';
-import 'package:sporth/widgets/toast_card.dart';
+import 'package:sporth/widgets/widgets.dart';
 
 class UserPage extends StatelessWidget {
   const UserPage({super.key});
@@ -20,7 +17,7 @@ class UserPage extends StatelessWidget {
     final listDeportes = deportesProvider.deportes;
 
     return SafeArea(
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: Column(
@@ -63,7 +60,7 @@ class UserPage extends StatelessWidget {
               nombre,
               style: TextUtils.kanitItalic_24_black,
             ),
-            Container(
+            SizedBox(
               height: 60,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -76,7 +73,7 @@ class UserPage extends StatelessWidget {
                 },
               ),
             ),
-            Container(
+            SizedBox(
               height: 48,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,

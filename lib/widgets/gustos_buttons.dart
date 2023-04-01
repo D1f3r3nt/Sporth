@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/utils/color_utils.dart';
-import 'package:sporth/utils/effect_utils.dart';
-import 'package:sporth/utils/text_utils.dart';
+import 'package:sporth/utils/utils.dart';
 
 class GustosButtons extends StatelessWidget {
   final bool active;

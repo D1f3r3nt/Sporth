@@ -3,9 +3,12 @@ import 'package:sporth/utils/utils.dart';
 
 class PopButton extends StatelessWidget {
   final String text;
+  final Function() onPressed;
+
   const PopButton({
     Key? key,
     required this.text,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -15,6 +18,7 @@ class PopButton extends StatelessWidget {
       child: Container(
         alignment: Alignment.centerLeft,
         child: TextButton(
+          onPressed: onPressed,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -28,7 +32,6 @@ class PopButton extends StatelessWidget {
               ),
             ],
           ),
-          onPressed: () {},
         ),
       ),
     );

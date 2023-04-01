@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/utils/text_utils.dart';
-import 'package:sporth/widgets/card_event.dart';
+import 'package:sporth/utils/utils.dart';
+import 'package:sporth/widgets/widgets.dart';
 
 class CardPublicacion extends StatelessWidget {
   const CardPublicacion({super.key});

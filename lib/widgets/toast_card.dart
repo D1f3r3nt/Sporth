@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/utils/effect_utils.dart';
 import 'package:sporth/utils/utils.dart';
 
 class ToastCard extends StatelessWidget {

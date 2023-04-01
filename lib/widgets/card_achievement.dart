@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/utils/color_utils.dart';
+import 'package:sporth/utils/utils.dart';
 
 class CardAchievement extends StatelessWidget {
   const CardAchievement({super.key});
