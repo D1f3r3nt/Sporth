@@ -23,7 +23,8 @@ class PrincipalPlantilla extends StatelessWidget {
               elevation: 0.5,
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, 'chats'),
                   icon: const Icon(
                     Icons.message,
                     color: ColorsUtils.black,
