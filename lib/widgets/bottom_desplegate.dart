@@ -104,14 +104,16 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                     style: TextUtils.kanit_18_black,
                   ),
                   const SizedBox(height: 5.0),
-                  const FormInput(
-                    icon: Icon(
+                  FormInput(
+                    icon: const Icon(
                       Icons.search,
                       color: ColorsUtils.grey,
                     ),
                     placeholder: 'Buscar',
+                    controller: TextEditingController(),
                     fillColor: ColorsUtils.white,
                     styleText: TextUtils.kanit_18_grey,
+                    validator: (p0) => null,
                   ),
                   const SizedBox(height: 5.0),
                   Padding(
@@ -129,22 +131,26 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                     'Dia y hora',
                     style: TextUtils.kanit_18_black,
                   ),
-                  const FormInput(
-                    icon: Icon(
+                  FormInput(
+                    icon: const Icon(
                       Icons.calendar_month,
                     ),
                     placeholder: 'Buscar',
+                    controller: TextEditingController(),
                     fillColor: ColorsUtils.white,
                     styleText: TextUtils.kanit_18_black,
+                    validator: (p0) => null,
                   ),
                   const SizedBox(height: 20.0),
-                  const FormInput(
-                    icon: Icon(
+                  FormInput(
+                    icon: const Icon(
                       Icons.access_time,
                     ),
                     placeholder: 'Buscar',
+                    controller: TextEditingController(),
                     fillColor: ColorsUtils.white,
                     styleText: TextUtils.kanit_18_black,
+                    validator: (p0) => null,
                   ),
                 ],
               ),

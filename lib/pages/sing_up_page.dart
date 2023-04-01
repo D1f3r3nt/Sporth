@@ -20,7 +20,8 @@ class SingUpPage extends StatelessWidget {
             children: [
               PopButton(
                 text: 'Entrar',
-                onPressed: () {},
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, 'login'),
               ),
               const SizedBox(height: 15.0),
               Expanded(
@@ -51,48 +52,56 @@ class SingUpPage extends StatelessWidget {
                         ),
                       ),
                       const Expanded(flex: 1, child: SizedBox()),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 20.0),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
                         child: FormInput(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.email,
                             color: ColorsUtils.black,
                           ),
                           placeholder: 'Email',
+                          controller: TextEditingController(),
                           fillColor: ColorsUtils.white,
+                          validator: (p0) => null,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 20.0),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
                         child: FormInput(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.person,
                             color: ColorsUtils.black,
                           ),
                           placeholder: 'Usuario',
+                          controller: TextEditingController(),
                           fillColor: ColorsUtils.white,
+                          validator: (p0) => null,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 20.0),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
                         child: FormInput(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.lock,
                             color: ColorsUtils.black,
                           ),
                           placeholder: 'Contraseña',
+                          controller: TextEditingController(),
                           fillColor: ColorsUtils.white,
+                          validator: (p0) => null,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 20.0),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
                         child: FormInput(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.lock,
                             color: ColorsUtils.black,
                           ),
                           placeholder: 'Confirmar contraseña',
+                          controller: TextEditingController(),
                           fillColor: ColorsUtils.white,
+                          validator: (p0) => null,
                         ),
                       ),
                       CheckboxListTile(

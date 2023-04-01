@@ -43,48 +43,56 @@ class PersonalPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30.0),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 20.0),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
                 child: FormInput(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.person,
                     color: ColorsUtils.black,
                   ),
+                  controller: TextEditingController(),
                   placeholder: 'Nombre',
                   fillColor: ColorsUtils.white,
+                  validator: (p0) => null,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 20.0),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
                 child: FormInput(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.person,
                     color: ColorsUtils.black,
                   ),
                   placeholder: 'Apellido',
+                  controller: TextEditingController(),
                   fillColor: ColorsUtils.white,
+                  validator: (p0) => null,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 20.0),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
                 child: FormInput(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.phone,
                     color: ColorsUtils.black,
                   ),
                   placeholder: 'Telefono',
+                  controller: TextEditingController(),
                   fillColor: ColorsUtils.white,
+                  validator: (p0) => null,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 20.0),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
                 child: FormInput(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.calendar_month,
                     color: ColorsUtils.black,
                   ),
+                  controller: TextEditingController(),
                   placeholder: 'Fecha de nacimiento',
                   fillColor: ColorsUtils.white,
+                  validator: (p0) => null,
                 ),
               ),
               const Expanded(child: SizedBox()),

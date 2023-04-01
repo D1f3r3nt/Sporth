@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/utils/utils.dart';
-import 'package:sporth/widgets/chat_message.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class PersonalChatPage extends StatelessWidget {
@@ -10,6 +9,7 @@ class PersonalChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserLocal user = ModalRoute.of(context)!.settings.arguments as UserLocal;
+    final _messageController = TextEditingController();
 
     return Scaffold(
       body: Container(
@@ -82,12 +82,14 @@ class PersonalChatPage extends StatelessWidget {
                         height: 80.0,
                         child: Row(
                           children: [
-                            const Expanded(
+                            Expanded(
                               child: FormInput(
                                 icon: null,
                                 placeholder: 'Escribe',
+                                controller: _messageController,
                                 fillColor: ColorsUtils.white,
                                 styleText: TextUtils.kanit_18_grey,
+                                validator: (p0) => null,
                               ),
                             ),
                             IconButton(

@@ -7,19 +7,28 @@ class FormInput extends StatelessWidget {
   final String placeholder;
   final Color fillColor;
   final TextStyle styleText;
+  final String? Function(String?) validator;
+  final TextInputType textInputType;
+  final bool password;
+  final TextEditingController controller;
 
   const FormInput({
     super.key,
-    this.form,
     required this.icon,
     required this.placeholder,
     required this.fillColor,
+    required this.validator,
+    required this.controller,
+    this.textInputType = TextInputType.text,
+    this.password = false,
+    this.form,
     this.styleText = TextUtils.kanit_18_black,
   });
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    String? _errorText;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -29,9 +38,10 @@ class FormInput extends StatelessWidget {
           borderRadius: BorderRadius.circular(60.0),
         ),
         child: TextFormField(
-          validator: (value) => (value == null || value.isEmpty)
-              ? 'Introduzca: $placeholder'
-              : null,
+          controller: controller,
+          keyboardType: textInputType,
+          obscureText: password,
+          validator: validator,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(60.0),

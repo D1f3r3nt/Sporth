@@ -26,15 +26,17 @@ class _SearchPageState extends State<SearchPage> {
             const SizedBox(height: 20),
             Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: FormInput(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.search,
                       color: ColorsUtils.grey,
                     ),
                     placeholder: 'Buscar',
+                    controller: TextEditingController(),
                     fillColor: ColorsUtils.white,
                     styleText: TextUtils.kanit_18_grey,
+                    validator: (p0) => null,
                   ),
                 ),
                 IconButton(

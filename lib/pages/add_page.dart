@@ -123,22 +123,26 @@ class _AddPageState extends State<AddPage> {
                                 style: TextUtils.kanit_18_black,
                               ),
                               const SizedBox(height: 20.0),
-                              const FormInput(
-                                icon: Icon(
+                              FormInput(
+                                icon: const Icon(
                                   Icons.calendar_month,
                                 ),
                                 placeholder: 'Buscar',
+                                controller: TextEditingController(),
                                 fillColor: ColorsUtils.white,
                                 styleText: TextUtils.kanit_18_black,
+                                validator: (p0) => null,
                               ),
                               const SizedBox(height: 20.0),
-                              const FormInput(
-                                icon: Icon(
+                              FormInput(
+                                icon: const Icon(
                                   Icons.access_time,
                                 ),
                                 placeholder: 'Buscar',
+                                controller: TextEditingController(),
                                 fillColor: ColorsUtils.white,
                                 styleText: TextUtils.kanit_18_black,
+                                validator: (p0) => null,
                               ),
                               const SizedBox(height: 20.0),
                               const Text(
@@ -147,14 +151,16 @@ class _AddPageState extends State<AddPage> {
                               ),
                               const SizedBox(height: 20.0),
                               const SizedBox(height: 5.0),
-                              const FormInput(
-                                icon: Icon(
+                              FormInput(
+                                icon: const Icon(
                                   Icons.search,
                                   color: ColorsUtils.grey,
                                 ),
                                 placeholder: 'Buscar',
+                                controller: TextEditingController(),
                                 fillColor: ColorsUtils.white,
                                 styleText: TextUtils.kanit_18_grey,
+                                validator: (p0) => null,
                               ),
                               const SizedBox(height: 5.0),
                               Padding(
@@ -173,13 +179,15 @@ class _AddPageState extends State<AddPage> {
                                 style: TextUtils.kanit_18_black,
                               ),
                               const SizedBox(height: 20.0),
-                              const FormInput(
-                                icon: Icon(
+                              FormInput(
+                                icon: const Icon(
                                   Icons.people,
                                 ),
                                 placeholder: 'Max. Personas',
+                                controller: TextEditingController(),
                                 fillColor: ColorsUtils.white,
                                 styleText: TextUtils.kanit_18_black,
+                                validator: (p0) => null,
                               ),
                               const SizedBox(height: 20.0),
                               Row(
@@ -199,12 +207,15 @@ class _AddPageState extends State<AddPage> {
                                 ],
                               ),
                               if (_precio)
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 20.0),
                                   child: FormInput(
-                                    icon: Icon(Icons.euro),
+                                    icon: const Icon(Icons.euro),
                                     placeholder: 'Precio',
+                                    controller: TextEditingController(),
                                     fillColor: ColorsUtils.white,
+                                    validator: (p0) => null,
                                   ),
                                 ),
                               Row(
@@ -224,12 +235,15 @@ class _AddPageState extends State<AddPage> {
                                 ],
                               ),
                               if (_privado)
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 20.0),
                                   child: FormInput(
-                                    icon: Icon(Icons.lock),
+                                    icon: const Icon(Icons.lock),
                                     placeholder: 'Contraseña',
+                                    controller: TextEditingController(),
                                     fillColor: ColorsUtils.white,
+                                    validator: (p0) => null,
                                   ),
                                 ),
                             ],
