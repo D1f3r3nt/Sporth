@@ -4,6 +4,7 @@ export 'button_input.dart';
 export 'card_achievement.dart';
 export 'card_event.dart';
 export 'card_publicacion.dart';
+export 'chat_card.dart';
 export 'form_input.dart';
 export 'gustos_buttons.dart';
 export 'pop_button.dart';

@@ -3,7 +3,7 @@ import 'package:sporth/utils/utils.dart';
 
 class FormInput extends StatelessWidget {
   final Form? form;
-  final Icon icon;
+  final Icon? icon;
   final String placeholder;
   final Color fillColor;
   final TextStyle styleText;
@@ -37,7 +37,9 @@ class FormInput extends StatelessWidget {
               borderRadius: BorderRadius.circular(60.0),
               borderSide: BorderSide.none,
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 5.0),
+            contentPadding: icon == null
+                ? const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0)
+                : const EdgeInsets.symmetric(vertical: 5.0),
             prefixIcon: icon,
             prefixIconColor: ColorsUtils.black,
             hintText: placeholder,

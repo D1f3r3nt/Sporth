@@ -1,10 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:sporth/models/models.dart';
 import 'package:sporth/utils/utils.dart';
-import 'package:sporth/widgets/chat_card.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class ChatsPage extends StatelessWidget {
-  const ChatsPage({super.key});
+  final user = UserLocal(
+    028,
+    'Marc',
+    'Santisteban',
+    'msantisteban',
+    'https://m8p8m9h3.stackpathcdn.com/wp-content/uploads/2021/11/que-tipo-de-persona-te-gustaria-ser-730x411-SP.jpg',
+    [],
+    DateTime.now(),
+    '666666666',
+    'sanitstebanmarc@gmail.com',
+    [],
+    [],
+    0,
+  );
+
+  ChatsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +64,14 @@ class ChatsPage extends StatelessWidget {
                           itemCount: 20,
                           itemBuilder: (context, index) {
                             return ChatCard(
-                              onTap: () {},
-                              nombre: 'Marc Santisteban',
-                              username: 'msantisteban',
-                              image:
-                                  'https://m8p8m9h3.stackpathcdn.com/wp-content/uploads/2021/11/que-tipo-de-persona-te-gustaria-ser-730x411-SP.jpg',
+                              onTap: () => Navigator.pushReplacementNamed(
+                                context,
+                                'chat-personal',
+                                arguments: user,
+                              ),
+                              nombre: '${user.nombre} ${user.apellidos}',
+                              username: user.username,
+                              image: user.imagen,
                             );
                           },
                         ),
