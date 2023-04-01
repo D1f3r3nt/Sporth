@@ -18,6 +18,14 @@ class TextUtils {
     color: ColorsUtils.black,
   );
 
+  static const TextStyle kanitItalic_24_grey = TextStyle(
+    fontFamily: 'Kanit',
+    fontSize: 24.0,
+    fontStyle: FontStyle.italic,
+    fontWeight: FontWeight.bold,
+    color: ColorsUtils.grey,
+  );
+
   static const TextStyle kanitItalic_24_blue = TextStyle(
     fontFamily: 'Kanit',
     fontSize: 24.0,

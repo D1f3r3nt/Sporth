@@ -18,7 +18,10 @@ class SingUpPage extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              const PopButton(text: 'Entrar'),
+              PopButton(
+                text: 'Entrar',
+                onPressed: () {},
+              ),
               const SizedBox(height: 15.0),
               Expanded(
                 child: Container(

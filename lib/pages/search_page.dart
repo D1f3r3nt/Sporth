@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sporth/providers/local/deportes_provider.dart';
+import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -19,7 +18,7 @@ class _SearchPageState extends State<SearchPage> {
     final deportes = deportesProvider.deportesSelect;
 
     return SafeArea(
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: Column(
@@ -44,7 +43,7 @@ class _SearchPageState extends State<SearchPage> {
                     useSafeArea: true,
                     isScrollControlled: true,
                     builder: (context) {
-                      return BottomDesplegate();
+                      return const BottomDesplegate();
                     },
                   ),
                   icon: const Icon(
@@ -57,7 +56,7 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
             const SizedBox(height: 20),
-            Container(
+            SizedBox(
               height: 90.0,
               child: ListView(
                 scrollDirection: Axis.horizontal,
@@ -80,7 +79,7 @@ class _SearchPageState extends State<SearchPage> {
                     const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
                 itemCount: 20,
                 itemBuilder: (context, index) {
-                  return CardPublicacion();
+                  return const CardPublicacion();
                 },
               ),
             )

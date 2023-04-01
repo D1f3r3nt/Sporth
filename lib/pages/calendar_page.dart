@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/utils/utils.dart';
-import 'package:sporth/widgets/card_event.dart';
-import 'package:sporth/widgets/card_publicacion.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -17,7 +15,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: Column(
