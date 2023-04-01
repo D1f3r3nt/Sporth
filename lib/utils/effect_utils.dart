@@ -23,4 +23,13 @@ class EffectUtils {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
+
+  static const LinearGradient linearGreys = LinearGradient(
+    colors: [
+      ColorsUtils.creme,
+      ColorsUtils.grey,
+    ],
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+  );
 }
