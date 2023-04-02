@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sporth/providers/firebase/auth/email_auth.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -16,6 +17,16 @@ class _PasswordPageState extends State<PasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final emailProvider = EmailAuth();
+
+    _enviar() {
+      if (_formKey.currentState!.validate()) {
+        emailProvider.newPassword(context, email: _emailController.text);
+
+        Navigator.pushReplacementNamed(context, 'login');
+      }
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -85,11 +96,7 @@ class _PasswordPageState extends State<PasswordPage> {
                           padding: const EdgeInsets.all(20.0),
                           child: ButtonInput(
                             text: 'ENVIAR',
-                            funcion: () {
-                              if (_formKey.currentState!.validate()) {
-                                print('OK - ${_emailController.text}');
-                              }
-                            },
+                            funcion: _enviar,
                           ),
                         ),
                       ],
