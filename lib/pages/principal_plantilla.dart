@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sporth/models/models.dart';
 import 'package:sporth/pages/pages.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
@@ -9,6 +10,9 @@ class PrincipalPlantilla extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bottomNavProvider = Provider.of<BottomNavProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
+
+    final UserDto user = userProvider.currentUser!;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -23,8 +27,7 @@ class PrincipalPlantilla extends StatelessWidget {
               elevation: 0.5,
               actions: [
                 IconButton(
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, 'chats'),
+                  onPressed: () => Navigator.pushReplacementNamed(context, 'chats'),
                   icon: const Icon(
                     Icons.message,
                     color: ColorsUtils.black,
@@ -35,8 +38,8 @@ class PrincipalPlantilla extends StatelessWidget {
           : (bottomNavProvider.index == 4)
               ? AppBar(
                   centerTitle: true,
-                  title: const Text(
-                    'test__user',
+                  title: Text(
+                    user.username,
                     style: TextUtils.kanit_18_grey,
                   ),
                   backgroundColor: Colors.white,
@@ -104,21 +107,16 @@ class PrincipalPlantilla extends StatelessWidget {
   gatewayPages(BuildContext context, int index) {
     switch (index) {
       case 0:
-        {
-          return const HomePage();
-        }
+        return const HomePage();
+
       case 1:
-        {
-          return const SearchPage();
-        }
+        return const SearchPage();
+
       case 3:
-        {
-          return const CalendarPage();
-        }
+        return const CalendarPage();
+
       case 4:
-        {
-          return const UserPage();
-        }
+        return const UserPage();
     }
   }
 }

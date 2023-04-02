@@ -25,9 +25,10 @@ class SearchDeporte extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  boxShadow: EffectUtils.dropShadow,
-                  color: active ? ColorsUtils.blue : ColorsUtils.creme,
-                  borderRadius: BorderRadius.circular(35.0)),
+                boxShadow: EffectUtils.dropShadow,
+                color: active ? ColorsUtils.blue : ColorsUtils.creme,
+                borderRadius: BorderRadius.circular(35.0),
+              ),
               width: 70,
               height: 70,
               child: Image.asset(

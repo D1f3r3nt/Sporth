@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
@@ -12,14 +15,28 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
+  final _pickerImage = ImagePicker();
+
+  File? _imageFile;
   bool _precio = false;
   bool _privado = false;
+
+  Future<void> _pickImageFromGallery() async {
+    final pickedfile = await _pickerImage.pickImage(source: ImageSource.gallery);
+    if (pickedfile != null) setState(() => _imageFile = File(pickedfile.path));
+  }
+
+  Future<void> _pickImageFromCamera() async {
+    final pickedfile = await _pickerImage.pickImage(source: ImageSource.camera);
+    if (pickedfile != null) setState(() => _imageFile = File(pickedfile.path));
+  }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final deportesProvider = Provider.of<DeportesProvider>(context);
     final listDeportes = deportesProvider.deportesSelect;
+    File? _imageFile = null;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -36,9 +53,7 @@ class _AddPageState extends State<AddPage> {
                 left: 5,
                 child: PopButton(
                   text: 'Atras',
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, 'home');
-                  },
+                  onPressed: () => Navigator.pushReplacementNamed(context, 'home'),
                 ),
               ),
               Positioned(
@@ -50,7 +65,10 @@ class _AddPageState extends State<AddPage> {
                     useSafeArea: true,
                     isScrollControlled: true,
                     builder: (context) {
-                      return const SelectImageBottom();
+                      return SelectImageBottom(
+                        onTapCamera: () => _pickImageFromCamera(),
+                        onTapGallery: () => _pickImageFromGallery(),
+                      );
                     },
                   ),
                   child: Column(
@@ -75,8 +93,7 @@ class _AddPageState extends State<AddPage> {
                 child: Container(
                   decoration: const BoxDecoration(
                     color: ColorsUtils.white,
-                    borderRadius:
-                        BorderRadius.only(topLeft: Radius.circular(70.0)),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(70.0)),
                   ),
                   width: double.infinity,
                   child: Column(
@@ -106,8 +123,7 @@ class _AddPageState extends State<AddPage> {
                                     return Padding(
                                       padding: const EdgeInsets.all(10.0),
                                       child: GestureDetector(
-                                        onTap: () =>
-                                            selectActivity(listDeportes, index),
+                                        onTap: () => selectActivity(listDeportes, index),
                                         child: ToastCard(
                                           active: listDeportes[index].selected,
                                           nombre: listDeportes[index].nombre,
@@ -123,22 +139,26 @@ class _AddPageState extends State<AddPage> {
                                 style: TextUtils.kanit_18_black,
                               ),
                               const SizedBox(height: 20.0),
-                              const FormInput(
-                                icon: Icon(
+                              FormInput(
+                                icon: const Icon(
                                   Icons.calendar_month,
                                 ),
                                 placeholder: 'Buscar',
+                                controller: TextEditingController(),
                                 fillColor: ColorsUtils.white,
                                 styleText: TextUtils.kanit_18_black,
+                                validator: (p0) => null,
                               ),
                               const SizedBox(height: 20.0),
-                              const FormInput(
-                                icon: Icon(
+                              FormInput(
+                                icon: const Icon(
                                   Icons.access_time,
                                 ),
                                 placeholder: 'Buscar',
+                                controller: TextEditingController(),
                                 fillColor: ColorsUtils.white,
                                 styleText: TextUtils.kanit_18_black,
+                                validator: (p0) => null,
                               ),
                               const SizedBox(height: 20.0),
                               const Text(
@@ -147,19 +167,20 @@ class _AddPageState extends State<AddPage> {
                               ),
                               const SizedBox(height: 20.0),
                               const SizedBox(height: 5.0),
-                              const FormInput(
-                                icon: Icon(
+                              FormInput(
+                                icon: const Icon(
                                   Icons.search,
                                   color: ColorsUtils.grey,
                                 ),
                                 placeholder: 'Buscar',
+                                controller: TextEditingController(),
                                 fillColor: ColorsUtils.white,
                                 styleText: TextUtils.kanit_18_grey,
+                                validator: (p0) => null,
                               ),
                               const SizedBox(height: 5.0),
                               Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 20.0),
+                                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
                                 child: ButtonInput(
                                   text: 'Mi ubicacion',
                                   color: ColorsUtils.lightblue,
@@ -173,18 +194,19 @@ class _AddPageState extends State<AddPage> {
                                 style: TextUtils.kanit_18_black,
                               ),
                               const SizedBox(height: 20.0),
-                              const FormInput(
-                                icon: Icon(
+                              FormInput(
+                                icon: const Icon(
                                   Icons.people,
                                 ),
                                 placeholder: 'Max. Personas',
+                                controller: TextEditingController(),
                                 fillColor: ColorsUtils.white,
                                 styleText: TextUtils.kanit_18_black,
+                                validator: (p0) => null,
                               ),
                               const SizedBox(height: 20.0),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
                                   const Text(
                                     'Precio',
@@ -199,17 +221,18 @@ class _AddPageState extends State<AddPage> {
                                 ],
                               ),
                               if (_precio)
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 20.0),
                                   child: FormInput(
-                                    icon: Icon(Icons.euro),
+                                    icon: const Icon(Icons.euro),
                                     placeholder: 'Precio',
+                                    controller: TextEditingController(),
                                     fillColor: ColorsUtils.white,
+                                    validator: (p0) => null,
                                   ),
                                 ),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
                                   const Text(
                                     'Privado',
@@ -224,12 +247,14 @@ class _AddPageState extends State<AddPage> {
                                 ],
                               ),
                               if (_privado)
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 20.0),
                                   child: FormInput(
-                                    icon: Icon(Icons.lock),
+                                    icon: const Icon(Icons.lock),
                                     placeholder: 'Contraseña',
+                                    controller: TextEditingController(),
                                     fillColor: ColorsUtils.white,
+                                    validator: (p0) => null,
                                   ),
                                 ),
                             ],

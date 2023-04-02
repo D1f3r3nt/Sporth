@@ -5,8 +5,7 @@ import 'package:sporth/widgets/widgets.dart';
 class CardPublicacion extends StatelessWidget {
   const CardPublicacion({super.key});
 
-  final imagePersona =
-      'https://m8p8m9h3.stackpathcdn.com/wp-content/uploads/2021/11/que-tipo-de-persona-te-gustaria-ser-730x411-SP.jpg';
+  final imagePersona = 'https://m8p8m9h3.stackpathcdn.com/wp-content/uploads/2021/11/que-tipo-de-persona-te-gustaria-ser-730x411-SP.jpg';
   final namePersona = 'msantisteban';
 
   @override
