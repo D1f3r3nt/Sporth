@@ -15,4 +15,9 @@ class DatabaseUser {
 
     return user;
   }
+
+  Future<bool> existsUser(String idUser) async {
+    DocumentReference documentReference = _db.collection(COLLECTION_NAME).doc(idUser);
+    return await documentReference.get().then((value) => value.exists);
+  }
 }
