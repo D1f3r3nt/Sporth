@@ -58,7 +58,7 @@ class UserPage extends StatelessWidget {
             ),
             const SizedBox(height: 5.0),
             Text(
-              user.nombre,
+              '${user.nombre} ${user.apellidos}',
               style: TextUtils.kanitItalic_24_black,
             ),
             SizedBox(
