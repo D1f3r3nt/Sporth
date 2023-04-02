@@ -5,7 +5,7 @@ import 'package:sporth/pages/personal_chat_page.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 Map<String, WidgetBuilder> getRoutes = {
-  '/': (context) => const Gateway(),
+  '/': (context) => Gateway(),
   'home': (context) => const PrincipalPlantilla(),
   'login': (context) => const LoginPage(),
   'sing-up': (context) => const SingUpPage(),

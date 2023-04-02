@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sporth/models/dto/user_dto.dart';
+import 'package:sporth/models/local/deportes_local.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -6,15 +8,13 @@ import 'package:sporth/widgets/widgets.dart';
 class UserPage extends StatelessWidget {
   const UserPage({super.key});
 
-  final seguidores = 0;
-  final seguidos = 3;
-  final nombre = 'Usuario test';
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final deportesProvider = Provider.of<DeportesProvider>(context);
-    final listDeportes = deportesProvider.deportes;
+    final userProvider = Provider.of<UserProvider>(context);
+
+    final UserDto user = userProvider.currentUser!;
+    final List<DeportesLocal> listDeportes = user.gustos;
 
     return SafeArea(
       child: SizedBox(
@@ -29,7 +29,7 @@ class UserPage extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      seguidores.toString(),
+                      user.seguidores.toString(),
                       style: TextUtils.kanitItalic_24_blue,
                     ),
                     const Text(
@@ -38,13 +38,14 @@ class UserPage extends StatelessWidget {
                     )
                   ],
                 ),
-                const CircleAvatar(
+                CircleAvatar(
+                  backgroundImage: NetworkImage(user.urlImagen),
                   radius: 50.0,
                 ),
                 Column(
                   children: [
                     Text(
-                      seguidos.toString(),
+                      user.seguidos.length.toString(),
                       style: TextUtils.kanitItalic_24_blue,
                     ),
                     const Text(
@@ -57,14 +58,14 @@ class UserPage extends StatelessWidget {
             ),
             const SizedBox(height: 5.0),
             Text(
-              nombre,
+              user.nombre,
               style: TextUtils.kanitItalic_24_black,
             ),
             SizedBox(
               height: 60,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 20,
+                itemCount: user.logros.length,
                 itemBuilder: (context, index) {
                   return const Padding(
                     padding: EdgeInsets.all(10.0),

@@ -12,15 +12,14 @@ class DeportesDto {
   String nombre;
   bool selected;
 
-  factory DeportesDto.fromJson(String str) =>
-      DeportesDto.fromMap(json.decode(str));
+  factory DeportesDto.fromJson(String str) => DeportesDto.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
   factory DeportesDto.fromMap(Map<String, dynamic> json) => DeportesDto(
         imagen: json["imagen"],
         nombre: json["nombre"],
-        selected: json["selected"],
+        selected: json["selected"] == 1,
       );
 
   Map<String, dynamic> toMap() => {

@@ -8,7 +8,7 @@ class PersonalChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserLocal user = ModalRoute.of(context)!.settings.arguments as UserLocal;
+    UserDto user = ModalRoute.of(context)!.settings.arguments as UserDto;
     final _messageController = TextEditingController();
 
     return Scaffold(
@@ -27,8 +27,7 @@ class PersonalChatPage extends StatelessWidget {
                 children: [
                   PopButton(
                     text: 'Atras',
-                    onPressed: () =>
-                        Navigator.pushReplacementNamed(context, 'chats'),
+                    onPressed: () => Navigator.pushReplacementNamed(context, 'chats'),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 20.0, top: 5.0),
@@ -44,8 +43,7 @@ class PersonalChatPage extends StatelessWidget {
                 child: Container(
                   decoration: const BoxDecoration(
                     color: ColorsUtils.white,
-                    borderRadius:
-                        BorderRadius.only(topLeft: Radius.circular(70.0)),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(70.0)),
                   ),
                   width: double.infinity,
                   child: Column(
@@ -72,8 +70,7 @@ class PersonalChatPage extends StatelessWidget {
                             }
                             return const ChatMessage(
                               ourMessage: false,
-                              message:
-                                  'Hola que ddscdes fsefvse few ffwe few fwe few ftal?',
+                              message: 'Hola que ddscdes fsefvse few ffwe few fwe few ftal?',
                             );
                           },
                         ),

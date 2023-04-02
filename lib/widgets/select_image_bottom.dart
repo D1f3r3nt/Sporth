@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:sporth/utils/utils.dart';
 
 class SelectImageBottom extends StatelessWidget {
-  const SelectImageBottom({super.key});
+  final Function() onTapCamera;
+  final Function() onTapGallery;
+  SelectImageBottom({
+    super.key,
+    required this.onTapCamera,
+    required this.onTapGallery,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +22,12 @@ class SelectImageBottom extends StatelessWidget {
           SelectImage(
             icono: const Icon(Icons.image),
             nombre: 'Galeria',
-            onTap: () {},
+            onTap: onTapGallery,
           ),
           SelectImage(
             icono: const Icon(Icons.camera),
             nombre: 'Camara',
-            onTap: () {},
+            onTap: onTapCamera,
           ),
         ],
       ),
@@ -53,9 +59,7 @@ class SelectImage extends StatelessWidget {
           Container(
             height: size.height * 0.1,
             width: size.height * 0.1,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100.0),
-                gradient: EffectUtils.linearBlues),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(100.0), gradient: EffectUtils.linearBlues),
             child: icono,
           ),
           Text(

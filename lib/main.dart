@@ -19,6 +19,8 @@ class AppState extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => DeportesProvider()),
         ChangeNotifierProvider(create: (_) => BottomNavProvider()),
+        ChangeNotifierProvider(create: (_) => SingUpProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: const MyApp(),
     );

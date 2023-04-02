@@ -4,19 +4,19 @@ import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class ChatsPage extends StatelessWidget {
-  final user = UserLocal(
-    028,
-    'Marc',
-    'Santisteban',
-    'msantisteban',
-    'https://m8p8m9h3.stackpathcdn.com/wp-content/uploads/2021/11/que-tipo-de-persona-te-gustaria-ser-730x411-SP.jpg',
-    [],
-    DateTime.now(),
-    '666666666',
-    'sanitstebanmarc@gmail.com',
-    [],
-    [],
-    0,
+  final user = UserDto(
+    apellidos: 'Santisteban',
+    email: 'sanitstebanmarc@gmail.com',
+    gustos: [],
+    idUser: '',
+    imagen: 'https://m8p8m9h3.stackpathcdn.com/wp-content/uploads/2021/11/que-tipo-de-persona-te-gustaria-ser-730x411-SP.jpg',
+    logros: [],
+    nacimiento: DateTime.now(),
+    nombre: 'Marc',
+    seguidores: 0,
+    seguidos: [],
+    telefono: '',
+    username: 'msantisteban',
   );
 
   ChatsPage({super.key});
@@ -36,16 +36,14 @@ class ChatsPage extends StatelessWidget {
             children: [
               PopButton(
                 text: 'Atras',
-                onPressed: () =>
-                    Navigator.pushReplacementNamed(context, 'home'),
+                onPressed: () => Navigator.pushReplacementNamed(context, 'home'),
               ),
               const SizedBox(height: 15.0),
               Expanded(
                 child: Container(
                   decoration: const BoxDecoration(
                     color: ColorsUtils.white,
-                    borderRadius:
-                        BorderRadius.only(topLeft: Radius.circular(70.0)),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(70.0)),
                   ),
                   width: double.infinity,
                   child: Column(

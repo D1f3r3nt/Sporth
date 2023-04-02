@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 
 class Gateway extends StatelessWidget {
-  const Gateway({super.key});
+  Gateway({super.key});
+  final databaseUser = DatabaseUser();
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +24,16 @@ class Gateway extends StatelessWidget {
   }
 
   void home(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    userProvider.currentUser = await databaseUser.getUser(FirebaseAuth.instance.currentUser!.uid);
+
     // Tutorial
     /*if (Preferences.isFirstTime) {
       Navigator.pushReplacementNamed(context, 'tutorial');
       return;
     }*/
+
     Navigator.pushReplacementNamed(context, 'home');
   }
 }

@@ -58,9 +58,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                       Expanded(
                         flex: 1,
                         child: Text(
-                          (_maxPersonas == 25)
-                              ? '+25'
-                              : '${_maxPersonas.toInt()}',
+                          (_maxPersonas == 25) ? '+25' : '${_maxPersonas.toInt()}',
                           style: TextUtils.kanitItalic_24_blue,
                         ),
                       ),
@@ -117,8 +115,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                   ),
                   const SizedBox(height: 5.0),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
                     child: ButtonInput(
                       text: 'Mi ubicacion',
                       color: ColorsUtils.lightblue,

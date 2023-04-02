@@ -31,16 +31,14 @@ class _PasswordPageState extends State<PasswordPage> {
               children: [
                 PopButton(
                   text: 'Atras',
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, 'login'),
+                  onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
                 ),
                 const SizedBox(height: 15.0),
                 Expanded(
                   child: Container(
                     decoration: const BoxDecoration(
                       color: ColorsUtils.white,
-                      borderRadius:
-                          BorderRadius.only(topLeft: Radius.circular(70.0)),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(70.0)),
                     ),
                     width: double.infinity,
                     child: Column(
@@ -55,8 +53,7 @@ class _PasswordPageState extends State<PasswordPage> {
                           ),
                         ),
                         Container(
-                          padding:
-                              const EdgeInsets.only(left: 50.0, right: 50.0),
+                          padding: const EdgeInsets.only(left: 50.0, right: 50.0),
                           alignment: Alignment.centerLeft,
                           child: const Text(
                             'Ponga su email, se le enviara un email con las instrucciones para recuperar la contraseña',
@@ -76,10 +73,9 @@ class _PasswordPageState extends State<PasswordPage> {
                             controller: _emailController,
                             fillColor: ColorsUtils.white,
                             validator: (value) {
-                              if (value == null || value.isEmpty)
-                                return 'Pon un valor';
-                              if (!_emailRegex.hasMatch(value))
-                                return 'Pon un email';
+                              if (value == null || value.isEmpty) return 'Pon un valor';
+                              if (!_emailRegex.hasMatch(value)) return 'Pon un email';
+
                               return null;
                             },
                           ),

@@ -1,0 +1,102 @@
+import 'dart:convert';
+
+import 'package:sporth/models/models.dart';
+
+class UserDto {
+  final String idUser;
+  final String nombre;
+  final String apellidos;
+  final String username;
+  final String imagen;
+  final List<DeportesLocal> gustos;
+  final DateTime nacimiento;
+  final String telefono;
+  final String email;
+  final List<int> logros;
+  final List<UserDto> seguidos;
+  final int seguidores;
+
+  UserDto({
+    required this.idUser,
+    required this.nombre,
+    required this.apellidos,
+    required this.username,
+    required this.imagen,
+    required this.gustos,
+    required this.nacimiento,
+    required this.telefono,
+    required this.email,
+    required this.logros,
+    required this.seguidos,
+    required this.seguidores,
+  });
+
+  UserDto copyOf({
+    String? idUser,
+    String? nombre,
+    String? apellidos,
+    String? username,
+    String? imagen,
+    List<DeportesLocal>? gustos,
+    DateTime? nacimiento,
+    String? telefono,
+    String? email,
+    List<int>? logros,
+    List<UserDto>? seguidos,
+    int? seguidores,
+  }) {
+    return UserDto(
+      idUser: idUser ?? this.idUser,
+      nombre: nombre ?? this.nombre,
+      apellidos: apellidos ?? this.apellidos,
+      username: username ?? this.username,
+      imagen: imagen ?? this.imagen,
+      gustos: gustos ?? this.gustos,
+      nacimiento: nacimiento ?? this.nacimiento,
+      telefono: telefono ?? this.telefono,
+      email: email ?? this.email,
+      logros: logros ?? this.logros,
+      seguidos: seguidos ?? this.seguidos,
+      seguidores: seguidores ?? this.seguidores,
+    );
+  }
+
+  String get urlImagen {
+    if (imagen.isEmpty) return 'https://firebasestorage.googleapis.com/v0/b/sporth-c3c47.appspot.com/o/user.png?alt=media&token=7ad26cc5-02f3-4160-8802-eecd875ac101';
+    return imagen;
+  }
+
+  factory UserDto.fromJson(String str) => UserDto.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory UserDto.fromMap(Map<String, dynamic> json) => UserDto(
+        imagen: json["imagen"],
+        nombre: json["nombre"],
+        apellidos: json["apellidos"],
+        email: json["email"],
+        gustos: List<DeportesLocal>.from(json["gustos"].map((x) => DeportesLocal.fromJson(x))),
+        idUser: json["idUser"],
+        logros: List<int>.from(json["logros"].map((x) => x)),
+        nacimiento: DateTime.fromMicrosecondsSinceEpoch(json["nacimiento"].microsecondsSinceEpoch),
+        seguidores: json["seguidores"],
+        seguidos: List<UserDto>.from(json["seguidos"].map((x) => UserDto.fromJson(x))),
+        telefono: json["telefono"],
+        username: json["username"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "imagen": imagen,
+        "nombre": nombre,
+        "apellidos": apellidos,
+        "email": email,
+        "gustos": List<dynamic>.from(gustos.map((x) => x.toJson())),
+        "idUser": idUser,
+        "logros": List<dynamic>.from(logros.map((x) => x)),
+        "nacimiento": nacimiento,
+        "seguidores": seguidores,
+        "seguidos": List<dynamic>.from(seguidos.map((x) => x.toJson())),
+        "telefono": telefono,
+        "username": username,
+      };
+}

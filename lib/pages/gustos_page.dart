@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/firebase/database/database_user.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -16,7 +17,18 @@ class _GustosPageState extends State<GustosPage> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final deportesProvider = Provider.of<DeportesProvider>(context);
+    final singUpProvider = Provider.of<SingUpProvider>(context);
+    final databaseUser = DatabaseUser();
+
     List<DeportesDto> gustos = deportesProvider.deportesSelect;
+
+    _finalizar() {
+      singUpProvider.addGustos(gustos.where((element) => element.selected).toList());
+
+      databaseUser.saveUser(singUpProvider.newUser);
+
+      Navigator.pushReplacementNamed(context, '/');
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -27,11 +39,7 @@ class _GustosPageState extends State<GustosPage> {
         child: SafeArea(
           child: Column(
             children: [
-              PopButton(
-                text: 'Entrar',
-                onPressed: () {},
-              ),
-              const SizedBox(height: 15.0),
+              const SizedBox(height: 30.0),
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -77,12 +85,7 @@ class _GustosPageState extends State<GustosPage> {
                 padding: const EdgeInsets.all(20.0),
                 child: ButtonInput(
                   text: 'FINALIZAR',
-                  funcion: () {
-                    print(gustos
-                        .where((element) => element.selected)
-                        .map((e) => e.nombre)
-                        .toList());
-                  },
+                  funcion: _finalizar,
                 ),
               ),
             ],

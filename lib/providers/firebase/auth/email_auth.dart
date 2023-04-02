@@ -3,20 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:sporth/utils/utils.dart';
 
 class EmailAuth {
-  Future<void> singUp(
-    BuildContext context, {
-    required String email,
-    required String password,
-    required String name,
-  }) async {
+  Future<String> singUp(BuildContext context, {required String email, required String password, required String name}) async {
     try {
-      UserCredential credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
       credential.user!.updateDisplayName(name);
+      return credential.user!.uid;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         Snackbar.errorSnackbar(context, 'La contrasenya es muy débil');
@@ -24,23 +19,23 @@ class EmailAuth {
         Snackbar.errorSnackbar(context, 'Este email ya existe');
       }
     } catch (e) {}
+
+    return '';
   }
 
-  Future<void> logIn(
-    BuildContext context, {
-    required String email,
-    required String password,
-  }) async {
+  Future<String> logIn(BuildContext context, {required String email, required String password}) async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      var userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      return userCredential.user!.uid;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        Snackbar.errorSnackbar(context, 'Usuari no encontrat');
+        Snackbar.errorSnackbar(context, 'Usuario no encontrado');
       } else if (e.code == 'wrong-password') {
-        Snackbar.errorSnackbar(context, 'Contraseña incorrecte');
+        Snackbar.errorSnackbar(context, 'Contraseña incorrecta');
       }
     }
+
+    return '';
   }
 
   Future<void> logOut(BuildContext context) async {
@@ -49,10 +44,8 @@ class EmailAuth {
     } catch (e) {}
   }
 
-  Future<void> newPassword(BuildContext context,
-      {required String email}) async {
+  Future<void> newPassword(BuildContext context, {required String email}) async {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-    Snackbar.correctSnackbar(context,
-        'Se ha enviado un email con los pasos a seguir, revise su bandeja de entrada');
+    Snackbar.correctSnackbar(context, 'Se ha enviado un email con los pasos a seguir, revise su bandeja de entrada');
   }
 }

@@ -26,18 +26,12 @@ class ChatMessage extends StatelessWidget {
               maxWidth: size.width * 0.6,
             ),
             decoration: BoxDecoration(
-              gradient: ourMessage
-                  ? EffectUtils.linearBlues
-                  : EffectUtils.linearGreys,
+              gradient: ourMessage ? EffectUtils.linearBlues : EffectUtils.linearGreys,
               borderRadius: BorderRadius.only(
                 bottomLeft: const Radius.circular(8.0),
                 bottomRight: const Radius.circular(8.0),
-                topLeft: ourMessage
-                    ? const Radius.circular(8.0)
-                    : const Radius.circular(30.0),
-                topRight: ourMessage
-                    ? const Radius.circular(30.0)
-                    : const Radius.circular(8.0),
+                topLeft: ourMessage ? const Radius.circular(8.0) : const Radius.circular(30.0),
+                topRight: ourMessage ? const Radius.circular(30.0) : const Radius.circular(8.0),
               ),
             ),
             padding: EdgeInsets.only(

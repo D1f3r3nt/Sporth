@@ -77,8 +77,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             Expanded(
               child: ListView.builder(
-                padding:
-                    const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
+                padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
                 itemCount: 20,
                 itemBuilder: (context, index) {
                   return const CardPublicacion();
