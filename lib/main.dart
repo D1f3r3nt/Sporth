@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Sporth',
       routes: getRoutes,
-      initialRoute: 'other-user',
+      initialRoute: '/',
     );
   }
 }

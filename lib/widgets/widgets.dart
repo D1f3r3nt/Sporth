@@ -1,5 +1,6 @@
 export 'bottom_desplegate.dart';
 export 'button_google_input.dart';
+export 'button_icon_input.dart';
 export 'button_input.dart';
 export 'card_achievement.dart';
 export 'card_event.dart';
