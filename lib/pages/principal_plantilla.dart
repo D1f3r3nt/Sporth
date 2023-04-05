@@ -46,7 +46,7 @@ class PrincipalPlantilla extends StatelessWidget {
                   elevation: 0.0,
                   actions: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () => Navigator.pushReplacementNamed(context, 'settings'),
                       icon: const Icon(
                         Icons.settings,
                         color: ColorsUtils.grey,
