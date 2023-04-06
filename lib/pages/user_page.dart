@@ -14,7 +14,8 @@ class UserPage extends StatelessWidget {
     final userProvider = Provider.of<UserProvider>(context);
 
     final UserDto user = userProvider.currentUser!;
-    final List<DeportesLocal> listDeportes = user.gustos;
+    final deportesProvider = Provider.of<DeportesProvider>(context);
+    final List<DeportesLocal> listDeportes = deportesProvider.deportes.where((element) => _filterDeportes(element.id, user.gustos)).toList();
 
     return SafeArea(
       child: SizedBox(
@@ -105,5 +106,9 @@ class UserPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _filterDeportes(int id, List<int> gustos) {
+    return gustos.contains(id);
   }
 }

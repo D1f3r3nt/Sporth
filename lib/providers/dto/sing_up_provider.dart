@@ -34,6 +34,6 @@ class SingUpProvider extends ChangeNotifier {
   }
 
   void addGustos(List<DeportesDto> gustos) {
-    newUser = newUser.copyOf(gustos: gustos.map((e) => DeportesLocal(imagen: e.imagen, nombre: e.nombre)).toList());
+    newUser = newUser.copyOf(gustos: gustos.map((e) => e.id).toList());
   }
 }
