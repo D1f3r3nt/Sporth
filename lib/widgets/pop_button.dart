@@ -4,11 +4,13 @@ import 'package:sporth/utils/utils.dart';
 class PopButton extends StatelessWidget {
   final String text;
   final Function() onPressed;
+  final bool colorWhite;
 
   const PopButton({
     Key? key,
     required this.text,
     required this.onPressed,
+    this.colorWhite = false,
   }) : super(key: key);
 
   @override
@@ -22,13 +24,13 @@ class PopButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.keyboard_arrow_left_sharp,
-                color: ColorsUtils.black,
+                color: colorWhite ? ColorsUtils.white : ColorsUtils.black,
               ),
               Text(
                 text,
-                style: TextUtils.kanit_18_black,
+                style: colorWhite ? TextUtils.kanit_18_whtie : TextUtils.kanit_18_black,
               ),
             ],
           ),
