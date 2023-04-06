@@ -24,6 +24,7 @@ class DeportesProvider extends ChangeNotifier {
   dataToSelect() {
     deportesSelect = deportes
         .map((element) => DeportesDto(
+              id: element.id,
               imagen: element.imagen,
               nombre: element.nombre,
               selected: false,

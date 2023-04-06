@@ -8,7 +8,7 @@ class UserDto {
   final String apellidos;
   final String username;
   final String imagen;
-  final List<DeportesLocal> gustos;
+  final List<int> gustos;
   final DateTime nacimiento;
   final String telefono;
   final String email;
@@ -37,7 +37,7 @@ class UserDto {
     String? apellidos,
     String? username,
     String? imagen,
-    List<DeportesLocal>? gustos,
+    List<int>? gustos,
     DateTime? nacimiento,
     String? telefono,
     String? email,
@@ -75,7 +75,7 @@ class UserDto {
         nombre: json["nombre"],
         apellidos: json["apellidos"],
         email: json["email"],
-        gustos: List<DeportesLocal>.from(json["gustos"].map((x) => DeportesLocal.fromJson(x))),
+        gustos: List<int>.from(json["gustos"].map((x) => x)),
         idUser: json["idUser"],
         logros: List<int>.from(json["logros"].map((x) => x)),
         nacimiento: DateTime.fromMicrosecondsSinceEpoch(json["nacimiento"].microsecondsSinceEpoch),
@@ -90,7 +90,7 @@ class UserDto {
         "nombre": nombre,
         "apellidos": apellidos,
         "email": email,
-        "gustos": List<dynamic>.from(gustos.map((x) => x.toJson())),
+        "gustos": List<dynamic>.from(gustos.map((x) => x)),
         "idUser": idUser,
         "logros": List<dynamic>.from(logros.map((x) => x)),
         "nacimiento": nacimiento,

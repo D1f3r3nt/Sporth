@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -24,7 +25,8 @@ class OtherUserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final List<DeportesLocal> listDeportes = user.gustos;
+    final deportesProvider = Provider.of<DeportesProvider>(context);
+    final List<DeportesLocal> listDeportes = deportesProvider.deportes.where((element) => _filterDeportes(element.id, user.gustos)).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -155,5 +157,9 @@ class OtherUserPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _filterDeportes(int id, List<int> gustos) {
+    return gustos.contains(id);
   }
 }
