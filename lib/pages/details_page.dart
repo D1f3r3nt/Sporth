@@ -17,6 +17,21 @@ class _DetailsPageState extends State<DetailsPage> {
     final Size size = MediaQuery.of(context).size;
     final eventoDto = ModalRoute.of(context)!.settings.arguments as EventoDto;
     final userProvider = Provider.of<UserProvider>(context);
+    final databaseEvento = DatabaseEvento();
+
+    _inscribirse() {
+      if (userProvider.currentUser!.idUser == eventoDto.anfitrion.idUser) {
+        Snackbar.errorSnackbar(context, 'Este es tu evento');
+      } else {
+        databaseEvento.inscribe(eventoDto.id, userProvider.currentUser!.idUser);
+        Navigator.pop(context);
+      }
+    }
+
+    _message() {
+      // TODO: Cambiar por privado
+      Navigator.pushReplacementNamed(context, 'chats');
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -97,8 +112,8 @@ class _DetailsPageState extends State<DetailsPage> {
                             ),
                             Row(
                               children: [
-                                Icon(Icons.location_on_outlined),
-                                SizedBox(width: 10),
+                                const Icon(Icons.location_on_outlined),
+                                const SizedBox(width: 10),
                                 Text(
                                   eventoDto.ubicacion,
                                   style: TextUtils.kanit_18_black,
@@ -131,7 +146,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                   (eventoDto.precio == 0) ? 'Free' : '${eventoDto.precio} €',
                                   style: TextUtils.kanitItalic_24_blue,
                                 ),
-                                Text(
+                                const Text(
                                   'Precio',
                                   style: TextUtils.kanit_16_grey,
                                 ),
@@ -144,7 +159,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                   eventoDto.maximo.toString(),
                                   style: TextUtils.kanitItalic_24_blue,
                                 ),
-                                Text(
+                                const Text(
                                   'Maximo',
                                   style: TextUtils.kanit_16_grey,
                                 ),
@@ -162,13 +177,13 @@ class _DetailsPageState extends State<DetailsPage> {
                             ),
                             Row(
                               children: [
-                                Icon(Icons.person),
-                                SizedBox(width: 5.0),
+                                const Icon(Icons.person),
+                                const SizedBox(width: 5.0),
                                 Text(
                                   eventoDto.participantes.length.toString(),
                                   style: TextUtils.kanit_16_black,
                                 ),
-                                SizedBox(width: 10.0),
+                                const SizedBox(width: 10.0),
                               ],
                             ),
                           ],
@@ -190,14 +205,8 @@ class _DetailsPageState extends State<DetailsPage> {
                             children: [
                               Expanded(
                                 child: ButtonInput(
-                                  text: 'Inscribirse',
-                                  funcion: () {
-                                    if (userProvider.currentUser!.idUser == eventoDto.anfitrion.idUser) {
-                                      Snackbar.errorSnackbar(context, 'Este es tu evento');
-                                    } else {
-                                      print('OK');
-                                    }
-                                  },
+                                  text: _containsUser(eventoDto.participantes, userProvider.currentUser!) ? 'Inscribirse' : 'Chat',
+                                  funcion: _containsUser(eventoDto.participantes, userProvider.currentUser!) ? _inscribirse : _message,
                                 ),
                               ),
                               const SizedBox(width: 10.0),
@@ -221,5 +230,9 @@ class _DetailsPageState extends State<DetailsPage> {
         ),
       ),
     );
+  }
+
+  bool _containsUser(List<UserDto> participantes, UserDto user) {
+    return participantes.where((element) => element.idUser == user.idUser).toList().isEmpty;
   }
 }

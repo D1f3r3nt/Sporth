@@ -6,6 +6,7 @@ import 'package:sporth/models/models.dart';
 
 class EventoDto {
   EventoDto({
+    required this.id,
     required this.name,
     required this.hora,
     required this.dia,
@@ -20,6 +21,7 @@ class EventoDto {
     this.privado,
   });
 
+  String id;
   String name;
   DateTime hora;
   DateTime dia;
