@@ -33,6 +33,10 @@ class _DetailsPageState extends State<DetailsPage> {
       Navigator.pushReplacementNamed(context, 'chats');
     }
 
+    _showPeople() {
+      PopupUtils().dialogScrollUsers(context, eventoDto.participantes);
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -175,16 +179,19 @@ class _DetailsPageState extends State<DetailsPage> {
                               nombre: eventoDto.deporte.nombre,
                               active: true,
                             ),
-                            Row(
-                              children: [
-                                const Icon(Icons.person),
-                                const SizedBox(width: 5.0),
-                                Text(
-                                  eventoDto.participantes.length.toString(),
-                                  style: TextUtils.kanit_16_black,
-                                ),
-                                const SizedBox(width: 10.0),
-                              ],
+                            GestureDetector(
+                              onTap: _showPeople,
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.people),
+                                  const SizedBox(width: 5.0),
+                                  Text(
+                                    eventoDto.participantes.length.toString(),
+                                    style: TextUtils.kanit_16_black,
+                                  ),
+                                  const SizedBox(width: 10.0),
+                                ],
+                              ),
                             ),
                           ],
                         ),
