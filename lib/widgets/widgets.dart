@@ -15,3 +15,4 @@ export 'search_deporte.dart';
 export 'select_image_bottom.dart';
 export 'text_input.dart';
 export 'toast_card.dart';
+export 'user_tile.dart';
