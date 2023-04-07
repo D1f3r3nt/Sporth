@@ -23,7 +23,7 @@ class _AddPageState extends State<AddPage> {
   final _nombreController = TextEditingController();
   final _ubicacionesController = TextEditingController();
   final _maxPersonasController = TextEditingController();
-  final _precioController = TextEditingController();
+  final _precioController = TextEditingController(text: '0');
   final _privadoController = TextEditingController();
   final _timeController = TextEditingController();
   final _dateController = TextEditingController();
@@ -73,7 +73,6 @@ class _AddPageState extends State<AddPage> {
 
     _dateController.text = DateFormat('dd/MM/yyyy').format(_date);
     _timeController.text = '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
-    _precioController.text = '0';
 
     _subirEvento() async {
       if (_formKey.currentState!.validate()) {
@@ -348,6 +347,7 @@ class _AddPageState extends State<AddPage> {
                                       placeholder: 'Precio',
                                       controller: _precioController,
                                       fillColor: ColorsUtils.white,
+                                      textInputType: TextInputType.number,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) return 'Ponga un valor';
                                         if (value.contains('-') || value.contains(',') || value.contains('.')) return 'Ponga numero enteros';
