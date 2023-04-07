@@ -19,7 +19,10 @@ class Gateway extends StatelessWidget {
 
     return const Scaffold(
       backgroundColor: ColorsUtils.blue,
-      body: CircularProgressIndicator(),
+      body: Center(
+          child: CircularProgressIndicator(
+        color: ColorsUtils.white,
+      )),
     );
   }
 
