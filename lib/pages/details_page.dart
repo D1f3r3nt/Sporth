@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -11,12 +12,11 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  final imagePersona = 'https://m8p8m9h3.stackpathcdn.com/wp-content/uploads/2021/11/que-tipo-de-persona-te-gustaria-ser-730x411-SP.jpg';
-  final namePersona = 'msantisteban';
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final eventoDto = ModalRoute.of(context)!.settings.arguments as EventoDto;
+    final userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -33,9 +33,9 @@ class _DetailsPageState extends State<DetailsPage> {
                 width: size.width,
                 height: size.height * 0.3,
                 child: Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('image/banners/badminton.png'),
+                      image: eventoDto.imagen.contains('http') ? NetworkImage(eventoDto.imagen) : AssetImage('image/banners/${eventoDto.imagen}') as ImageProvider,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -67,18 +67,18 @@ class _DetailsPageState extends State<DetailsPage> {
                         Row(
                           children: [
                             CircleAvatar(
-                              backgroundImage: NetworkImage(imagePersona),
+                              backgroundImage: NetworkImage(eventoDto.anfitrion.urlImagen),
                             ),
                             const SizedBox(width: 10),
                             Text(
-                              namePersona,
+                              eventoDto.anfitrion.username,
                               style: TextUtils.kanitBold_18,
                             ),
                           ],
                         ),
                         const SizedBox(height: 5.0),
-                        const Text(
-                          'Partido de badminton',
+                        Text(
+                          eventoDto.name,
                           style: TextUtils.kanitItalic_24_black,
                         ),
                         const SizedBox(height: 10.0),
@@ -86,21 +86,21 @@ class _DetailsPageState extends State<DetailsPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
-                              children: const [
-                                Icon(Icons.access_time),
-                                SizedBox(width: 10),
+                              children: [
+                                const Icon(Icons.access_time),
+                                const SizedBox(width: 10),
                                 Text(
-                                  '10:00 AM',
+                                  eventoDto.timeFormat,
                                   style: TextUtils.kanit_18_black,
                                 ),
                               ],
                             ),
                             Row(
-                              children: const [
+                              children: [
                                 Icon(Icons.location_on_outlined),
                                 SizedBox(width: 10),
                                 Text(
-                                  'Palma de Mallorca',
+                                  eventoDto.ubicacion,
                                   style: TextUtils.kanit_18_black,
                                 ),
                               ],
@@ -113,22 +113,22 @@ class _DetailsPageState extends State<DetailsPage> {
                           children: [
                             Column(
                               mainAxisSize: MainAxisSize.min,
-                              children: const [
+                              children: [
                                 Text(
-                                  '15',
+                                  eventoDto.dia.day.toString(),
                                   style: TextUtils.kanitItalic_24_blue,
                                 ),
                                 Text(
-                                  'Julio',
+                                  eventoDto.month,
                                   style: TextUtils.kanit_16_grey,
                                 ),
                               ],
                             ),
                             Column(
                               mainAxisSize: MainAxisSize.min,
-                              children: const [
+                              children: [
                                 Text(
-                                  'Free',
+                                  (eventoDto.precio == 0) ? 'Free' : '${eventoDto.precio} €',
                                   style: TextUtils.kanitItalic_24_blue,
                                 ),
                                 Text(
@@ -139,9 +139,9 @@ class _DetailsPageState extends State<DetailsPage> {
                             ),
                             Column(
                               mainAxisSize: MainAxisSize.min,
-                              children: const [
+                              children: [
                                 Text(
-                                  '20',
+                                  eventoDto.maximo.toString(),
                                   style: TextUtils.kanitItalic_24_blue,
                                 ),
                                 Text(
@@ -156,16 +156,16 @@ class _DetailsPageState extends State<DetailsPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const ToastCard(
-                              nombre: 'Badminton',
+                            ToastCard(
+                              nombre: eventoDto.deporte.nombre,
                               active: true,
                             ),
                             Row(
-                              children: const [
+                              children: [
                                 Icon(Icons.person),
                                 SizedBox(width: 5.0),
                                 Text(
-                                  '2',
+                                  eventoDto.participantes.length.toString(),
                                   style: TextUtils.kanit_16_black,
                                 ),
                                 SizedBox(width: 10.0),
@@ -176,9 +176,9 @@ class _DetailsPageState extends State<DetailsPage> {
                         const SizedBox(height: 10.0),
                         Expanded(
                           child: ListView(
-                            children: const [
+                            children: [
                               Text(
-                                'Hola csobves vsdv svdv sdv s dv s dv s dv  s dvs dv    sdvdsvsdv sdv sdv sdv sdvaswdefew vsdvds dsv',
+                                eventoDto.descripcion,
                                 style: TextUtils.kanit_16_black,
                               ),
                             ],
@@ -190,8 +190,14 @@ class _DetailsPageState extends State<DetailsPage> {
                             children: [
                               Expanded(
                                 child: ButtonInput(
-                                  text: 'Seguir',
-                                  funcion: () {},
+                                  text: 'Inscribirse',
+                                  funcion: () {
+                                    if (userProvider.currentUser!.idUser == eventoDto.anfitrion.idUser) {
+                                      Snackbar.errorSnackbar(context, 'Este es tu evento');
+                                    } else {
+                                      print('OK');
+                                    }
+                                  },
                                 ),
                               ),
                               const SizedBox(width: 10.0),

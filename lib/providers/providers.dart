@@ -1,7 +1,10 @@
 export 'dto/bottom_nav_provider.dart';
+export 'dto/eventos_provider.dart';
 export 'dto/sing_up_provider.dart';
 export 'dto/user_provider.dart';
 export 'firebase/auth/email_auth.dart';
+export 'firebase/auth/google_auth.dart';
+export 'firebase/database/database_evento.dart';
 export 'firebase/database/database_user.dart';
 export 'firebase/storage/image_repository.dart';
 export 'local/deportes_provider.dart';

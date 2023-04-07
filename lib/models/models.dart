@@ -1,3 +1,4 @@
+export 'api/evento_api.dart';
 export 'dto/deportes_dto.dart';
 export 'dto/evento_dto.dart';
 export 'dto/user_dto.dart';

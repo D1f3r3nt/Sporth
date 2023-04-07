@@ -21,6 +21,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => BottomNavProvider()),
         ChangeNotifierProvider(create: (_) => SingUpProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => EventosProvider()),
       ],
       child: const MyApp(),
     );

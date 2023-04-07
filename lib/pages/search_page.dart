@@ -13,8 +13,13 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    Provider.of<EventosProvider>(context, listen: false).getAllEventosOneTime();
+
+    final eventosProvider = Provider.of<EventosProvider>(context);
     final deportesProvider = Provider.of<DeportesProvider>(context);
+    final Size size = MediaQuery.of(context).size;
+
+    final eventos = eventosProvider.allEventos;
     final deportes = deportesProvider.deportesSelect;
 
     return SafeArea(
@@ -76,13 +81,18 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
-                itemCount: 20,
-                itemBuilder: (context, index) {
-                  return const CardPublicacion();
-                },
-              ),
+              child: (eventos.length == 0)
+                  ? Image.asset(
+                      'image/usuario_no_tiene_evento.png',
+                      height: size.height * 0.4,
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
+                      itemCount: eventos.length,
+                      itemBuilder: (context, index) {
+                        return CardPublicacion(eventoDto: eventos[index]);
+                      },
+                    ),
             )
           ],
         ),

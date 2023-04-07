@@ -5,27 +5,13 @@ import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class OtherUserPage extends StatelessWidget {
-  final UserDto user = UserDto(
-    apellidos: 'Santisteban',
-    email: 'sanitstebanmarc@gmail.com',
-    gustos: [],
-    idUser: '',
-    imagen: 'https://m8p8m9h3.stackpathcdn.com/wp-content/uploads/2021/11/que-tipo-de-persona-te-gustaria-ser-730x411-SP.jpg',
-    logros: [],
-    nacimiento: DateTime.now(),
-    nombre: 'Marc',
-    seguidores: 0,
-    seguidos: [],
-    telefono: '',
-    username: 'msantisteban',
-  );
-
   OtherUserPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final deportesProvider = Provider.of<DeportesProvider>(context);
+    final user = ModalRoute.of(context)!.settings.arguments as UserDto;
     final List<DeportesLocal> listDeportes = deportesProvider.deportes.where((element) => _filterDeportes(element.id, user.gustos)).toList();
 
     return Scaffold(
@@ -39,7 +25,7 @@ class OtherUserPage extends StatelessWidget {
         leadingWidth: 100.0,
         leading: PopButton(
           text: 'Atras',
-          onPressed: () {},
+          onPressed: () => Navigator.pop(context),
         ),
         elevation: 0.0,
       ),

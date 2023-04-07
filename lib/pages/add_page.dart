@@ -84,11 +84,13 @@ class _AddPageState extends State<AddPage> {
           String imagen = "";
           if (_imageFile != null) {
             imagen = await _imageRepository.uploadFile(_imageFile!);
+          } else {
+            imagen = list.first.imagen;
           }
 
           final now = DateTime.now();
 
-          EventoDto evento = EventoDto(
+          EventoApi evento = EventoApi(
             name: _nombreController.text,
             hora: DateTime(now.year, now.month, now.day, _time.hour, _time.minute),
             dia: _date,
