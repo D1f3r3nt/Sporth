@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sporth/models/dto/search_dto.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -13,14 +14,23 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    Provider.of<EventosProvider>(context, listen: false).getAllEventosOneTime();
-
     final eventosProvider = Provider.of<EventosProvider>(context);
     final deportesProvider = Provider.of<DeportesProvider>(context);
     final Size size = MediaQuery.of(context).size;
 
-    final eventos = eventosProvider.allEventos;
-    final deportes = deportesProvider.deportesSelect;
+    final deportes = deportesProvider.deportesFilter;
+
+    deportes.sort((a, b) {
+      if (a.selected) return -1;
+      if (b.selected) return 1;
+      return 0;
+    });
+
+    SearchDto searchDto = SearchDto(
+      deporte: deportes.where((element) => element.selected).map((e) => e.id).toList(),
+    );
+    eventosProvider.getFilteredEventosOneTime(searchDto);
+    final eventos = eventosProvider.filteredEventos;
 
     return SafeArea(
       child: SizedBox(

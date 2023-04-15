@@ -38,8 +38,8 @@ class EventoApi {
 
   factory EventoApi.fromJson(Map<String, dynamic> json) => EventoApi(
         name: json["name"],
-        hora: DateTime.fromMicrosecondsSinceEpoch(json["hora"].microsecondsSinceEpoch),
-        dia: DateTime.fromMicrosecondsSinceEpoch(json["dia"].microsecondsSinceEpoch),
+        hora: DateFormat.Hm().parse(json["hora"]),
+        dia: DateFormat.yMd().parse(json["dia"]),
         ubicacion: json["ubicacion"],
         precio: json["precio"],
         maximo: json["maximo"],
@@ -53,8 +53,8 @@ class EventoApi {
 
   Map<String, dynamic> toJson() => {
         "name": name,
-        "hora": hora,
-        "dia": dia,
+        "hora": DateFormat.Hm().format(hora),
+        "dia": DateFormat.yMd().format(dia),
         "ubicacion": ubicacion,
         "precio": precio,
         "maximo": maximo,
@@ -71,6 +71,6 @@ class EventoApi {
   }
 
   String get timeFormat {
-    return '${hora.hour.toString().padLeft(2, '0')}:${hora.minute.toString().padLeft(2, '0')}';
+    return DateFormat.Hm().format(hora);
   }
 }

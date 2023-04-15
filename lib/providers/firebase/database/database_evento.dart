@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sporth/models/dto/search_dto.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 
@@ -86,6 +87,47 @@ class DatabaseEvento {
     participantes.forEach((element) async {
       listResponse.add(await databaseUser.getUser(element));
     });
+
+    return listResponse;
+  }
+
+  Future<List<EventoDto>> getFilterEventos(SearchDto searchDto) async {
+    final CollectionReference events = _db.collection(COLLECTION_NAME);
+
+    Query query = events.where('precio', isLessThanOrEqualTo: searchDto.precio);
+
+    if (searchDto.deporte != null && searchDto.deporte!.isNotEmpty) query = query.where('deporte', whereIn: searchDto.deporte);
+    if (searchDto.dia != null) query = query.where('dia', isEqualTo: searchDto.dia);
+    if (searchDto.hora != null) query = query.where('hora', isEqualTo: searchDto.hora);
+
+    QuerySnapshot resultEvents = await query.get();
+
+    final deportes = await DeportesProvider().getDataCurrent();
+    final listIds = [];
+
+    final eventosApi = resultEvents.docs.map((event) {
+      listIds.add(event.id);
+      return EventoApi.fromJson(event.data() as Map<String, dynamic>);
+    }).toList();
+
+    final List<EventoDto> listResponse = [];
+
+    for (int i = 0; i < eventosApi.length; i++) {
+      listResponse.add(EventoDto(
+        id: listIds[i],
+        name: eventosApi[i].name,
+        hora: eventosApi[i].hora,
+        dia: eventosApi[i].dia,
+        ubicacion: eventosApi[i].ubicacion,
+        precio: eventosApi[i].precio,
+        maximo: eventosApi[i].maximo,
+        deporte: deportes.where((e) => e.id == eventosApi[i].deporte).toList().first,
+        imagen: eventosApi[i].imagen,
+        descripcion: eventosApi[i].descripcion,
+        anfitrion: await databaseUser.getUser(eventosApi[i].anfitrion),
+        participantes: await _getParticipantes(eventosApi[i].participantes),
+      ));
+    }
 
     return listResponse;
   }
