@@ -68,7 +68,7 @@ class _AddPageState extends State<AddPage> {
     final Size size = MediaQuery.of(context).size;
     final deportesProvider = Provider.of<DeportesProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
-    final listDeportes = deportesProvider.deportesSelect;
+    final listDeportes = deportesProvider.deportesAdd;
     final eventoDatabase = DatabaseEvento();
 
     _dateController.text = DateFormat('dd/MM/yyyy').format(_date);
@@ -101,6 +101,7 @@ class _AddPageState extends State<AddPage> {
             descripcion: _descripcionController.text,
             anfitrion: userProvider.currentUser!.idUser,
             participantes: [],
+            privado: _privadoController.text.isEmpty ? null : _privadoController.text,
           );
 
           eventoDatabase.saveEvento(evento);
@@ -319,7 +320,6 @@ class _AddPageState extends State<AddPage> {
                                   styleText: TextUtils.kanit_18_black,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) return 'Ponga un valor';
-                                    if (value.contains('-') || value.contains(',') || value.contains('.')) return 'Ponga numero enteros';
                                     return null;
                                   },
                                 ),

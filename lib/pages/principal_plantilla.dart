@@ -107,7 +107,7 @@ class PrincipalPlantilla extends StatelessWidget {
   gatewayPages(BuildContext context, int index) {
     switch (index) {
       case 0:
-        return const HomePage();
+        return HomePage();
 
       case 1:
         return const SearchPage();

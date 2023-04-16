@@ -20,7 +20,7 @@ class _GustosPageState extends State<GustosPage> {
     final singUpProvider = Provider.of<SingUpProvider>(context);
     final databaseUser = DatabaseUser();
 
-    List<DeportesDto> gustos = deportesProvider.deportesSelect;
+    List<DeportesDto> gustos = deportesProvider.deportesGustos;
 
     _finalizar() {
       singUpProvider.addGustos(gustos.where((element) => element.selected).toList());

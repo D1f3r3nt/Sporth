@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -10,12 +12,40 @@ class BottomDesplegate extends StatefulWidget {
 }
 
 class _BottomDesplegateState extends State<BottomDesplegate> {
-  double _precio = 0;
-  double _maxPersonas = 2;
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _ubicacionController = TextEditingController();
+
+  DateTime? _date;
+  TimeOfDay? _time;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      firstDate: DateTime(1950),
+      initialDate: _date ?? DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+
+    _date = picked;
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _time ?? TimeOfDay.now(),
+    );
+
+    _time = picked;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final SearchProvider searchProvider = Provider.of<SearchProvider>(context);
     final Size size = MediaQuery.of(context).size;
+
+    _dateController.text = searchProvider.search.dia == null ? '' : searchProvider.search.dia!;
+    _timeController.text = searchProvider.search.hora == null ? '' : searchProvider.search.hora!;
 
     return SizedBox(
       height: size.height * 0.75,
@@ -44,21 +74,21 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                       Expanded(
                         flex: 4,
                         child: Slider(
-                          value: _maxPersonas,
+                          value: double.parse(searchProvider.search.maxPersonas.toString()),
                           activeColor: ColorsUtils.creme,
                           inactiveColor: ColorsUtils.grey,
                           min: 2.0,
                           max: 25.0,
                           divisions: 23,
                           onChanged: (value) => setState(() {
-                            _maxPersonas = value;
+                            searchProvider.maxPersonas = value.toInt();
                           }),
                         ),
                       ),
                       Expanded(
                         flex: 1,
                         child: Text(
-                          (_maxPersonas == 25) ? '+25' : '${_maxPersonas.toInt()}',
+                          (searchProvider.search.maxPersonas == 25) ? '+25' : '${searchProvider.search.maxPersonas}',
                           style: TextUtils.kanitItalic_24_blue,
                         ),
                       ),
@@ -73,25 +103,25 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                       Expanded(
                         flex: 3,
                         child: Slider(
-                          value: _precio,
+                          value: double.parse(searchProvider.search.precio.toString()),
                           activeColor: ColorsUtils.creme,
                           inactiveColor: ColorsUtils.grey,
                           min: 0.0,
                           max: 50.0,
                           divisions: 25,
                           onChanged: (value) => setState(() {
-                            _precio = value;
+                            searchProvider.precio = value.toInt();
                           }),
                         ),
                       ),
                       Expanded(
                         flex: 1,
                         child: Text(
-                          (_precio == 0)
+                          (searchProvider.search.precio == 0)
                               ? 'Gratis'
-                              : (_precio == 50)
+                              : (searchProvider.search.precio == 50)
                                   ? '+50 €'
-                                  : '${_precio.toInt()} €',
+                                  : '${searchProvider.search.precio} €',
                           style: TextUtils.kanitItalic_24_blue,
                         ),
                       ),
@@ -108,7 +138,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                       color: ColorsUtils.grey,
                     ),
                     placeholder: 'Buscar',
-                    controller: TextEditingController(),
+                    controller: _ubicacionController,
                     fillColor: ColorsUtils.white,
                     styleText: TextUtils.kanit_18_grey,
                     validator: (p0) => null,
@@ -133,9 +163,14 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                       Icons.calendar_month,
                     ),
                     placeholder: 'Buscar',
-                    controller: TextEditingController(),
+                    controller: _dateController,
                     fillColor: ColorsUtils.white,
                     styleText: TextUtils.kanit_18_black,
+                    onTap: () async {
+                      await _selectDate(context);
+                      searchProvider.dia = _date == null ? '' : DateFormat.yMd().format(_date!);
+                    },
+                    textInputType: TextInputType.none,
                     validator: (p0) => null,
                   ),
                   const SizedBox(height: 20.0),
@@ -144,9 +179,14 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                       Icons.access_time,
                     ),
                     placeholder: 'Buscar',
-                    controller: TextEditingController(),
+                    controller: _timeController,
+                    onTap: () async {
+                      await _selectTime(context);
+                      searchProvider.hora = _time == null ? '' : '${_time!.hour.toString().padLeft(2, '0')}:${_time!.minute.toString().padLeft(2, '0')}';
+                    },
                     fillColor: ColorsUtils.white,
                     styleText: TextUtils.kanit_18_black,
+                    textInputType: TextInputType.none,
                     validator: (p0) => null,
                   ),
                 ],
@@ -154,9 +194,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
             ),
             ButtonInput(
               text: 'Aplicar',
-              funcion: () {
-                Navigator.pop(context);
-              },
+              funcion: () => Navigator.pop(context),
             )
           ],
         ),

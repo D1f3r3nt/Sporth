@@ -1,26 +1,26 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sporth/models/dto/search_dto.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/firebase/database/database_evento.dart';
 
 class EventosProvider extends ChangeNotifier {
-  final databaseEvento = DatabaseEvento();
-  List<EventoDto> allEventos = [];
+  final DatabaseEvento databaseEvento = DatabaseEvento();
+
+  List<EventoDto> allEvents = [];
+  List<EventoDto> filteredEventos = [];
 
   Future<void> refresh() async {
-    allEventos = [];
+    allEvents = await databaseEvento.importantAllEvents;
     notifyListeners();
   }
 
-  void getAllEventosOneTime() async {
-    log('GET_ALL_EVENTOS');
-    final oldList = allEventos;
-    allEventos = await databaseEvento.getAllEventos();
-    if (oldList.isEmpty) {
-      notifyListeners();
-    }
-    log('CORRECT - GET_ALL_EVENTOS');
+  void getAllEventos() async {
+    allEvents = await databaseEvento.allEvents;
+    notifyListeners();
+  }
+
+  void getFilteredEventos(SearchDto searchDto) async {
+    filteredEventos = await databaseEvento.getFilterEventos(searchDto);
+    notifyListeners();
   }
 }

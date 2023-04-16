@@ -62,7 +62,7 @@ class CardEvent extends StatelessWidget {
                         style: TextUtils.kanit_18_black,
                       ),
                       Text(
-                        '${eventoDto.ubicacion} | ${eventoDto.diaFormat}',
+                        '${eventoDto.ubicacion} | ${eventoDto.diaFormatShow}',
                         style: TextUtils.kanit_16_grey,
                       ),
                     ],
