@@ -12,6 +12,7 @@ class FormInput extends StatelessWidget {
   final bool password;
   final TextEditingController controller;
   final Function()? onTap;
+  final Function(String)? onChanged;
 
   const FormInput({
     super.key,
@@ -24,6 +25,7 @@ class FormInput extends StatelessWidget {
     this.password = false,
     this.form,
     this.onTap,
+    this.onChanged,
     this.styleText = TextUtils.kanit_18_black,
   });
 
@@ -45,6 +47,7 @@ class FormInput extends StatelessWidget {
           obscureText: password,
           validator: validator,
           onTap: onTap,
+          onChanged: onChanged,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(60.0),

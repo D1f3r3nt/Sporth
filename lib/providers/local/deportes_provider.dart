@@ -7,8 +7,9 @@ import 'package:flutter/services.dart' show rootBundle;
 
 class DeportesProvider extends ChangeNotifier {
   List<DeportesLocal> deportes = [];
-  List<DeportesDto> deportesSelect = [];
+  List<DeportesDto> deportesGustos = [];
   List<DeportesDto> deportesFilter = [];
+  List<DeportesDto> deportesAdd = [];
 
   DeportesProvider() {
     getData();
@@ -35,7 +36,7 @@ class DeportesProvider extends ChangeNotifier {
   }
 
   dataToSelect() {
-    deportesSelect = deportes
+    deportesGustos = deportes
         .map((element) => DeportesDto(
               id: element.id,
               imagen: element.imagen,
@@ -44,7 +45,8 @@ class DeportesProvider extends ChangeNotifier {
             ))
         .toList();
 
-    deportesFilter = deportesSelect;
+    deportesFilter = deportesGustos.map((e) => e.copyOf()).toList();
+    deportesAdd = deportesGustos.map((e) => e.copyOf()).toList();
     notifyListeners();
   }
 }

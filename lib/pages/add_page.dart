@@ -68,7 +68,7 @@ class _AddPageState extends State<AddPage> {
     final Size size = MediaQuery.of(context).size;
     final deportesProvider = Provider.of<DeportesProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
-    final listDeportes = deportesProvider.deportesSelect;
+    final listDeportes = deportesProvider.deportesAdd;
     final eventoDatabase = DatabaseEvento();
 
     _dateController.text = DateFormat('dd/MM/yyyy').format(_date);

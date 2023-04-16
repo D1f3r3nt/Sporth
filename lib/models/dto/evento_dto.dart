@@ -35,7 +35,7 @@ class EventoDto {
   List<UserDto> participantes;
   String? privado;
 
-  String get diaFormat {
+  String get diaFormatShow {
     return DateFormat('dd MMM').format(dia);
   }
 
@@ -43,7 +43,11 @@ class EventoDto {
     return DateFormat('MMM').format(dia);
   }
 
+  String get diaFormat {
+    return DateFormat.yMd().format(dia);
+  }
+
   String get timeFormat {
-    return '${hora.hour.toString().padLeft(2, '0')}:${hora.minute.toString().padLeft(2, '0')}';
+    return DateFormat.Hm().format(hora);
   }
 }

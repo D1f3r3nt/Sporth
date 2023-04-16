@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/models/dto/search_dto.dart';
+import 'package:sporth/models/dto/deportes_dto.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -12,13 +12,17 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final TextEditingController _nombreController = TextEditingController();
+  final DatabaseEvento databaseEvento = DatabaseEvento();
+
   @override
   Widget build(BuildContext context) {
-    final eventosProvider = Provider.of<EventosProvider>(context);
-    final deportesProvider = Provider.of<DeportesProvider>(context);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
+    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
+    final SearchProvider searchProvider = Provider.of<SearchProvider>(context);
     final Size size = MediaQuery.of(context).size;
 
-    final deportes = deportesProvider.deportesFilter;
+    final List<DeportesDto> deportes = deportesProvider.deportesFilter;
 
     deportes.sort((a, b) {
       if (a.selected) return -1;
@@ -26,10 +30,8 @@ class _SearchPageState extends State<SearchPage> {
       return 0;
     });
 
-    SearchDto searchDto = SearchDto(
-      deporte: deportes.where((element) => element.selected).map((e) => e.id).toList(),
-    );
-    eventosProvider.getFilteredEventosOneTime(searchDto);
+    eventosProvider.getFilteredEventos(searchProvider.search);
+
     final eventos = eventosProvider.filteredEventos;
 
     return SafeArea(
@@ -48,9 +50,12 @@ class _SearchPageState extends State<SearchPage> {
                       color: ColorsUtils.grey,
                     ),
                     placeholder: 'Buscar',
-                    controller: TextEditingController(),
+                    controller: _nombreController,
                     fillColor: ColorsUtils.white,
                     styleText: TextUtils.kanit_18_grey,
+                    onChanged: (value) => setState(() {
+                      searchProvider.nombre = value;
+                    }),
                     validator: (p0) => null,
                   ),
                 ),
@@ -84,6 +89,7 @@ class _SearchPageState extends State<SearchPage> {
                         image: e.imagen,
                         onTap: () => setState(() {
                           e.selected = !e.selected;
+                          searchProvider.deporte = deportes.where((element) => element.selected).map((e) => e.id).toList();
                         }),
                       ),
                     )
@@ -93,7 +99,7 @@ class _SearchPageState extends State<SearchPage> {
             Expanded(
               child: (eventos.length == 0)
                   ? Image.asset(
-                      'image/usuario_no_tiene_evento.png',
+                      'image/no_hay_eventos.png',
                       height: size.height * 0.4,
                     )
                   : ListView.builder(

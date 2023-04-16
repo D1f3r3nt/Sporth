@@ -9,9 +9,27 @@ class SearchDto {
   SearchDto({
     this.nombre,
     this.deporte,
-    this.maxPersonas = 100,
-    this.precio = 100,
+    this.maxPersonas = 25,
+    this.precio = 50,
     this.hora,
     this.dia,
   });
+
+  SearchDto copyOf({
+    List<int>? deporte,
+    String? nombre,
+    String? hora,
+    String? dia,
+    int? maxPersonas,
+    int? precio,
+  }) {
+    return SearchDto(
+      deporte: deporte ?? this.deporte,
+      dia: dia ?? this.dia,
+      hora: hora ?? this.hora,
+      maxPersonas: maxPersonas ?? this.maxPersonas,
+      nombre: nombre ?? this.nombre,
+      precio: precio ?? this.precio,
+    );
+  }
 }

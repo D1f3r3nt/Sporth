@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:sporth/models/dto/evento_dto.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  late List<EventoDto> eventos;
+
+  HomePage({super.key}) {
+    eventos = [];
+  }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final eventosProvider = Provider.of<EventosProvider>(context);
-    eventosProvider.getAllEventosOneTime();
+    eventosProvider.getAllEventos();
 
-    final eventos = eventosProvider.allEventos;
+    eventos = eventosProvider.allEvents;
 
     return SafeArea(
       child: SizedBox(
