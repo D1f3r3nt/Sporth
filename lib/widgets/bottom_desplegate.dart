@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sporth/models/dto/geografico_dto.dart';
+import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/google/google_details_provider.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -12,12 +15,14 @@ class BottomDesplegate extends StatefulWidget {
 }
 
 class _BottomDesplegateState extends State<BottomDesplegate> {
+  final GoogleDetailsProvider _googleDetailsProvider = GoogleDetailsProvider();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _ubicacionController = TextEditingController();
 
   DateTime? _date;
   TimeOfDay? _time;
+  GeograficoDto? _geo;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -39,9 +44,21 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
     _time = picked;
   }
 
+  String _subtitle(List<Term> terms) {
+    String text = '';
+
+    for (int i = 1; i < terms.length; i++) {
+      text += terms[i].value;
+      if (i != terms.length - 1) text += ', ';
+    }
+
+    return text;
+  }
+
   @override
   Widget build(BuildContext context) {
     final SearchProvider searchProvider = Provider.of<SearchProvider>(context);
+    final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
     final Size size = MediaQuery.of(context).size;
 
     _dateController.text = searchProvider.search.dia == null ? '' : searchProvider.search.dia!;
@@ -140,9 +157,27 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                     placeholder: 'Buscar',
                     controller: _ubicacionController,
                     fillColor: ColorsUtils.white,
+                    onChanged: (value) {
+                      googleAutocompleteProvider.getData(value, '39.423956%2C2.749686');
+                    },
                     styleText: TextUtils.kanit_18_grey,
-                    validator: (p0) => null,
+                    validator: (p0) {
+                      if (_geo == null && _ubicacionController.text.isNotEmpty) return 'Seleccione un valor';
+                    },
                   ),
+                  if (googleAutocompleteProvider.lugares.isNotEmpty)
+                    ...googleAutocompleteProvider.lugares.map((lugar) {
+                      return ListTile(
+                        leading: const Icon(Icons.map_outlined),
+                        title: Text(lugar.terms[0].value),
+                        subtitle: Text(_subtitle(lugar.terms)),
+                        onTap: () async {
+                          _ubicacionController.text = lugar.terms[0].value;
+                          _geo = await _googleDetailsProvider.getData(lugar.placeId);
+                          googleAutocompleteProvider.cleanData();
+                        },
+                      );
+                    }),
                   const SizedBox(height: 5.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
@@ -189,6 +224,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                     textInputType: TextInputType.none,
                     validator: (p0) => null,
                   ),
+                  const SizedBox(height: 20.0),
                 ],
               ),
             ),

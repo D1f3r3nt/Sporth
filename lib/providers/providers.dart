@@ -8,5 +8,6 @@ export 'firebase/auth/google_auth.dart';
 export 'firebase/database/database_evento.dart';
 export 'firebase/database/database_user.dart';
 export 'firebase/storage/image_repository.dart';
+export 'google/google_autocomplete_provider.dart';
 export 'local/deportes_provider.dart';
 export 'package:provider/provider.dart';

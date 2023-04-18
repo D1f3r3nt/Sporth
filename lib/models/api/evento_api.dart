@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sporth/models/dto/geografico_dto.dart';
 
 EventoApi eventoDtoFromJson(String str) => EventoApi.fromJson(json.decode(str));
 
@@ -20,6 +21,7 @@ class EventoApi {
     required this.descripcion,
     required this.anfitrion,
     required this.participantes,
+    required this.geo,
     this.privado,
   });
 
@@ -34,6 +36,7 @@ class EventoApi {
   String descripcion;
   String anfitrion;
   List<String> participantes;
+  GeograficoDto geo;
   String? privado;
 
   factory EventoApi.fromJson(Map<String, dynamic> json) => EventoApi(
@@ -48,6 +51,7 @@ class EventoApi {
         descripcion: json["descripcion"],
         anfitrion: json["anfitrion"],
         participantes: List<String>.from(json["participantes"].map((x) => x)),
+        geo: GeograficoDto.fromString(json["geo"]),
         privado: json["privado"],
       );
 
@@ -63,6 +67,7 @@ class EventoApi {
         "descripcion": descripcion,
         "anfitrion": anfitrion,
         "participantes": List<dynamic>.from(participantes.map((x) => x)),
+        "geo": geo.toString(),
         "privado": privado,
       };
 

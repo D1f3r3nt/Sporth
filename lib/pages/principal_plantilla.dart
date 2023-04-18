@@ -9,8 +9,8 @@ class PrincipalPlantilla extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottomNavProvider = Provider.of<BottomNavProvider>(context);
-    final userProvider = Provider.of<UserProvider>(context);
+    final BottomNavProvider bottomNavProvider = Provider.of<BottomNavProvider>(context);
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
 
     final UserDto user = userProvider.currentUser!;
 
@@ -27,7 +27,9 @@ class PrincipalPlantilla extends StatelessWidget {
               elevation: 0.5,
               actions: [
                 IconButton(
-                  onPressed: () => Navigator.pushReplacementNamed(context, 'chats'),
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, 'chats');
+                  },
                   icon: const Icon(
                     Icons.message,
                     color: ColorsUtils.black,
