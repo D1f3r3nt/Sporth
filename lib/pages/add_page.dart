@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:sporth/models/dto/geografico_dto.dart';
 import 'package:sporth/models/models.dart';
-import 'package:sporth/providers/firebase/database/database_evento.dart';
+import 'package:sporth/providers/google/google_details_provider.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -17,21 +18,23 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
-  final _pickerImage = ImagePicker();
-  final _formKey = GlobalKey<FormState>();
-  final _imageRepository = ImageRepository();
-  final _nombreController = TextEditingController();
-  final _ubicacionesController = TextEditingController();
-  final _maxPersonasController = TextEditingController();
-  final _precioController = TextEditingController(text: '0');
-  final _privadoController = TextEditingController();
-  final _timeController = TextEditingController();
-  final _dateController = TextEditingController();
-  final _descripcionController = TextEditingController();
+  final ImagePicker _pickerImage = ImagePicker();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GoogleDetailsProvider _googleDetailsProvider = GoogleDetailsProvider();
+  final ImageRepository _imageRepository = ImageRepository();
+  final TextEditingController _nombreController = TextEditingController();
+  final TextEditingController _ubicacionesController = TextEditingController();
+  final TextEditingController _maxPersonasController = TextEditingController();
+  final TextEditingController _precioController = TextEditingController(text: '0');
+  final TextEditingController _privadoController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _descripcionController = TextEditingController();
 
   File? _imageFile;
   DateTime _date = DateTime.now();
   TimeOfDay _time = TimeOfDay.now();
+  GeograficoDto? _geo;
   bool _precio = false;
   bool _privado = false;
 
@@ -66,10 +69,11 @@ class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final deportesProvider = Provider.of<DeportesProvider>(context);
-    final userProvider = Provider.of<UserProvider>(context);
-    final listDeportes = deportesProvider.deportesAdd;
-    final eventoDatabase = DatabaseEvento();
+    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
+    final List<DeportesDto> listDeportes = deportesProvider.deportesAdd;
+    final DatabaseEvento eventoDatabase = DatabaseEvento();
 
     _dateController.text = DateFormat('dd/MM/yyyy').format(_date);
     _timeController.text = '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
@@ -101,6 +105,7 @@ class _AddPageState extends State<AddPage> {
             descripcion: _descripcionController.text,
             anfitrion: userProvider.currentUser!.idUser,
             participantes: [],
+            geo: _geo!,
             privado: _privadoController.text.isEmpty ? null : _privadoController.text,
           );
 
@@ -108,6 +113,17 @@ class _AddPageState extends State<AddPage> {
           Navigator.pushReplacementNamed(context, 'home');
         }
       }
+    }
+
+    String _subtitle(List<Term> terms) {
+      String text = '';
+
+      for (int i = 1; i < terms.length; i++) {
+        text += terms[i].value;
+        if (i != terms.length - 1) text += ', ';
+      }
+
+      return text;
     }
 
     return Scaffold(
@@ -270,11 +286,28 @@ class _AddPageState extends State<AddPage> {
                                   controller: _ubicacionesController,
                                   fillColor: ColorsUtils.white,
                                   styleText: TextUtils.kanit_18_grey,
+                                  onChanged: (value) {
+                                    googleAutocompleteProvider.getData(value, '39.423956%2C2.749686');
+                                  },
                                   validator: (value) {
                                     if (value == null || value.isEmpty) return 'Ponga un valor';
+                                    if (_geo == null) return 'Seleccione un valor';
                                     return null;
                                   },
                                 ),
+                                if (googleAutocompleteProvider.lugares.isNotEmpty)
+                                  ...googleAutocompleteProvider.lugares.map((lugar) {
+                                    return ListTile(
+                                      leading: const Icon(Icons.map_outlined),
+                                      title: Text(lugar.terms[0].value),
+                                      subtitle: Text(_subtitle(lugar.terms)),
+                                      onTap: () async {
+                                        _ubicacionesController.text = lugar.terms[0].value;
+                                        _geo = await _googleDetailsProvider.getData(lugar.placeId);
+                                        googleAutocompleteProvider.cleanData();
+                                      },
+                                    );
+                                  }),
                                 const SizedBox(height: 5.0),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),

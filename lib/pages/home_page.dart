@@ -13,9 +13,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final eventosProvider = Provider.of<EventosProvider>(context);
-    eventosProvider.getAllEventos();
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
 
+    eventosProvider.getAllEventos();
     eventos = eventosProvider.allEvents;
 
     return SafeArea(

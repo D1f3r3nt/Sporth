@@ -23,6 +23,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => EventosProvider()),
         ChangeNotifierProvider(create: (_) => SearchProvider()),
+        ChangeNotifierProvider(create: (_) => GoogleAutocompleteProvider()),
       ],
       child: const MyApp(),
     );
