@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/models/dto/search_dto.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/firebase/database/database_evento.dart';
 

@@ -68,7 +68,7 @@ class ResultDetails {
     required this.userRatingsTotal,
     required this.utcOffset,
     required this.vicinity,
-    required this.website,
+    this.website,
     required this.wheelchairAccessibleEntrance,
   });
 
@@ -96,7 +96,7 @@ class ResultDetails {
   final int userRatingsTotal;
   final int utcOffset;
   final String vicinity;
-  final String website;
+  final String? website;
   final bool wheelchairAccessibleEntrance;
 
   ResultDetails copyWith({
@@ -386,11 +386,11 @@ class OpeningHours {
 
 class OpeningHoursPeriod {
   OpeningHoursPeriod({
-    required this.close,
+    this.close,
     required this.open,
   });
 
-  final FluffyClose close;
+  final FluffyClose? close;
   final FluffyClose open;
 
   OpeningHoursPeriod copyWith({
@@ -403,12 +403,12 @@ class OpeningHoursPeriod {
       );
 
   factory OpeningHoursPeriod.fromJson(Map<String, dynamic> json) => OpeningHoursPeriod(
-        close: FluffyClose.fromJson(json["close"]),
+        close: json["close"] == null ? null : FluffyClose.fromJson(json["close"]),
         open: FluffyClose.fromJson(json["open"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "close": close.toJson(),
+        "close": close?.toJson(),
         "open": open.toJson(),
       };
 }

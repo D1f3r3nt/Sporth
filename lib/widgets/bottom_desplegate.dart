@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sporth/models/dto/geografico_dto.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/dto/position_provider.dart';
 import 'package:sporth/providers/google/google_details_provider.dart';
@@ -67,21 +66,34 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
     _dateController.text = searchProvider.search.dia == null ? '' : searchProvider.search.dia!;
     _timeController.text = searchProvider.search.hora == null ? '' : searchProvider.search.hora!;
 
+    if (_ubicacionController.text.isEmpty) {
+      _ubicacionController.text = searchProvider.ubiName;
+    }
+
     _miUbicacion() async {
       _geo = _miGeo ?? await positionProvider.getPosition(context);
-      if (_geo == null) return;
+      if (_geo == null) {
+        Snackbar.errorSnackbar(context, 'Ha fallado');
+        return;
+      }
+      searchProvider.ubicacion = _geo!;
       _ubicacionController.text = await _googleDetailsProvider.getNameByGeolocation(_geo!);
+      searchProvider.ubiName = _ubicacionController.text;
+      googleAutocompleteProvider.cleanData();
     }
 
     _tapOnAutocomplete(GooglePlaceAutocomplete lugar) async {
       _ubicacionController.text = lugar.terms[0].value;
-      _geo = await _googleDetailsProvider.getData(lugar.placeId);
+      searchProvider.ubiName = _ubicacionController.text;
       googleAutocompleteProvider.cleanData();
+      _geo = await _googleDetailsProvider.getData(lugar.placeId);
+      searchProvider.ubicacion = _geo!;
     }
 
     _onChangedUbicacion(String value) async {
-      _miGeo ??= await positionProvider.getPosition(context);
+      _geo = null;
       googleAutocompleteProvider.getData(value);
+      searchProvider.ubiName = value;
     }
 
     return SizedBox(

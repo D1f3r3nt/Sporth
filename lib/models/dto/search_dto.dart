@@ -1,3 +1,5 @@
+import 'package:sporth/models/dto/geografico_dto.dart';
+
 class SearchDto {
   String? nombre;
   List<int>? deporte;
@@ -5,6 +7,7 @@ class SearchDto {
   int precio;
   String? hora;
   String? dia;
+  GeograficoDto? ubicacion;
 
   SearchDto({
     this.nombre,
@@ -13,6 +16,7 @@ class SearchDto {
     this.precio = 50,
     this.hora,
     this.dia,
+    this.ubicacion,
   });
 
   SearchDto copyOf({
@@ -22,6 +26,7 @@ class SearchDto {
     String? dia,
     int? maxPersonas,
     int? precio,
+    GeograficoDto? ubicacion,
   }) {
     return SearchDto(
       deporte: deporte ?? this.deporte,
@@ -30,6 +35,7 @@ class SearchDto {
       maxPersonas: maxPersonas ?? this.maxPersonas,
       nombre: nombre ?? this.nombre,
       precio: precio ?? this.precio,
+      ubicacion: ubicacion ?? this.ubicacion,
     );
   }
 }
