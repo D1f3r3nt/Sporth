@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:sporth/models/models.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -8,8 +9,12 @@ class PersonalChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserDto user = ModalRoute.of(context)!.settings.arguments as UserDto;
-    final _messageController = TextEditingController();
+    final UserDto user = ModalRoute.of(context)!.settings.arguments as UserDto;
+    final TextEditingController messageController = TextEditingController();
+
+    atras() => Navigator.pushReplacementNamed(context, 'chats');
+
+    enviar() {}
 
     return Scaffold(
       body: Container(
@@ -27,7 +32,7 @@ class PersonalChatPage extends StatelessWidget {
                 children: [
                   PopButton(
                     text: 'Atras',
-                    onPressed: () => Navigator.pushReplacementNamed(context, 'chats'),
+                    onPressed: atras,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 20.0, top: 5.0),
@@ -83,16 +88,14 @@ class PersonalChatPage extends StatelessWidget {
                               child: FormInput(
                                 icon: null,
                                 placeholder: 'Escribe',
-                                controller: _messageController,
+                                controller: messageController,
                                 fillColor: ColorsUtils.white,
                                 styleText: TextUtils.kanit_18_grey,
                                 validator: (p0) => null,
                               ),
                             ),
                             IconButton(
-                              onPressed: () {
-                                print('Enviar');
-                              },
+                              onPressed: enviar,
                               icon: const Icon(Icons.send),
                             ),
                           ],

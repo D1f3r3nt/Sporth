@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -11,12 +12,13 @@ class SingUpPage extends StatefulWidget {
 }
 
 class _SingUpPageState extends State<SingUpPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailRegex = RegExp(r"^[^@]+@[^@]+\.[a-zA-Z]{2,}$");
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _passwordCheckController = TextEditingController();
-  final _userController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final RegExp _emailRegex = RegExp(r"^[^@]+@[^@]+\.[a-zA-Z]{2,}$");
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordCheckController = TextEditingController();
+  final TextEditingController _userController = TextEditingController();
+
   bool _checkbox = false;
 
   @override
@@ -24,7 +26,7 @@ class _SingUpPageState extends State<SingUpPage> {
     final emailAuth = EmailAuth();
     final singUpProvider = Provider.of<SingUpProvider>(context);
 
-    _singUp() async {
+    singUp() async {
       if (_formKey.currentState!.validate()) {
         if (!_checkbox) {
           Snackbar.errorSnackbar(context, 'Tienes que aceptar las condiciones');
@@ -44,6 +46,8 @@ class _SingUpPageState extends State<SingUpPage> {
       }
     }
 
+    entrar() => Navigator.pushReplacementNamed(context, 'login');
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -59,7 +63,7 @@ class _SingUpPageState extends State<SingUpPage> {
               children: [
                 PopButton(
                   text: 'Entrar',
-                  onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
+                  onPressed: entrar,
                 ),
                 const SizedBox(height: 15.0),
                 Expanded(
@@ -192,7 +196,7 @@ class _SingUpPageState extends State<SingUpPage> {
                           padding: const EdgeInsets.all(20.0),
                           child: ButtonInput(
                             text: 'CONTINUAR',
-                            funcion: _singUp,
+                            funcion: singUp,
                           ),
                         ),
                       ],

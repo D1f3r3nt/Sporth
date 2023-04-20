@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:sporth/models/models.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:sporth/models/models.dart';
 
 class GoogleAutocompleteProvider extends ChangeNotifier {
   List<GooglePlaceAutocomplete> lugares = [];
@@ -19,13 +20,10 @@ class GoogleAutocompleteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void cleanDataWithoutNotify() {
-    lugares = [];
-  }
-
   void getData(String search) async {
     log('GET -- GOOGLE AUTOCOMPLETE');
-    var url = Uri.https(URL_BASE, ENPOINT_AUTOCOMPLETE, {
+
+    Uri url = Uri.https(URL_BASE, ENPOINT_AUTOCOMPLETE, {
       'key': API_KEY,
       'types': TYPES,
       'input': search,

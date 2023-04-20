@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:sporth/models/models.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -23,6 +24,14 @@ class ChatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    atras() => Navigator.pushReplacementNamed(context, 'home');
+
+    tapChat() => Navigator.pushReplacementNamed(
+          context,
+          'chat-personal',
+          arguments: user,
+        );
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -36,7 +45,7 @@ class ChatsPage extends StatelessWidget {
             children: [
               PopButton(
                 text: 'Atras',
-                onPressed: () => Navigator.pushReplacementNamed(context, 'home'),
+                onPressed: atras,
               ),
               const SizedBox(height: 15.0),
               Expanded(
@@ -62,11 +71,7 @@ class ChatsPage extends StatelessWidget {
                           itemCount: 20,
                           itemBuilder: (context, index) {
                             return ChatCard(
-                              onTap: () => Navigator.pushReplacementNamed(
-                                context,
-                                'chat-personal',
-                                arguments: user,
-                              ),
+                              onTap: tapChat,
                               nombre: '${user.nombre} ${user.apellidos}',
                               username: user.username,
                               image: user.imagen,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/models/dto/deportes_dto.dart';
+
+import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -21,7 +22,6 @@ class _SearchPageState extends State<SearchPage> {
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final SearchProvider searchProvider = Provider.of<SearchProvider>(context);
     final Size size = MediaQuery.of(context).size;
-
     final List<DeportesDto> deportes = deportesProvider.deportesFilter;
 
     deportes.sort((a, b) {
@@ -33,6 +33,20 @@ class _SearchPageState extends State<SearchPage> {
     eventosProvider.getFilteredEventos(searchProvider.search);
 
     final eventos = eventosProvider.filteredEventos;
+
+    filter() => showModalBottomSheet(
+          context: context,
+          useSafeArea: true,
+          isScrollControlled: true,
+          builder: (context) {
+            return const BottomDesplegate();
+          },
+        );
+
+    tapDeporte(DeportesDto deporte) => setState(() {
+          deporte.selected = !deporte.selected;
+          searchProvider.deporte = deportes.where((element) => element.selected).map((e) => e.id).toList();
+        });
 
     return SafeArea(
       child: SizedBox(
@@ -60,14 +74,7 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () => showModalBottomSheet(
-                    context: context,
-                    useSafeArea: true,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return const BottomDesplegate();
-                    },
-                  ),
+                  onPressed: filter,
                   icon: const Icon(
                     Icons.filter_alt,
                     color: ColorsUtils.grey,
@@ -84,20 +91,17 @@ class _SearchPageState extends State<SearchPage> {
                 scrollDirection: Axis.horizontal,
                 children: deportes
                     .map(
-                      (e) => SearchDeporte(
-                        active: e.selected,
-                        image: e.imagen,
-                        onTap: () => setState(() {
-                          e.selected = !e.selected;
-                          searchProvider.deporte = deportes.where((element) => element.selected).map((e) => e.id).toList();
-                        }),
+                      (deporte) => SearchDeporte(
+                        active: deporte.selected,
+                        image: deporte.imagen,
+                        onTap: () => tapDeporte(deporte),
                       ),
                     )
                     .toList(),
               ),
             ),
             Expanded(
-              child: (eventos.length == 0)
+              child: (eventos.isEmpty)
                   ? Image.asset(
                       'image/no_hay_eventos.png',
                       height: size.height * 0.4,

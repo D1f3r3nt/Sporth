@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'package:sporth/models/models.dart';
-import 'package:sporth/providers/dto/position_provider.dart';
-import 'package:sporth/providers/google/google_details_provider.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -70,7 +69,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
       _ubicacionController.text = searchProvider.ubiName;
     }
 
-    _miUbicacion() async {
+    miUbicacion() async {
       _geo = _miGeo ?? await positionProvider.getPosition(context);
       if (_geo == null) {
         Snackbar.errorSnackbar(context, 'Ha fallado');
@@ -82,7 +81,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
       googleAutocompleteProvider.cleanData();
     }
 
-    _tapOnAutocomplete(GooglePlaceAutocomplete lugar) async {
+    tapOnAutocomplete(GooglePlaceAutocomplete lugar) async {
       _ubicacionController.text = lugar.terms[0].value;
       searchProvider.ubiName = _ubicacionController.text;
       googleAutocompleteProvider.cleanData();
@@ -90,11 +89,13 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
       searchProvider.ubicacion = _geo!;
     }
 
-    _onChangedUbicacion(String value) async {
+    onChangedUbicacion(String value) async {
       _geo = null;
       googleAutocompleteProvider.getData(value);
       searchProvider.ubiName = value;
     }
+
+    aplicar() => Navigator.pop(context);
 
     return SizedBox(
       height: size.height * 0.75,
@@ -189,10 +190,11 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                     placeholder: 'Buscar',
                     controller: _ubicacionController,
                     fillColor: ColorsUtils.white,
-                    onChanged: (value) => _onChangedUbicacion(value),
+                    onChanged: (value) => onChangedUbicacion(value),
                     styleText: TextUtils.kanit_18_grey,
                     validator: (p0) {
                       if (_geo == null && _ubicacionController.text.isNotEmpty) return 'Seleccione un valor';
+                      return null;
                     },
                   ),
                   if (googleAutocompleteProvider.lugares.isNotEmpty)
@@ -201,7 +203,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                         leading: const Icon(Icons.map_outlined),
                         title: Text(lugar.terms[0].value),
                         subtitle: Text(_subtitle(lugar.terms)),
-                        onTap: () => _tapOnAutocomplete(lugar),
+                        onTap: () => tapOnAutocomplete(lugar),
                       );
                     }),
                   const SizedBox(height: 5.0),
@@ -211,7 +213,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                       text: 'Mi ubicacion',
                       color: ColorsUtils.lightblue,
                       style: TextUtils.kanit_18_whtie,
-                      funcion: _miUbicacion,
+                      funcion: miUbicacion,
                     ),
                   ),
                   const SizedBox(height: 5.0),
@@ -256,7 +258,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
             ),
             ButtonInput(
               text: 'Aplicar',
-              funcion: () => Navigator.pop(context),
+              funcion: aplicar,
             )
           ],
         ),

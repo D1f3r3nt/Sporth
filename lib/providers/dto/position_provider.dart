@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:sporth/models/dto/geografico_dto.dart';
-import 'package:sporth/utils/snackbar.dart';
+
+import 'package:sporth/models/models.dart';
+import 'package:sporth/utils/utils.dart';
 
 class PositionProvider {
   Future<GeograficoDto?> getPosition(BuildContext context) async {

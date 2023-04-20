@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/utils/text_utils.dart';
+
+import 'package:sporth/utils/utils.dart';
 
 class ChatCard extends StatelessWidget {
   final String nombre;

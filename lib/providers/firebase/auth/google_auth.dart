@@ -11,11 +11,10 @@ class GoogleAuth {
   GoogleSignInAccount get user => _user!;
 
   Future<void> login() async {
-    log('GOOGLE_LOG_IN');
+    log('GET -- GOOGLE LOG IN');
     final googleUser = await _googleSingIn.signIn(); // Muestra la pantalla de login con Google
 
     if (googleUser == null) {
-      log('ERROR - GOOGLE_LOG_IN');
       return;
     }
     _user = googleUser;
@@ -25,18 +24,13 @@ class GoogleAuth {
     final credential = GoogleAuthProvider.credential(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
 
     await FirebaseAuth.instance.signInWithCredential(credential);
-
-    log('CORRECT - GOOGLE_LOG_IN');
   }
 
   Future<void> logout() async {
-    log('GOOGLE_LOG_OUT');
+    log('POST -- GOOGLE LOG OUT');
     try {
       await _googleSingIn.disconnect();
       await FirebaseAuth.instance.signOut();
-      log('CORRECT - GOOGLE_LOG_OUT');
-    } catch (e) {
-      log('ERROR - GOOGLE_LOG_OUT');
-    }
+    } catch (e) {}
   }
 }

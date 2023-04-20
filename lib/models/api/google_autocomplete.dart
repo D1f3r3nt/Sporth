@@ -1,8 +1,3 @@
-// To parse this JSON data, do
-//
-//     final googleAutocomplete = googleAutocompleteFromJson(jsonString);
-
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 GoogleAutocomplete googleAutocompleteFromJson(String str) => GoogleAutocomplete.fromJson(json.decode(str));

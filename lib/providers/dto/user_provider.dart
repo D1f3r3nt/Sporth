@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:sporth/models/models.dart';
 
 class UserProvider extends ChangeNotifier {

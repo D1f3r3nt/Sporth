@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/providers/firebase/auth/email_auth.dart';
+
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -12,17 +12,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailRegex = RegExp(r"^[^@]+@[^@]+\.[a-zA-Z]{2,}$");
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _emailAuth = EmailAuth();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final RegExp _emailRegex = RegExp(r"^[^@]+@[^@]+\.[a-zA-Z]{2,}$");
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final EmailAuth _emailAuth = EmailAuth();
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    _login() async {
+    login() async {
       if (_formKey.currentState!.validate()) {
         await _emailAuth.logIn(
           context,
@@ -33,6 +33,10 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushReplacementNamed(context, '/');
       }
     }
+
+    tapRecuperarContrasenia() => Navigator.pushReplacementNamed(context, 'new-password');
+
+    tapRegistrarse() => Navigator.pushReplacementNamed(context, 'sing-up');
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -91,11 +95,11 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   alignment: Alignment.centerRight,
                   child: TextButton(
+                    onPressed: tapRecuperarContrasenia,
                     child: const Text(
                       'Has olvidado la contraseña?',
                       style: TextUtils.kanit_16_white,
                     ),
-                    onPressed: () => Navigator.pushReplacementNamed(context, 'new-password'),
                   ),
                 ),
                 const Expanded(child: SizedBox()),
@@ -103,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: ButtonInput(
                     text: 'ENTRAR',
-                    funcion: _login,
+                    funcion: login,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -118,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: ButtonInput(
                     text: 'REGISTRARSE',
-                    funcion: () => Navigator.pushReplacementNamed(context, 'sing-up'),
+                    funcion: tapRegistrarse,
                   ),
                 ),
                 const SizedBox(height: 20),

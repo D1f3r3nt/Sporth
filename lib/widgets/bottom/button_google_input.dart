@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sporth/models/dto/user_dto.dart';
-import 'package:sporth/providers/firebase/auth/google_auth.dart';
+
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 
@@ -15,7 +14,7 @@ class ButtonGoogleInput extends StatelessWidget {
     final databaseUser = DatabaseUser();
     final googleAuth = GoogleAuth();
 
-    _loginGoogle() async {
+    loginGoogle() async {
       await googleAuth.login();
 
       User user = FirebaseAuth.instance.currentUser!;
@@ -32,7 +31,7 @@ class ButtonGoogleInput extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: _loginGoogle,
+      onTap: loginGoogle,
       child: Container(
         decoration: BoxDecoration(
           color: ColorsUtils.red_google,

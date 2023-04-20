@@ -1,7 +1,8 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sporth/models/dto/user_dto.dart';
+
+import 'package:sporth/models/models.dart';
 
 class DatabaseUser {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -29,7 +30,7 @@ class DatabaseUser {
   }
 
   Future<bool> existsUser(String idUser) async {
-    log('GET -- USER');
+    log('GET -- EXISTS USER');
     DocumentReference documentReference = _db.collection(COLLECTION_NAME).doc(idUser);
     return await documentReference.get().then((value) => value.exists);
   }
@@ -38,7 +39,7 @@ class DatabaseUser {
   // POST
   // =============
   Future<void> saveUser(UserDto user) async {
-    log('POST -- USER');
+    log('POST -- SAVE USER');
     await _db.collection(COLLECTION_NAME).doc(user.idUser).set(user.toMap());
   }
 }

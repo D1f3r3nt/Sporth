@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:sporth/utils/utils.dart';
 
 class SelectImageBottom extends StatelessWidget {
   final Function() onTapCamera;
   final Function() onTapGallery;
-  SelectImageBottom({
+
+  const SelectImageBottom({
     super.key,
     required this.onTapCamera,
     required this.onTapGallery,

@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:sporth/models/models.dart';
-
 class UserDto {
   final String idUser;
   final String nombre;

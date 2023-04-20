@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:sporth/models/models.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:sporth/models/models.dart';
 
 class GoogleDetailsProvider {
   static const String URL_BASE = "maps.googleapis.com";
@@ -12,10 +13,12 @@ class GoogleDetailsProvider {
 
   Future<GeograficoDto> getData(String placeId) async {
     log('GET -- GOOGLE DETAILS');
-    var url = Uri.https(URL_BASE, ENPOINT_AUTOCOMPLETE, {
+
+    Uri url = Uri.https(URL_BASE, ENPOINT_AUTOCOMPLETE, {
       'key': API_KEY,
       'place_id': placeId,
     });
+
     var response = await http.get(url);
 
     GoogleDetails details = GoogleDetails.fromJson(jsonDecode(response.body));
@@ -25,7 +28,8 @@ class GoogleDetailsProvider {
 
   Future<String> getNameByGeolocation(GeograficoDto geo) async {
     log('GET -- GOOGLE GEOLOCATION');
-    var url = Uri.https(URL_BASE, ENPOINT_GEOLOCATION, {
+
+    Uri url = Uri.https(URL_BASE, ENPOINT_GEOLOCATION, {
       'key': API_KEY,
       'latlng': '${geo.lat},${geo.lng}',
     });
@@ -39,9 +43,5 @@ class GoogleDetailsProvider {
 
   String _getLocalityName(GoogleGeolocation geo) {
     return geo.results[0].addressComponents.where((element) => element.types.contains('locality')).map((e) => e.longName).toList()[0];
-  }
-
-  String _getAdministrativeName(GoogleGeolocation geo) {
-    return geo.results[0].addressComponents.where((element) => element.types.contains('administrative_area_level_1')).map((e) => e.longName).toList()[0];
   }
 }

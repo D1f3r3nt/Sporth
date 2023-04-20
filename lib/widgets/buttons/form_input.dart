@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:sporth/utils/utils.dart';
 
 class FormInput extends StatelessWidget {
@@ -31,9 +32,6 @@ class FormInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    String? _errorText;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Container(

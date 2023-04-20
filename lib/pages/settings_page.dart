@@ -1,13 +1,12 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:sporth/providers/firebase/auth/google_auth.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
-import 'package:image_picker/image_picker.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -17,13 +16,12 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _imageRepository = ImageRepository();
-  final _nombreController = TextEditingController();
-  final _apellidosController = TextEditingController();
-  final _telefonoController = TextEditingController();
-  final _timeController = TextEditingController();
-  final _pickerImage = ImagePicker();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _nombreController = TextEditingController();
+  final TextEditingController _apellidosController = TextEditingController();
+  final TextEditingController _telefonoController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
+  final ImagePicker _pickerImage = ImagePicker();
 
   File? _imageFile;
   DateTime _time = DateTime.now();
@@ -50,16 +48,30 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    _timeController.text = DateFormat('dd/MM/yyyy').format(_time);
-    final singUPProvider = Provider.of<SingUpProvider>(context);
-    final emailAuth = EmailAuth();
-    final googleAuth = GoogleAuth();
+    final EmailAuth emailAuth = EmailAuth();
+    final GoogleAuth googleAuth = GoogleAuth();
 
-    _logout() async {
+    _timeController.text = DateFormat('dd/MM/yyyy').format(_time);
+
+    logout() async {
       emailAuth.logOut(context);
       googleAuth.logout();
       Navigator.pushReplacementNamed(context, '/');
     }
+
+    atras() => Navigator.pushReplacementNamed(context, 'home');
+
+    addImage() => showModalBottomSheet(
+          context: context,
+          useSafeArea: true,
+          isScrollControlled: true,
+          builder: (context) {
+            return SelectImageBottom(
+              onTapCamera: () => _pickImageFromCamera(),
+              onTapGallery: () => _pickImageFromGallery(),
+            );
+          },
+        );
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -74,21 +86,11 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 PopButton(
                   text: 'Atras',
-                  onPressed: () => Navigator.pushReplacementNamed(context, 'home'),
+                  onPressed: atras,
                 ),
                 const SizedBox(height: 30.0),
                 GestureDetector(
-                  onTap: () => showModalBottomSheet(
-                    context: context,
-                    useSafeArea: true,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return SelectImageBottom(
-                        onTapCamera: () => _pickImageFromCamera(),
-                        onTapGallery: () => _pickImageFromGallery(),
-                      );
-                    },
-                  ),
+                  onTap: addImage,
                   child: CircleAvatar(
                     backgroundColor: (_imageFile == null) ? ColorsUtils.blue : null,
                     backgroundImage: (_imageFile != null) ? FileImage(_imageFile!) : null,
@@ -183,7 +185,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     text: 'Salir',
                     color: ColorsUtils.red_google,
-                    funcion: _logout,
+                    funcion: logout,
                   ),
                 ),
               ],

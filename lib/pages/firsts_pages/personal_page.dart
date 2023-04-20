@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:sporth/providers/firebase/storage/image_repository.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
-import 'package:image_picker/image_picker.dart';
 
 class PersonalPage extends StatefulWidget {
   const PersonalPage({super.key});
@@ -16,13 +16,13 @@ class PersonalPage extends StatefulWidget {
 }
 
 class _PersonalPageState extends State<PersonalPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _imageRepository = ImageRepository();
-  final _nombreController = TextEditingController();
-  final _apellidosController = TextEditingController();
-  final _telefonoController = TextEditingController();
-  final _timeController = TextEditingController();
-  final _pickerImage = ImagePicker();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final ImageRepository _imageRepository = ImageRepository();
+  final TextEditingController _nombreController = TextEditingController();
+  final TextEditingController _apellidosController = TextEditingController();
+  final TextEditingController _telefonoController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
+  final ImagePicker _pickerImage = ImagePicker();
 
   File? _imageFile;
   DateTime _time = DateTime.now();
@@ -52,7 +52,7 @@ class _PersonalPageState extends State<PersonalPage> {
     _timeController.text = DateFormat('dd/MM/yyyy').format(_time);
     final singUPProvider = Provider.of<SingUpProvider>(context);
 
-    _continuar() async {
+    continuar() async {
       if (_formKey.currentState!.validate()) {
         String imagen = '';
 
@@ -63,6 +63,18 @@ class _PersonalPageState extends State<PersonalPage> {
         Navigator.pushReplacementNamed(context, 'gustos');
       }
     }
+
+    addImage() => showModalBottomSheet(
+          context: context,
+          useSafeArea: true,
+          isScrollControlled: true,
+          builder: (context) {
+            return SelectImageBottom(
+              onTapCamera: () => _pickImageFromCamera(),
+              onTapGallery: () => _pickImageFromGallery(),
+            );
+          },
+        );
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -77,17 +89,7 @@ class _PersonalPageState extends State<PersonalPage> {
               children: [
                 const SizedBox(height: 30.0),
                 GestureDetector(
-                  onTap: () => showModalBottomSheet(
-                    context: context,
-                    useSafeArea: true,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return SelectImageBottom(
-                        onTapCamera: () => _pickImageFromCamera(),
-                        onTapGallery: () => _pickImageFromGallery(),
-                      );
-                    },
-                  ),
+                  onTap: addImage,
                   child: CircleAvatar(
                     backgroundColor: (_imageFile == null) ? ColorsUtils.blue : null,
                     backgroundImage: (_imageFile != null) ? FileImage(_imageFile!) : null,
@@ -177,7 +179,7 @@ class _PersonalPageState extends State<PersonalPage> {
                   padding: const EdgeInsets.all(20.0),
                   child: ButtonInput(
                     text: 'CONTINUAR',
-                    funcion: _continuar,
+                    funcion: continuar,
                   ),
                 ),
               ],

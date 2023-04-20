@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:sporth/models/models.dart';
 import 'package:sporth/pages/pages.dart';
 import 'package:sporth/providers/providers.dart';
@@ -11,8 +12,35 @@ class PrincipalPlantilla extends StatelessWidget {
   Widget build(BuildContext context) {
     final BottomNavProvider bottomNavProvider = Provider.of<BottomNavProvider>(context);
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-
     final UserDto user = userProvider.currentUser!;
+
+    chats() => Navigator.pushReplacementNamed(context, 'chats');
+
+    settings() => Navigator.pushReplacementNamed(context, 'settings');
+
+    tapNavigation(int value) {
+      if (value == 2) {
+        Navigator.pushReplacementNamed(context, 'add-page');
+        value = 0;
+      }
+      bottomNavProvider.index = value;
+    }
+
+    gatewayPages(BuildContext context, int index) {
+      switch (index) {
+        case 0:
+          return HomePage();
+
+        case 1:
+          return const SearchPage();
+
+        case 3:
+          return const CalendarPage();
+
+        case 4:
+          return const UserPage();
+      }
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -27,9 +55,7 @@ class PrincipalPlantilla extends StatelessWidget {
               elevation: 0.5,
               actions: [
                 IconButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, 'chats');
-                  },
+                  onPressed: chats,
                   icon: const Icon(
                     Icons.message,
                     color: ColorsUtils.black,
@@ -48,7 +74,7 @@ class PrincipalPlantilla extends StatelessWidget {
                   elevation: 0.0,
                   actions: [
                     IconButton(
-                      onPressed: () => Navigator.pushReplacementNamed(context, 'settings'),
+                      onPressed: settings,
                       icon: const Icon(
                         Icons.settings,
                         color: ColorsUtils.grey,
@@ -95,30 +121,8 @@ class PrincipalPlantilla extends StatelessWidget {
         selectedFontSize: 0.0,
         unselectedFontSize: 0.0,
         type: BottomNavigationBarType.fixed,
-        onTap: (value) {
-          if (value == 2) {
-            Navigator.pushReplacementNamed(context, 'add-page');
-            value = 0;
-          }
-          bottomNavProvider.index = value;
-        },
+        onTap: (value) => tapNavigation(value),
       ),
     );
-  }
-
-  gatewayPages(BuildContext context, int index) {
-    switch (index) {
-      case 0:
-        return HomePage();
-
-      case 1:
-        return const SearchPage();
-
-      case 3:
-        return const CalendarPage();
-
-      case 4:
-        return const UserPage();
-    }
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+
 import 'package:sporth/models/models.dart';
-import 'package:sporth/providers/firebase/database/database_user.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -15,20 +15,23 @@ class GustosPage extends StatefulWidget {
 class _GustosPageState extends State<GustosPage> {
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final deportesProvider = Provider.of<DeportesProvider>(context);
-    final singUpProvider = Provider.of<SingUpProvider>(context);
-    final databaseUser = DatabaseUser();
+    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
+    final SingUpProvider singUpProvider = Provider.of<SingUpProvider>(context);
+    final DatabaseUser databaseUser = DatabaseUser();
 
     List<DeportesDto> gustos = deportesProvider.deportesGustos;
 
-    _finalizar() {
+    finalizar() {
       singUpProvider.addGustos(gustos.where((element) => element.selected).toList());
 
       databaseUser.saveUser(singUpProvider.newUser);
 
       Navigator.pushReplacementNamed(context, '/');
     }
+
+    tapGustosButtons(DeportesDto element) => setState(() {
+          element.selected = !element.selected;
+        });
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -72,9 +75,7 @@ class _GustosPageState extends State<GustosPage> {
                                 active: element.selected,
                                 image: element.imagen,
                                 text: element.nombre,
-                                onTap: () => setState(() {
-                                  element.selected = !element.selected;
-                                }),
+                                onTap: () => tapGustosButtons(element),
                               ))
                           .toList(),
                     ),
@@ -85,7 +86,7 @@ class _GustosPageState extends State<GustosPage> {
                 padding: const EdgeInsets.all(20.0),
                 child: ButtonInput(
                   text: 'FINALIZAR',
-                  funcion: _finalizar,
+                  funcion: finalizar,
                 ),
               ),
             ],

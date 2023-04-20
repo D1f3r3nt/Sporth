@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
+
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 

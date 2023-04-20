@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/models/dto/user_dto.dart';
-import 'package:sporth/models/local/deportes_local.dart';
+
+import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -8,13 +8,16 @@ import 'package:sporth/widgets/widgets.dart';
 class UserPage extends StatelessWidget {
   const UserPage({super.key});
 
+  _filterDeportes(int id, List<int> gustos) {
+    return gustos.contains(id);
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final userProvider = Provider.of<UserProvider>(context);
-
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final UserDto user = userProvider.currentUser!;
-    final deportesProvider = Provider.of<DeportesProvider>(context);
     final List<DeportesLocal> listDeportes = deportesProvider.deportes.where((element) => _filterDeportes(element.id, user.gustos)).toList();
 
     return SafeArea(
@@ -106,9 +109,5 @@ class UserPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  _filterDeportes(int id, List<int> gustos) {
-    return gustos.contains(id);
   }
 }

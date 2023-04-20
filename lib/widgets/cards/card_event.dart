@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:sporth/models/models.dart';
 import 'package:sporth/utils/utils.dart';
 
@@ -9,10 +10,10 @@ class CardEvent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    goEvento() => Navigator.pushNamed(context, 'details', arguments: eventoDto);
 
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, 'details', arguments: eventoDto),
+      onTap: goEvento,
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [

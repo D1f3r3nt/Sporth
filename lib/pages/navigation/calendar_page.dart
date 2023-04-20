@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/utils/utils.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import 'package:sporth/utils/utils.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -10,60 +11,9 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  dynamic _focusedDay = DateTime.now();
+  DateTime _focusedDay = DateTime.now();
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Column(
-          children: [
-            const SizedBox(height: 10.0),
-            Text(
-              '${formatIntToMonth(_focusedDay.month)} ${_focusedDay.year}',
-              style: TextUtils.kanitItalic_24_black,
-            ),
-            const SizedBox(height: 20.0),
-            TableCalendar(
-              onPageChanged: (focusedDay) {
-                setState(() {
-                  _focusedDay = focusedDay;
-                });
-              },
-              firstDay: DateTime.utc(2010, 10, 16),
-              lastDay: DateTime.utc(2030, 3, 14),
-              focusedDay: _focusedDay,
-              availableGestures: AvailableGestures.horizontalSwipe,
-              eventLoader: (day) {
-                if (day.day == DateTime.now().day) {
-                  return ['Dia X'];
-                }
-                return [];
-              },
-              calendarStyle: const CalendarStyle(
-                defaultTextStyle: TextUtils.kanit_18_black,
-              ),
-              headerVisible: false,
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              headerStyle: const HeaderStyle(
-                formatButtonVisible: false,
-                leftChevronVisible: false,
-                rightChevronVisible: false,
-                titleCentered: true,
-                titleTextStyle: TextStyle(
-                  fontSize: 20.0,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  formatIntToMonth(int month) {
+  String formatIntToMonth(int month) {
     switch (month) {
       case 1:
         return 'Enero';
@@ -90,5 +40,59 @@ class _CalendarPageState extends State<CalendarPage> {
       case 12:
         return 'Diciembre';
     }
+    return '';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    onPageChanged(DateTime focusedDay) => setState(() {
+          _focusedDay = focusedDay;
+        });
+
+    eventLoader(DateTime day) {
+      if (day.day == DateTime.now().day) {
+        return ['Dia X'];
+      }
+      return [];
+    }
+
+    return SafeArea(
+      child: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Column(
+          children: [
+            const SizedBox(height: 10.0),
+            Text(
+              '${formatIntToMonth(_focusedDay.month)} ${_focusedDay.year}',
+              style: TextUtils.kanitItalic_24_black,
+            ),
+            const SizedBox(height: 20.0),
+            TableCalendar(
+              onPageChanged: (focusedDay) => onPageChanged(focusedDay),
+              firstDay: DateTime.utc(2010, 10, 16),
+              lastDay: DateTime.utc(2030, 3, 14),
+              focusedDay: _focusedDay,
+              availableGestures: AvailableGestures.horizontalSwipe,
+              eventLoader: (day) => eventLoader(day),
+              calendarStyle: const CalendarStyle(
+                defaultTextStyle: TextUtils.kanit_18_black,
+              ),
+              headerVisible: false,
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              headerStyle: const HeaderStyle(
+                formatButtonVisible: false,
+                leftChevronVisible: false,
+                rightChevronVisible: false,
+                titleCentered: true,
+                titleTextStyle: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

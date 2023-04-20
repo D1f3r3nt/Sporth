@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:sporth/models/models.dart';
 import 'package:sporth/utils/utils.dart';
 
@@ -12,8 +13,10 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    goUser() => Navigator.pushNamed(context, 'other-user', arguments: userDto);
+
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, 'other-user', arguments: userDto),
+      onTap: goUser,
       child: Row(
         children: [
           CircleAvatar(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:sporth/models/models.dart';
-import 'package:sporth/providers/firebase/database/database_evento.dart';
+import 'package:sporth/providers/providers.dart';
 
 class EventosProvider extends ChangeNotifier {
   final DatabaseEvento databaseEvento = DatabaseEvento();

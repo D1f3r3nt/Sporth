@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/pages/chats_page.dart';
-import 'package:sporth/pages/details_page.dart';
-import 'package:sporth/pages/other_user_page.dart';
+
 import 'package:sporth/pages/pages.dart';
-import 'package:sporth/pages/personal_chat_page.dart';
-import 'package:sporth/pages/settings_page.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 Map<String, WidgetBuilder> getRoutes = {
@@ -18,7 +14,7 @@ Map<String, WidgetBuilder> getRoutes = {
   'add-page': (context) => const AddPage(),
   'chats': (context) => ChatsPage(),
   'chat-personal': (context) => const PersonalChatPage(),
-  'other-user': (context) => OtherUserPage(),
+  'other-user': (context) => const OtherUserPage(),
   'settings': (context) => const SettingsPage(),
   'details': (context) => const DetailsPage(),
 };

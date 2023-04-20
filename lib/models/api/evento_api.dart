@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'package:sporth/models/dto/geografico_dto.dart';
 
 EventoApi eventoDtoFromJson(String str) => EventoApi.fromJson(json.decode(str));

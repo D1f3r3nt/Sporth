@@ -1,4 +1,4 @@
-import 'package:sporth/models/dto/geografico_dto.dart';
+import 'package:sporth/models/models.dart';
 
 class SearchDto {
   String? nombre;

@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:sporth/models/dto/geografico_dto.dart';
+
 import 'package:sporth/models/models.dart';
-import 'package:sporth/providers/dto/position_provider.dart';
-import 'package:sporth/providers/google/google_details_provider.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -68,6 +66,15 @@ class _AddPageState extends State<AddPage> {
     if (picked != null && picked != _time) setState(() => _time = picked);
   }
 
+  selectActivity(List<DeportesDto> listDeportes, int index) {
+    setState(() {
+      for (var element in listDeportes) {
+        element.selected = false;
+      }
+      listDeportes[index].selected = !listDeportes[index].selected;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -81,10 +88,10 @@ class _AddPageState extends State<AddPage> {
     _dateController.text = DateFormat('dd/MM/yyyy').format(_date);
     _timeController.text = '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
 
-    void _subirEvento() async {
+    subirEvento() async {
       if (_formKey.currentState!.validate()) {
         var list = listDeportes.where((element) => element.selected).toList();
-        if (list.length == 0) {
+        if (list.isEmpty) {
           Snackbar.errorSnackbar(context, 'Ponga un deporte');
         } else {
           String imagen = "";
@@ -118,24 +125,38 @@ class _AddPageState extends State<AddPage> {
       }
     }
 
-    _tapOnAutocomplete(GooglePlaceAutocomplete lugar) async {
+    addImage() => showModalBottomSheet(
+          context: context,
+          useSafeArea: true,
+          isScrollControlled: true,
+          builder: (context) {
+            return SelectImageBottom(
+              onTapCamera: () => _pickImageFromCamera(),
+              onTapGallery: () => _pickImageFromGallery(),
+            );
+          },
+        );
+
+    atras() => Navigator.pushReplacementNamed(context, 'home');
+
+    tapOnAutocomplete(GooglePlaceAutocomplete lugar) async {
       _ubicacionesController.text = lugar.terms[0].value;
       _geo = await _googleDetailsProvider.getData(lugar.placeId);
       googleAutocompleteProvider.cleanData();
     }
 
-    _onChangedUbicacion(String value) async {
+    onChangedUbicacion(String value) async {
       _miGeo ??= await positionProvider.getPosition(context);
       googleAutocompleteProvider.getData(value);
     }
 
-    _miUbicacion() async {
+    miUbicacion() async {
       _geo = _miGeo ?? await positionProvider.getPosition(context);
       if (_geo == null) return;
       _ubicacionesController.text = await _googleDetailsProvider.getNameByGeolocation(_geo!);
     }
 
-    String _subtitle(List<Term> terms) {
+    String subtitle(List<Term> terms) {
       String text = '';
 
       for (int i = 1; i < terms.length; i++) {
@@ -167,17 +188,7 @@ class _AddPageState extends State<AddPage> {
                         )
                       : null,
                   child: GestureDetector(
-                    onTap: () => showModalBottomSheet(
-                      context: context,
-                      useSafeArea: true,
-                      isScrollControlled: true,
-                      builder: (context) {
-                        return SelectImageBottom(
-                          onTapCamera: () => _pickImageFromCamera(),
-                          onTapGallery: () => _pickImageFromGallery(),
-                        );
-                      },
-                    ),
+                    onTap: addImage,
                     child: _imageFile == null
                         ? Column(
                             children: const [
@@ -200,7 +211,7 @@ class _AddPageState extends State<AddPage> {
                 left: 5,
                 child: PopButton(
                   text: 'Atras',
-                  onPressed: () => Navigator.pushReplacementNamed(context, 'home'),
+                  onPressed: atras,
                 ),
               ),
               Positioned(
@@ -306,7 +317,7 @@ class _AddPageState extends State<AddPage> {
                                   controller: _ubicacionesController,
                                   fillColor: ColorsUtils.white,
                                   styleText: TextUtils.kanit_18_grey,
-                                  onChanged: (value) => _onChangedUbicacion(value),
+                                  onChanged: (value) => onChangedUbicacion(value),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) return 'Ponga un valor';
                                     if (_geo == null) return 'Seleccione un valor';
@@ -318,8 +329,8 @@ class _AddPageState extends State<AddPage> {
                                     return ListTile(
                                       leading: const Icon(Icons.map_outlined),
                                       title: Text(lugar.terms[0].value),
-                                      subtitle: Text(_subtitle(lugar.terms)),
-                                      onTap: () => _tapOnAutocomplete(lugar),
+                                      subtitle: Text(subtitle(lugar.terms)),
+                                      onTap: () => tapOnAutocomplete(lugar),
                                     );
                                   }),
                                 const SizedBox(height: 5.0),
@@ -329,7 +340,7 @@ class _AddPageState extends State<AddPage> {
                                     text: 'Mi ubicacion',
                                     color: ColorsUtils.lightblue,
                                     style: TextUtils.kanit_18_whtie,
-                                    funcion: _miUbicacion,
+                                    funcion: miUbicacion,
                                   ),
                                 ),
                                 const SizedBox(height: 20.0),
@@ -440,7 +451,7 @@ class _AddPageState extends State<AddPage> {
                           padding: const EdgeInsets.all(30.0),
                           child: ButtonInput(
                             text: 'SUBIR',
-                            funcion: _subirEvento,
+                            funcion: subirEvento,
                           ),
                         )
                       ],
@@ -453,13 +464,5 @@ class _AddPageState extends State<AddPage> {
         ),
       ),
     );
-  }
-
-  void selectActivity(List<DeportesDto> listDeportes, int index) {
-    setState(() {
-      listDeportes.forEach((element) => element.selected = false);
-      listDeportes[index].selected = !listDeportes[index].selected;
-      print(listDeportes[index].selected);
-    });
   }
 }

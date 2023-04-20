@@ -1,5 +1,6 @@
 export 'dto/bottom_nav_provider.dart';
 export 'dto/eventos_provider.dart';
+export 'dto/position_provider.dart';
 export 'dto/search_provider.dart';
 export 'dto/sing_up_provider.dart';
 export 'dto/user_provider.dart';
@@ -9,5 +10,6 @@ export 'firebase/database/database_evento.dart';
 export 'firebase/database/database_user.dart';
 export 'firebase/storage/image_repository.dart';
 export 'google/google_autocomplete_provider.dart';
+export 'google/google_details_provider.dart';
 export 'local/deportes_provider.dart';
 export 'package:provider/provider.dart';

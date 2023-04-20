@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/providers/firebase/auth/email_auth.dart';
+
+import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -11,21 +12,23 @@ class PasswordPage extends StatefulWidget {
 }
 
 class _PasswordPageState extends State<PasswordPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailRegex = RegExp(r"^[^@]+@[^@]+\.[a-zA-Z]{2,}$");
-  final _emailController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final RegExp _emailRegex = RegExp(r"^[^@]+@[^@]+\.[a-zA-Z]{2,}$");
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final emailProvider = EmailAuth();
 
-    _enviar() {
+    enviar() {
       if (_formKey.currentState!.validate()) {
         emailProvider.newPassword(context, email: _emailController.text);
 
         Navigator.pushReplacementNamed(context, 'login');
       }
     }
+
+    tapAtras() => Navigator.pushReplacementNamed(context, 'login');
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -42,7 +45,7 @@ class _PasswordPageState extends State<PasswordPage> {
               children: [
                 PopButton(
                   text: 'Atras',
-                  onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
+                  onPressed: tapAtras,
                 ),
                 const SizedBox(height: 15.0),
                 Expanded(
@@ -96,7 +99,7 @@ class _PasswordPageState extends State<PasswordPage> {
                           padding: const EdgeInsets.all(20.0),
                           child: ButtonInput(
                             text: 'ENVIAR',
-                            funcion: _enviar,
+                            funcion: enviar,
                           ),
                         ),
                       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
@@ -12,14 +13,18 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  bool _containsUser(List<UserDto> participantes, UserDto user) {
+    return participantes.where((element) => element.idUser == user.idUser).toList().isEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final eventoDto = ModalRoute.of(context)!.settings.arguments as EventoDto;
-    final userProvider = Provider.of<UserProvider>(context);
-    final databaseEvento = DatabaseEvento();
+    final EventoDto eventoDto = ModalRoute.of(context)!.settings.arguments as EventoDto;
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    final DatabaseEvento databaseEvento = DatabaseEvento();
 
-    _inscribirse() {
+    inscribirse() {
       if (userProvider.currentUser!.idUser == eventoDto.anfitrion.idUser) {
         Snackbar.errorSnackbar(context, 'Este es tu evento');
       } else {
@@ -28,14 +33,18 @@ class _DetailsPageState extends State<DetailsPage> {
       }
     }
 
-    _message() {
+    message() {
       // TODO: Cambiar por privado
       Navigator.pushReplacementNamed(context, 'chats');
     }
 
-    _showPeople() {
+    showPeople() {
       PopupUtils().dialogScrollUsers(context, eventoDto.participantes);
     }
+
+    tapShare() {}
+
+    atras() => Navigator.pop(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -64,7 +73,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 left: 5,
                 child: PopButton(
                   text: 'Atras',
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: atras,
                   colorWhite: true,
                 ),
               ),
@@ -180,7 +189,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               active: true,
                             ),
                             GestureDetector(
-                              onTap: _showPeople,
+                              onTap: showPeople,
                               child: Row(
                                 children: [
                                   const Icon(Icons.people),
@@ -213,14 +222,12 @@ class _DetailsPageState extends State<DetailsPage> {
                               Expanded(
                                 child: ButtonInput(
                                   text: _containsUser(eventoDto.participantes, userProvider.currentUser!) ? 'Inscribirse' : 'Chat',
-                                  funcion: _containsUser(eventoDto.participantes, userProvider.currentUser!) ? _inscribirse : _message,
+                                  funcion: _containsUser(eventoDto.participantes, userProvider.currentUser!) ? inscribirse : message,
                                 ),
                               ),
                               const SizedBox(width: 10.0),
                               IconButton(
-                                onPressed: () {
-                                  print('Enviar');
-                                },
+                                onPressed: tapShare,
                                 icon: const Icon(Icons.share),
                               ),
                             ],
@@ -237,9 +244,5 @@ class _DetailsPageState extends State<DetailsPage> {
         ),
       ),
     );
-  }
-
-  bool _containsUser(List<UserDto> participantes, UserDto user) {
-    return participantes.where((element) => element.idUser == user.idUser).toList().isEmpty;
   }
 }
