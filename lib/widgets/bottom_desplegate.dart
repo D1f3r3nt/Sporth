@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sporth/models/dto/geografico_dto.dart';
 import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/dto/position_provider.dart';
 import 'package:sporth/providers/google/google_details_provider.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
@@ -23,6 +24,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
   DateTime? _date;
   TimeOfDay? _time;
   GeograficoDto? _geo;
+  GeograficoDto? _miGeo;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -60,9 +62,27 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
     final SearchProvider searchProvider = Provider.of<SearchProvider>(context);
     final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
     final Size size = MediaQuery.of(context).size;
+    final PositionProvider positionProvider = PositionProvider();
 
     _dateController.text = searchProvider.search.dia == null ? '' : searchProvider.search.dia!;
     _timeController.text = searchProvider.search.hora == null ? '' : searchProvider.search.hora!;
+
+    _miUbicacion() async {
+      _geo = _miGeo ?? await positionProvider.getPosition(context);
+      if (_geo == null) return;
+      _ubicacionController.text = await _googleDetailsProvider.getNameByGeolocation(_geo!);
+    }
+
+    _tapOnAutocomplete(GooglePlaceAutocomplete lugar) async {
+      _ubicacionController.text = lugar.terms[0].value;
+      _geo = await _googleDetailsProvider.getData(lugar.placeId);
+      googleAutocompleteProvider.cleanData();
+    }
+
+    _onChangedUbicacion(String value) async {
+      _miGeo ??= await positionProvider.getPosition(context);
+      googleAutocompleteProvider.getData(value);
+    }
 
     return SizedBox(
       height: size.height * 0.75,
@@ -157,9 +177,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                     placeholder: 'Buscar',
                     controller: _ubicacionController,
                     fillColor: ColorsUtils.white,
-                    onChanged: (value) {
-                      googleAutocompleteProvider.getData(value, '39.423956%2C2.749686');
-                    },
+                    onChanged: (value) => _onChangedUbicacion(value),
                     styleText: TextUtils.kanit_18_grey,
                     validator: (p0) {
                       if (_geo == null && _ubicacionController.text.isNotEmpty) return 'Seleccione un valor';
@@ -171,11 +189,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                         leading: const Icon(Icons.map_outlined),
                         title: Text(lugar.terms[0].value),
                         subtitle: Text(_subtitle(lugar.terms)),
-                        onTap: () async {
-                          _ubicacionController.text = lugar.terms[0].value;
-                          _geo = await _googleDetailsProvider.getData(lugar.placeId);
-                          googleAutocompleteProvider.cleanData();
-                        },
+                        onTap: () => _tapOnAutocomplete(lugar),
                       );
                     }),
                   const SizedBox(height: 5.0),
@@ -185,7 +199,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                       text: 'Mi ubicacion',
                       color: ColorsUtils.lightblue,
                       style: TextUtils.kanit_18_whtie,
-                      funcion: () {},
+                      funcion: _miUbicacion,
                     ),
                   ),
                   const SizedBox(height: 5.0),

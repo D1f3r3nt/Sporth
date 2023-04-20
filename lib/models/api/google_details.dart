@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
+import 'package:sporth/models/models.dart';
+
 GoogleDetails googleDetailsFromJson(String str) => GoogleDetails.fromJson(json.decode(str));
 
 String googleDetailsToJson(GoogleDetails data) => json.encode(data.toJson());
@@ -13,12 +15,12 @@ class GoogleDetails {
   });
 
   final List<dynamic> htmlAttributions;
-  final Result result;
+  final ResultDetails result;
   final String status;
 
   GoogleDetails copyWith({
     List<dynamic>? htmlAttributions,
-    Result? result,
+    ResultDetails? result,
     String? status,
   }) =>
       GoogleDetails(
@@ -29,7 +31,7 @@ class GoogleDetails {
 
   factory GoogleDetails.fromJson(Map<String, dynamic> json) => GoogleDetails(
         htmlAttributions: List<dynamic>.from(json["html_attributions"].map((x) => x)),
-        result: Result.fromJson(json["result"]),
+        result: ResultDetails.fromJson(json["result"]),
         status: json["status"],
       );
 
@@ -40,8 +42,8 @@ class GoogleDetails {
       };
 }
 
-class Result {
-  Result({
+class ResultDetails {
+  ResultDetails({
     required this.addressComponents,
     required this.adrAddress,
     required this.businessStatus,
@@ -76,7 +78,7 @@ class Result {
   final CurrentOpeningHours currentOpeningHours;
   final String formattedAddress;
   final String? formattedPhoneNumber;
-  final Geometry geometry;
+  final GeometryDetails geometry;
   final String icon;
   final String iconBackgroundColor;
   final String iconMaskBaseUri;
@@ -97,14 +99,14 @@ class Result {
   final String website;
   final bool wheelchairAccessibleEntrance;
 
-  Result copyWith({
+  ResultDetails copyWith({
     List<AddressComponent>? addressComponents,
     String? adrAddress,
     String? businessStatus,
     CurrentOpeningHours? currentOpeningHours,
     String? formattedAddress,
     String? formattedPhoneNumber,
-    Geometry? geometry,
+    GeometryDetails? geometry,
     String? icon,
     String? iconBackgroundColor,
     String? iconMaskBaseUri,
@@ -125,7 +127,7 @@ class Result {
     String? website,
     bool? wheelchairAccessibleEntrance,
   }) =>
-      Result(
+      ResultDetails(
         addressComponents: addressComponents ?? this.addressComponents,
         adrAddress: adrAddress ?? this.adrAddress,
         businessStatus: businessStatus ?? this.businessStatus,
@@ -154,14 +156,14 @@ class Result {
         wheelchairAccessibleEntrance: wheelchairAccessibleEntrance ?? this.wheelchairAccessibleEntrance,
       );
 
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
+  factory ResultDetails.fromJson(Map<String, dynamic> json) => ResultDetails(
         addressComponents: List<AddressComponent>.from(json["address_components"].map((x) => AddressComponent.fromJson(x))),
         adrAddress: json["adr_address"],
         businessStatus: json["business_status"],
         currentOpeningHours: CurrentOpeningHours.fromJson(json["current_opening_hours"]),
         formattedAddress: json["formatted_address"],
         formattedPhoneNumber: json["formatted_phone_number"],
-        geometry: Geometry.fromJson(json["geometry"]),
+        geometry: GeometryDetails.fromJson(json["geometry"]),
         icon: json["icon"],
         iconBackgroundColor: json["icon_background_color"],
         iconMaskBaseUri: json["icon_mask_base_uri"],
@@ -210,41 +212,6 @@ class Result {
         "vicinity": vicinity,
         "website": website,
         "wheelchair_accessible_entrance": wheelchairAccessibleEntrance,
-      };
-}
-
-class AddressComponent {
-  AddressComponent({
-    required this.longName,
-    required this.shortName,
-    required this.types,
-  });
-
-  final String longName;
-  final String shortName;
-  final List<String> types;
-
-  AddressComponent copyWith({
-    String? longName,
-    String? shortName,
-    List<String>? types,
-  }) =>
-      AddressComponent(
-        longName: longName ?? this.longName,
-        shortName: shortName ?? this.shortName,
-        types: types ?? this.types,
-      );
-
-  factory AddressComponent.fromJson(Map<String, dynamic> json) => AddressComponent(
-        longName: json["long_name"],
-        shortName: json["short_name"],
-        types: List<String>.from(json["types"].map((x) => x)),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "long_name": longName,
-        "short_name": shortName,
-        "types": List<dynamic>.from(types.map((x) => x)),
       };
 }
 
@@ -353,8 +320,8 @@ class PurpleClose {
       };
 }
 
-class Geometry {
-  Geometry({
+class GeometryDetails {
+  GeometryDetails({
     required this.location,
     required this.viewport,
   });
@@ -362,16 +329,16 @@ class Geometry {
   final Location location;
   final Viewport viewport;
 
-  Geometry copyWith({
+  GeometryDetails copyWith({
     Location? location,
     Viewport? viewport,
   }) =>
-      Geometry(
+      GeometryDetails(
         location: location ?? this.location,
         viewport: viewport ?? this.viewport,
       );
 
-  factory Geometry.fromJson(Map<String, dynamic> json) => Geometry(
+  factory GeometryDetails.fromJson(Map<String, dynamic> json) => GeometryDetails(
         location: Location.fromJson(json["location"]),
         viewport: Viewport.fromJson(json["viewport"]),
       );
@@ -379,64 +346,6 @@ class Geometry {
   Map<String, dynamic> toJson() => {
         "location": location.toJson(),
         "viewport": viewport.toJson(),
-      };
-}
-
-class Location {
-  Location({
-    required this.lat,
-    required this.lng,
-  });
-
-  final double lat;
-  final double lng;
-
-  Location copyWith({
-    double? lat,
-    double? lng,
-  }) =>
-      Location(
-        lat: lat ?? this.lat,
-        lng: lng ?? this.lng,
-      );
-
-  factory Location.fromJson(Map<String, dynamic> json) => Location(
-        lat: json["lat"]?.toDouble(),
-        lng: json["lng"]?.toDouble(),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "lat": lat,
-        "lng": lng,
-      };
-}
-
-class Viewport {
-  Viewport({
-    required this.northeast,
-    required this.southwest,
-  });
-
-  final Location northeast;
-  final Location southwest;
-
-  Viewport copyWith({
-    Location? northeast,
-    Location? southwest,
-  }) =>
-      Viewport(
-        northeast: northeast ?? this.northeast,
-        southwest: southwest ?? this.southwest,
-      );
-
-  factory Viewport.fromJson(Map<String, dynamic> json) => Viewport(
-        northeast: Location.fromJson(json["northeast"]),
-        southwest: Location.fromJson(json["southwest"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "northeast": northeast.toJson(),
-        "southwest": southwest.toJson(),
       };
 }
 
@@ -571,35 +480,6 @@ class Photo {
         "html_attributions": List<dynamic>.from(htmlAttributions.map((x) => x)),
         "photo_reference": photoReference,
         "width": width,
-      };
-}
-
-class PlusCode {
-  PlusCode({
-    required this.compoundCode,
-    required this.globalCode,
-  });
-
-  final String compoundCode;
-  final String globalCode;
-
-  PlusCode copyWith({
-    String? compoundCode,
-    String? globalCode,
-  }) =>
-      PlusCode(
-        compoundCode: compoundCode ?? this.compoundCode,
-        globalCode: globalCode ?? this.globalCode,
-      );
-
-  factory PlusCode.fromJson(Map<String, dynamic> json) => PlusCode(
-        compoundCode: json["compound_code"],
-        globalCode: json["global_code"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "compound_code": compoundCode,
-        "global_code": globalCode,
       };
 }
 

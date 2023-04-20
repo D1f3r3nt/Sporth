@@ -19,11 +19,10 @@ class GoogleAutocompleteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getData(String search, String location) async {
+  void getData(String search) async {
     log('GET -- GOOGLE AUTOCOMPLETE');
     var url = Uri.https(URL_BASE, ENPOINT_AUTOCOMPLETE, {
       'key': API_KEY,
-      'location': location,
       'types': TYPES,
       'input': search,
     });
