@@ -18,6 +18,7 @@ class EventoDto {
     required this.descripcion,
     required this.anfitrion,
     required this.participantes,
+    required this.geo,
     this.privado,
   });
 
@@ -33,6 +34,7 @@ class EventoDto {
   String descripcion;
   UserDto anfitrion;
   List<UserDto> participantes;
+  GeograficoDto geo;
   String? privado;
 
   String get diaFormatShow {

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sporth/models/dto/search_dto.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 
@@ -53,6 +53,17 @@ class DatabaseEvento {
 
       return true;
     }).toList();
+
+    if (searchDto.ubicacion != null) {
+      listResponse.sort((a, b) {
+        double distanceA = Geolocator.distanceBetween(searchDto.ubicacion!.lat, searchDto.ubicacion!.lng, a.geo.lat, a.geo.lng);
+        double distanceB = Geolocator.distanceBetween(searchDto.ubicacion!.lat, searchDto.ubicacion!.lng, b.geo.lat, b.geo.lng);
+
+        if (distanceA > distanceB) return 1;
+        if (distanceA < distanceB) return -1;
+        return 0;
+      });
+    }
 
     return listResponse;
   }
@@ -110,6 +121,7 @@ class DatabaseEvento {
         imagen: eventosApi[i].imagen,
         descripcion: eventosApi[i].descripcion,
         anfitrion: await databaseUser.getUser(eventosApi[i].anfitrion),
+        geo: eventosApi[i].geo,
         participantes: await _getParticipantes(eventosApi[i].participantes),
       ));
     }
