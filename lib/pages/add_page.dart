@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sporth/models/dto/geografico_dto.dart';
 import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/dto/position_provider.dart';
 import 'package:sporth/providers/google/google_details_provider.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
@@ -35,6 +36,7 @@ class _AddPageState extends State<AddPage> {
   DateTime _date = DateTime.now();
   TimeOfDay _time = TimeOfDay.now();
   GeograficoDto? _geo;
+  GeograficoDto? _miGeo;
   bool _precio = false;
   bool _privado = false;
 
@@ -72,13 +74,14 @@ class _AddPageState extends State<AddPage> {
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
+    final PositionProvider positionProvider = PositionProvider();
     final List<DeportesDto> listDeportes = deportesProvider.deportesAdd;
     final DatabaseEvento eventoDatabase = DatabaseEvento();
 
     _dateController.text = DateFormat('dd/MM/yyyy').format(_date);
     _timeController.text = '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
 
-    _subirEvento() async {
+    void _subirEvento() async {
       if (_formKey.currentState!.validate()) {
         var list = listDeportes.where((element) => element.selected).toList();
         if (list.length == 0) {
@@ -113,6 +116,23 @@ class _AddPageState extends State<AddPage> {
           Navigator.pushReplacementNamed(context, 'home');
         }
       }
+    }
+
+    _tapOnAutocomplete(GooglePlaceAutocomplete lugar) async {
+      _ubicacionesController.text = lugar.terms[0].value;
+      _geo = await _googleDetailsProvider.getData(lugar.placeId);
+      googleAutocompleteProvider.cleanData();
+    }
+
+    _onChangedUbicacion(String value) async {
+      _miGeo ??= await positionProvider.getPosition(context);
+      googleAutocompleteProvider.getData(value);
+    }
+
+    _miUbicacion() async {
+      _geo = _miGeo ?? await positionProvider.getPosition(context);
+      if (_geo == null) return;
+      _ubicacionesController.text = await _googleDetailsProvider.getNameByGeolocation(_geo!);
     }
 
     String _subtitle(List<Term> terms) {
@@ -286,9 +306,7 @@ class _AddPageState extends State<AddPage> {
                                   controller: _ubicacionesController,
                                   fillColor: ColorsUtils.white,
                                   styleText: TextUtils.kanit_18_grey,
-                                  onChanged: (value) {
-                                    googleAutocompleteProvider.getData(value, '39.423956%2C2.749686');
-                                  },
+                                  onChanged: (value) => _onChangedUbicacion(value),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) return 'Ponga un valor';
                                     if (_geo == null) return 'Seleccione un valor';
@@ -301,11 +319,7 @@ class _AddPageState extends State<AddPage> {
                                       leading: const Icon(Icons.map_outlined),
                                       title: Text(lugar.terms[0].value),
                                       subtitle: Text(_subtitle(lugar.terms)),
-                                      onTap: () async {
-                                        _ubicacionesController.text = lugar.terms[0].value;
-                                        _geo = await _googleDetailsProvider.getData(lugar.placeId);
-                                        googleAutocompleteProvider.cleanData();
-                                      },
+                                      onTap: () => _tapOnAutocomplete(lugar),
                                     );
                                   }),
                                 const SizedBox(height: 5.0),
@@ -315,7 +329,7 @@ class _AddPageState extends State<AddPage> {
                                     text: 'Mi ubicacion',
                                     color: ColorsUtils.lightblue,
                                     style: TextUtils.kanit_18_whtie,
-                                    funcion: () {},
+                                    funcion: _miUbicacion,
                                   ),
                                 ),
                                 const SizedBox(height: 20.0),

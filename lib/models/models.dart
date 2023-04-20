@@ -1,8 +1,14 @@
+export 'api/address_component.dart';
 export 'api/evento_api.dart';
 export 'api/google_autocomplete.dart';
 export 'api/google_details.dart';
+export 'api/google_geolocation.dart';
+export 'api/location.dart';
+export 'api/plus_code.dart';
+export 'api/viewport.dart';
 export 'dto/deportes_dto.dart';
 export 'dto/evento_dto.dart';
+export 'dto/geografico_dto.dart';
 export 'dto/search_dto.dart';
 export 'dto/user_dto.dart';
 export 'local/deportes_local.dart';
