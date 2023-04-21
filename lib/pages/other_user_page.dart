@@ -5,9 +5,14 @@ import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
-class OtherUserPage extends StatelessWidget {
+class OtherUserPage extends StatefulWidget {
   const OtherUserPage({super.key});
 
+  @override
+  State<OtherUserPage> createState() => _OtherUserPageState();
+}
+
+class _OtherUserPageState extends State<OtherUserPage> {
   _filterDeportes(int id, List<int> gustos) {
     return gustos.contains(id);
   }
@@ -16,20 +21,30 @@ class OtherUserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
-    final UserDto user = ModalRoute.of(context)!.settings.arguments as UserDto;
-    final List<DeportesLocal> listDeportes = deportesProvider.deportes.where((element) => _filterDeportes(element.id, user.gustos)).toList();
+    final UserProvider currentUser = Provider.of<UserProvider>(context);
+    final UserDto otherUser = ModalRoute.of(context)!.settings.arguments as UserDto;
+    final List<DeportesLocal> listDeportes = deportesProvider.deportes.where((element) => _filterDeportes(element.id, otherUser.gustos)).toList();
+    final DatabaseUser databaseUser = DatabaseUser();
 
     atras() => Navigator.pop(context);
 
-    seguir() {}
+    seguir() async {
+      await databaseUser.saveSeguidor(currentUser.currentUser!, otherUser.idUser);
+      setState(() {});
+    }
 
     chat() {}
+
+    dejar() async {
+      await databaseUser.saveDejar(currentUser.currentUser!, otherUser.idUser);
+      setState(() {});
+    }
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorsUtils.white,
         title: Text(
-          user.username,
+          otherUser.username,
           style: TextUtils.kanit_18_grey,
         ),
         centerTitle: true,
@@ -54,7 +69,7 @@ class OtherUserPage extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        user.seguidores.toString(),
+                        otherUser.seguidores.length.toString(),
                         style: TextUtils.kanitItalic_24_blue,
                       ),
                       const Text(
@@ -64,13 +79,13 @@ class OtherUserPage extends StatelessWidget {
                     ],
                   ),
                   CircleAvatar(
-                    backgroundImage: NetworkImage(user.urlImagen),
+                    backgroundImage: NetworkImage(otherUser.urlImagen),
                     radius: 50.0,
                   ),
                   Column(
                     children: [
                       Text(
-                        user.seguidos.length.toString(),
+                        otherUser.seguidos.length.toString(),
                         style: TextUtils.kanitItalic_24_blue,
                       ),
                       const Text(
@@ -83,14 +98,14 @@ class OtherUserPage extends StatelessWidget {
               ),
               const SizedBox(height: 5.0),
               Text(
-                '${user.nombre} ${user.apellidos}',
+                '${otherUser.nombre} ${otherUser.apellidos}',
                 style: TextUtils.kanitItalic_24_black,
               ),
               SizedBox(
                 height: 60,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: user.logros.length,
+                  itemCount: otherUser.logros.length,
                   itemBuilder: (context, index) {
                     return const Padding(
                       padding: EdgeInsets.all(10.0),
@@ -107,8 +122,8 @@ class OtherUserPage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ButtonInput(
-                          text: 'Seguir',
-                          funcion: seguir,
+                          text: currentUser.currentUser!.seguidos.contains(otherUser.idUser) ? 'Dejar' : 'Seguir',
+                          funcion: currentUser.currentUser!.seguidos.contains(otherUser.idUser) ? dejar : seguir,
                         ),
                       ),
                       const SizedBox(width: 10.0),

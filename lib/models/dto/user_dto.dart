@@ -11,8 +11,8 @@ class UserDto {
   final String telefono;
   final String email;
   final List<int> logros;
-  final List<UserDto> seguidos;
-  final int seguidores;
+  final List<String> seguidos;
+  final List<String> seguidores;
 
   UserDto({
     required this.idUser,
@@ -40,8 +40,8 @@ class UserDto {
     String? telefono,
     String? email,
     List<int>? logros,
-    List<UserDto>? seguidos,
-    int? seguidores,
+    List<String>? seguidos,
+    List<String>? seguidores,
   }) {
     return UserDto(
       idUser: idUser ?? this.idUser,
@@ -77,8 +77,8 @@ class UserDto {
         idUser: json["idUser"],
         logros: List<int>.from(json["logros"].map((x) => x)),
         nacimiento: DateTime.fromMicrosecondsSinceEpoch(json["nacimiento"].microsecondsSinceEpoch),
-        seguidores: json["seguidores"],
-        seguidos: List<UserDto>.from(json["seguidos"].map((x) => UserDto.fromJson(x))),
+        seguidores: List<String>.from(json["seguidores"].map((x) => x)),
+        seguidos: List<String>.from(json["seguidos"].map((x) => x)),
         telefono: json["telefono"],
         username: json["username"],
       );
@@ -92,8 +92,8 @@ class UserDto {
         "idUser": idUser,
         "logros": List<dynamic>.from(logros.map((x) => x)),
         "nacimiento": nacimiento,
-        "seguidores": seguidores,
-        "seguidos": List<dynamic>.from(seguidos.map((x) => x.toJson())),
+        "seguidores": List<dynamic>.from(seguidores.map((x) => x)),
+        "seguidos": List<dynamic>.from(seguidos.map((x) => x)),
         "telefono": telefono,
         "username": username,
       };

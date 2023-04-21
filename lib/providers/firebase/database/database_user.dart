@@ -42,4 +42,33 @@ class DatabaseUser {
     log('POST -- SAVE USER');
     await _db.collection(COLLECTION_NAME).doc(user.idUser).set(user.toMap());
   }
+
+  // =============
+  // PUT
+  // =============
+  Future<void> saveSeguidor(UserDto user, String idUser) async {
+    log('PUT -- SAVE SEGUIR');
+
+    // Usuario principal
+    user.seguidos.add(idUser);
+    await _db.collection(COLLECTION_NAME).doc(user.idUser).update(user.toMap());
+
+    // Otro usuario
+    UserDto otherUser = await getUser(idUser);
+    otherUser.seguidores.add(user.idUser);
+    await _db.collection(COLLECTION_NAME).doc(otherUser.idUser).update(otherUser.toMap());
+  }
+
+  Future<void> saveDejar(UserDto user, String idUser) async {
+    log('PUT -- SAVE DEJAR');
+
+    // Usuario principal
+    user.seguidos.remove(idUser);
+    await _db.collection(COLLECTION_NAME).doc(user.idUser).update(user.toMap());
+
+    // Otro usuario
+    UserDto otherUser = await getUser(idUser);
+    otherUser.seguidores.remove(user.idUser);
+    await _db.collection(COLLECTION_NAME).doc(otherUser.idUser).update(otherUser.toMap());
+  }
 }

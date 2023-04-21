@@ -14,7 +14,7 @@ class ChatsPage extends StatelessWidget {
     logros: [],
     nacimiento: DateTime.now(),
     nombre: 'Marc',
-    seguidores: 0,
+    seguidores: [],
     seguidos: [],
     telefono: '',
     username: 'msantisteban',

@@ -12,7 +12,7 @@ class SingUpProvider extends ChangeNotifier {
     logros: [],
     nacimiento: DateTime.now(),
     nombre: '',
-    seguidores: 0,
+    seguidores: [],
     seguidos: [],
     telefono: '',
     username: '',

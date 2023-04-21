@@ -33,7 +33,7 @@ class UserPage extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      user.seguidores.toString(),
+                      user.seguidores.length.toString(),
                       style: TextUtils.kanitItalic_24_blue,
                     ),
                     const Text(
