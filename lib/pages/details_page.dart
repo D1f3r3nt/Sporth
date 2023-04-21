@@ -92,18 +92,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundImage: NetworkImage(eventoDto.anfitrion.urlImagen),
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              eventoDto.anfitrion.username,
-                              style: TextUtils.kanitBold_18,
-                            ),
-                          ],
-                        ),
+                        UserTile(userDto: eventoDto.anfitrion),
                         const SizedBox(height: 5.0),
                         Text(
                           eventoDto.name,
