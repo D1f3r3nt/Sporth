@@ -46,8 +46,15 @@ class DatabaseUser {
   // =============
   // PUT
   // =============
-  Future<void> saveSeguidor(UserDto user, String idUser) async {
-    log('PUT -- SAVE SEGUIR');
+  Future<void> updateUser(UserDto user) async {
+    log('PUT -- UPDATE USER');
+
+    // Usuario principal
+    await _db.collection(COLLECTION_NAME).doc(user.idUser).update(user.toMap());
+  }
+
+  Future<void> updateSeguidor(UserDto user, String idUser) async {
+    log('PUT -- UPDATE SEGUIR');
 
     // Usuario principal
     user.seguidos.add(idUser);
@@ -59,8 +66,8 @@ class DatabaseUser {
     await _db.collection(COLLECTION_NAME).doc(otherUser.idUser).update(otherUser.toMap());
   }
 
-  Future<void> saveDejar(UserDto user, String idUser) async {
-    log('PUT -- SAVE DEJAR');
+  Future<void> updateDejar(UserDto user, String idUser) async {
+    log('PUT -- UPDATE DEJAR');
 
     // Usuario principal
     user.seguidos.remove(idUser);

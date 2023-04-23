@@ -29,14 +29,14 @@ class _OtherUserPageState extends State<OtherUserPage> {
     atras() => Navigator.pop(context);
 
     seguir() async {
-      await databaseUser.saveSeguidor(currentUser.currentUser!, otherUser.idUser);
+      await databaseUser.updateSeguidor(currentUser.currentUser!, otherUser.idUser);
       setState(() {});
     }
 
     chat() {}
 
     dejar() async {
-      await databaseUser.saveDejar(currentUser.currentUser!, otherUser.idUser);
+      await databaseUser.updateDejar(currentUser.currentUser!, otherUser.idUser);
       setState(() {});
     }
 
@@ -98,7 +98,7 @@ class _OtherUserPageState extends State<OtherUserPage> {
               ),
               const SizedBox(height: 5.0),
               Text(
-                '${otherUser.nombre} ${otherUser.apellidos}',
+                otherUser.nombre,
                 style: TextUtils.kanitItalic_24_black,
               ),
               SizedBox(

@@ -58,7 +58,7 @@ class PersonalChatPage extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 10.0),
                         alignment: Alignment.center,
                         child: Text(
-                          '${user.nombre} ${user.apellidos}',
+                          user.nombre,
                           style: TextUtils.kanitItalic_24_black,
                         ),
                       ),
