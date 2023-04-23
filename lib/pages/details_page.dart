@@ -23,6 +23,7 @@ class _DetailsPageState extends State<DetailsPage> {
     final EventoDto eventoDto = ModalRoute.of(context)!.settings.arguments as EventoDto;
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     final DatabaseEvento databaseEvento = DatabaseEvento();
+    final ShareProvider shareProvider = ShareProvider();
 
     inscribirse() {
       if (userProvider.currentUser!.idUser == eventoDto.anfitrion.idUser) {
@@ -42,7 +43,9 @@ class _DetailsPageState extends State<DetailsPage> {
       PopupUtils().dialogScrollUsers(context, eventoDto.participantes);
     }
 
-    tapShare() {}
+    tapShare() {
+      shareProvider.shareEvent(eventoDto.imagen, eventoDto.name);
+    }
 
     atras() => Navigator.pop(context);
 
