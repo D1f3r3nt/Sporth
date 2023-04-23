@@ -6,14 +6,13 @@ import 'package:sporth/widgets/widgets.dart';
 
 class ChatsPage extends StatelessWidget {
   final user = UserDto(
-    apellidos: 'Santisteban',
     email: 'sanitstebanmarc@gmail.com',
     gustos: [],
     idUser: '',
     imagen: 'https://m8p8m9h3.stackpathcdn.com/wp-content/uploads/2021/11/que-tipo-de-persona-te-gustaria-ser-730x411-SP.jpg',
     logros: [],
     nacimiento: DateTime.now(),
-    nombre: 'Marc',
+    nombre: 'Marc Santisteban',
     seguidores: [],
     seguidos: [],
     telefono: '',
@@ -72,7 +71,7 @@ class ChatsPage extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return ChatCard(
                               onTap: tapChat,
-                              nombre: '${user.nombre} ${user.apellidos}',
+                              nombre: user.nombre,
                               username: user.username,
                               image: user.imagen,
                             );

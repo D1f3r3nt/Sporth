@@ -3,7 +3,6 @@ import 'dart:convert';
 class UserDto {
   final String idUser;
   final String nombre;
-  final String apellidos;
   final String username;
   final String imagen;
   final List<int> gustos;
@@ -17,7 +16,6 @@ class UserDto {
   UserDto({
     required this.idUser,
     required this.nombre,
-    required this.apellidos,
     required this.username,
     required this.imagen,
     required this.gustos,
@@ -32,7 +30,6 @@ class UserDto {
   UserDto copyOf({
     String? idUser,
     String? nombre,
-    String? apellidos,
     String? username,
     String? imagen,
     List<int>? gustos,
@@ -46,7 +43,6 @@ class UserDto {
     return UserDto(
       idUser: idUser ?? this.idUser,
       nombre: nombre ?? this.nombre,
-      apellidos: apellidos ?? this.apellidos,
       username: username ?? this.username,
       imagen: imagen ?? this.imagen,
       gustos: gustos ?? this.gustos,
@@ -71,7 +67,6 @@ class UserDto {
   factory UserDto.fromMap(Map<String, dynamic> json) => UserDto(
         imagen: json["imagen"],
         nombre: json["nombre"],
-        apellidos: json["apellidos"],
         email: json["email"],
         gustos: List<int>.from(json["gustos"].map((x) => x)),
         idUser: json["idUser"],
@@ -86,7 +81,6 @@ class UserDto {
   Map<String, dynamic> toMap() => {
         "imagen": imagen,
         "nombre": nombre,
-        "apellidos": apellidos,
         "email": email,
         "gustos": List<dynamic>.from(gustos.map((x) => x)),
         "idUser": idUser,

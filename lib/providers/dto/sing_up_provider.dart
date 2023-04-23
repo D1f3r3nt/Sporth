@@ -4,7 +4,6 @@ import 'package:sporth/models/models.dart';
 
 class SingUpProvider extends ChangeNotifier {
   UserDto newUser = UserDto(
-    apellidos: '',
     email: '',
     gustos: [],
     idUser: '',
@@ -25,8 +24,7 @@ class SingUpProvider extends ChangeNotifier {
 
   void addPersonal(String nombre, String apellidos, String imagen, DateTime nacimiento, String telefono) {
     newUser = newUser.copyOf(
-      nombre: nombre,
-      apellidos: apellidos,
+      nombre: '$nombre $apellidos',
       imagen: imagen,
       nacimiento: nacimiento,
       telefono: telefono,

@@ -17,6 +17,11 @@ class ImageRepository {
     return ref.getDownloadURL();
   }
 
+  Future<void> deleteImage(String url) async {
+    Reference ref = storage.refFromURL(url);
+    ref.delete();
+  }
+
   String getCurrentTime() {
     DateTime time = DateTime.now();
     return '${time.year}_${time.month}_${time.day}_${time.hour}_${time.minute}_${time.second}_${time.millisecond}';
