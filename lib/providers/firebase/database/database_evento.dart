@@ -9,7 +9,7 @@ import 'package:sporth/providers/providers.dart';
 class DatabaseEvento {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final String COLLECTION_NAME = "eventos";
-  final databaseUser = DatabaseUser();
+  final DatabaseUser databaseUser = DatabaseUser();
   List<EventoDto> _allEvents = [];
 
   // =============

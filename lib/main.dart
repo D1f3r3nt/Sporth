@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:sporth/providers/firebase/database/database_chat.dart';
 
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/routes/routes.dart';
@@ -24,6 +25,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => EventosProvider()),
         ChangeNotifierProvider(create: (_) => SearchProvider()),
+        ChangeNotifierProvider(create: (_) => DatabaseChat()),
         ChangeNotifierProvider(create: (_) => GoogleAutocompleteProvider()),
       ],
       child: const MyApp(),

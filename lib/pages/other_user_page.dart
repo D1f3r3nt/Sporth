@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/firebase/database/database_chat.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -20,23 +21,37 @@ class _OtherUserPageState extends State<OtherUserPage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
-    final UserProvider currentUser = Provider.of<UserProvider>(context);
     final UserDto otherUser = ModalRoute.of(context)!.settings.arguments as UserDto;
+
+    final DatabaseChat databaseChat = Provider.of<DatabaseChat>(context);
+    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
+    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+
     final List<DeportesLocal> listDeportes = deportesProvider.deportes.where((element) => _filterDeportes(element.id, otherUser.gustos)).toList();
     final DatabaseUser databaseUser = DatabaseUser();
 
     atras() => Navigator.pop(context);
 
     seguir() async {
-      await databaseUser.updateSeguidor(currentUser.currentUser!, otherUser.idUser);
+      await databaseUser.updateSeguidor(currentUser, otherUser.idUser);
       setState(() {});
     }
 
-    chat() {}
+    chat() async {
+      ChatApi newChat = ChatApi(
+        anfitriones: [currentUser.idUser, otherUser.idUser],
+        mensajes: [],
+      );
+
+      String chatId = await databaseChat.anyChatUser(currentUser.idUser, otherUser.idUser);
+
+      if (chatId.isEmpty) chatId = await databaseChat.saveChat(newChat);
+
+      Navigator.pushReplacementNamed(context, 'chat-personal', arguments: chatId);
+    }
 
     dejar() async {
-      await databaseUser.updateDejar(currentUser.currentUser!, otherUser.idUser);
+      await databaseUser.updateDejar(currentUser, otherUser.idUser);
       setState(() {});
     }
 
@@ -122,8 +137,8 @@ class _OtherUserPageState extends State<OtherUserPage> {
                     children: [
                       Expanded(
                         child: ButtonInput(
-                          text: currentUser.currentUser!.seguidos.contains(otherUser.idUser) ? 'Dejar' : 'Seguir',
-                          funcion: currentUser.currentUser!.seguidos.contains(otherUser.idUser) ? dejar : seguir,
+                          text: currentUser.seguidos.contains(otherUser.idUser) ? 'Dejar' : 'Seguir',
+                          funcion: currentUser.seguidos.contains(otherUser.idUser) ? dejar : seguir,
                         ),
                       ),
                       const SizedBox(width: 10.0),
