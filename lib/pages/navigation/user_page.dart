@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
@@ -16,9 +15,12 @@ class UserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
+    final DeportesProvider deportesProvider =
+        Provider.of<DeportesProvider>(context);
     final UserDto user = userProvider.currentUser!;
-    final List<DeportesAsset> listDeportes = deportesProvider.deportes.where((element) => _filterDeportes(element.id, user.gustos)).toList();
+    final List<DeportesAsset> listDeportes = deportesProvider.deportes
+        .where((element) => _filterDeportes(element.id, user.gustos))
+        .toList();
 
     return SafeArea(
       child: SizedBox(
@@ -65,35 +67,37 @@ class UserPage extends StatelessWidget {
               user.nombre,
               style: TextUtils.kanitItalic_24_black,
             ),
-            SizedBox(
-              height: 60,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: user.logros.length,
-                itemBuilder: (context, index) {
-                  return const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: CardAchievement(),
-                  );
-                },
+            if (user.logros.isNotEmpty)
+              SizedBox(
+                height: 60,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: user.logros.length,
+                  itemBuilder: (context, index) {
+                    return const Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: CardAchievement(),
+                    );
+                  },
+                ),
               ),
-            ),
-            SizedBox(
-              height: 48,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: listDeportes.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ToastCard(
-                      active: true,
-                      nombre: listDeportes[index].nombre,
-                    ),
-                  );
-                },
+            if (listDeportes.isNotEmpty)
+              SizedBox(
+                height: 48,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: listDeportes.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ToastCard(
+                        active: true,
+                        nombre: listDeportes[index].nombre,
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
             Expanded(
               child: ListView.builder(
                 itemCount: 0 + 1,
