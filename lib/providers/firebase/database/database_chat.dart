@@ -34,6 +34,26 @@ class DatabaseChat {
     }).toList();
   }
 
+  Future<ChatApi?> getChatByEvent(String idEvent) async {
+    log('GET -- CHAT EVENT');
+
+    final CollectionReference chatsReference = _db.collection(COLLECTION_NAME);
+    QuerySnapshot query =
+        await chatsReference.where('idEvent', isEqualTo: idEvent).get();
+
+    return query.docs.isEmpty
+        ? null
+        : query.docs
+            .map((chat) {
+              ChatApi chatApi =
+                  ChatApi.fromJson(chat.data() as Map<String, dynamic>);
+              chatApi = chatApi.copyWith(idChat: chat.id);
+              return chatApi;
+            })
+            .toList()
+            .first;
+  }
+
   Future<List<MensajeApi>> getChat(String idChat) async {
     log('GET -- MENSAJE CHAT');
 
@@ -91,5 +111,13 @@ class DatabaseChat {
     DocumentReference documentReference =
         _db.collection("$COLLECTION_NAME/$idChat/$SUBCOLLECTION_NAME").doc();
     await documentReference.set(newMensaje.toJson());
+  }
+
+  Future<void> updateChat(ChatApi chatApi) async {
+    log('PUT -- UPDATE CHAT');
+
+    DocumentReference documentReference =
+        _db.collection(COLLECTION_NAME).doc(chatApi.idChat);
+    await documentReference.update(chatApi.toJson());
   }
 }

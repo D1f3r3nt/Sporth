@@ -21,18 +21,15 @@ class PersonalChatPage extends StatelessWidget {
     chatProvider.getChat(currentChat.idChat!);
 
     List<MensajeDto> mensajes = chatProvider.mensajes;
-    UserDto? otherUser;
+    UserDto? otherUser = currentChat.anfitriones
+        .where((user) => user.idUser != currentUser.idUser)
+        .toList()
+        .first;
 
-    if (currentChat.idEvent != null) {
-      eventosProvider.getEvento(currentChat.idEvent!);
-    } else {
-      otherUser = currentChat.anfitriones
-          .where((user) => user.idUser != currentUser.idUser)
-          .toList()
-          .first;
+    atras() {
+      eventosProvider.eventoChat = null;
+      Navigator.pushReplacementNamed(context, 'chats');
     }
-
-    atras() => Navigator.pushReplacementNamed(context, 'chats');
 
     enviar() async {
       chatProvider.sendMessage(
@@ -62,7 +59,7 @@ class PersonalChatPage extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 20.0, top: 5.0),
                     child: CircleAvatar(
                       backgroundImage: eventosProvider.eventoChat == null
-                          ? NetworkImage(otherUser!.urlImagen)
+                          ? NetworkImage(otherUser.urlImagen)
                           : eventosProvider.eventoChat!.imagen.contains('http')
                               ? NetworkImage(eventosProvider.eventoChat!.imagen)
                               : AssetImage(
@@ -90,7 +87,7 @@ class PersonalChatPage extends StatelessWidget {
                         alignment: Alignment.center,
                         child: Text(
                           eventosProvider.eventoChat == null
-                              ? otherUser!.nombre
+                              ? otherUser.nombre
                               : eventosProvider.eventoChat!.name,
                           style: TextUtils.kanitItalic_24_black,
                         ),
@@ -105,11 +102,17 @@ class PersonalChatPage extends StatelessWidget {
                                 itemCount: mensajes.length,
                                 itemBuilder: (context, index) {
                                   MensajeDto mensaje = mensajes[index];
-
+                                  String? user;
+                                  if (eventosProvider.eventoChat != null &&
+                                      mensaje.editor.idUser !=
+                                          currentUser.idUser) {
+                                    user = mensaje.editor.username;
+                                  }
                                   return ChatMessage(
                                     ourMessage: mensaje.editor.idUser ==
                                         currentUser.idUser,
                                     message: mensaje.mensaje,
+                                    user: user,
                                   );
                                 },
                               ),
