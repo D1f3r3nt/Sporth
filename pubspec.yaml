@@ -1,5 +1,5 @@
 name: sporth
-description: A new Flutter project.
+description: An application for sport's meetings.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
@@ -26,6 +26,7 @@ dependencies:
   table_calendar: ^3.0.0
 
 dev_dependencies:
+  build_runner:
   change_app_package_name: ^1.1.0
   flutter_lints: ^2.0.0
   flutter_test:

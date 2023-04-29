@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-
 import 'package:sporth/models/models.dart';
 
 class EventoDto {
@@ -27,7 +26,7 @@ class EventoDto {
   String ubicacion;
   int precio;
   int maximo;
-  DeportesLocal deporte;
+  DeportesAsset deporte;
   String imagen;
   String descripcion;
   UserDto anfitrion;

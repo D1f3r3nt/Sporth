@@ -18,7 +18,7 @@ class UserPage extends StatelessWidget {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final UserDto user = userProvider.currentUser!;
-    final List<DeportesLocal> listDeportes = deportesProvider.deportes.where((element) => _filterDeportes(element.id, user.gustos)).toList();
+    final List<DeportesAsset> listDeportes = deportesProvider.deportes.where((element) => _filterDeportes(element.id, user.gustos)).toList();
 
     return SafeArea(
       child: SizedBox(

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:sporth/models/models.dart';
-import 'package:sporth/providers/firebase/database/database_chat.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -14,20 +12,19 @@ class OtherUserPage extends StatefulWidget {
 }
 
 class _OtherUserPageState extends State<OtherUserPage> {
-  _filterDeportes(int id, List<int> gustos) {
-    return gustos.contains(id);
-  }
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final UserDto otherUser = ModalRoute.of(context)!.settings.arguments as UserDto;
-
-    final DatabaseChat databaseChat = Provider.of<DatabaseChat>(context);
-    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
+    final UserDto otherUser =
+        ModalRoute.of(context)!.settings.arguments as UserDto;
+    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
+    final DeportesProvider deportesProvider =
+        Provider.of<DeportesProvider>(context);
     final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
 
-    final List<DeportesLocal> listDeportes = deportesProvider.deportes.where((element) => _filterDeportes(element.id, otherUser.gustos)).toList();
+    final List<DeportesAsset> listDeportes = deportesProvider.deportes
+        .where((element) => otherUser.gustos.contains(element.id))
+        .toList();
     final DatabaseUser databaseUser = DatabaseUser();
 
     atras() => Navigator.pop(context);
@@ -40,14 +37,18 @@ class _OtherUserPageState extends State<OtherUserPage> {
     chat() async {
       ChatApi newChat = ChatApi(
         anfitriones: [currentUser.idUser, otherUser.idUser],
-        mensajes: [],
       );
 
-      String chatId = await databaseChat.anyChatUser(currentUser.idUser, otherUser.idUser);
+      String chatId =
+          await chatProvider.anyChatUser(currentUser.idUser, otherUser.idUser);
 
-      if (chatId.isEmpty) chatId = await databaseChat.saveChat(newChat);
+      if (chatId.isEmpty) chatId = await chatProvider.saveChat(newChat);
 
-      Navigator.pushReplacementNamed(context, 'chat-personal', arguments: chatId);
+      ChatDto chatDto = await ChatMapper.INSTANCE
+          .chatApiToChatDto(newChat.copyWith(idChat: chatId));
+
+      Navigator.pushReplacementNamed(context, 'chat-personal',
+          arguments: chatDto);
     }
 
     dejar() async {
@@ -137,8 +138,13 @@ class _OtherUserPageState extends State<OtherUserPage> {
                     children: [
                       Expanded(
                         child: ButtonInput(
-                          text: currentUser.seguidos.contains(otherUser.idUser) ? 'Dejar' : 'Seguir',
-                          funcion: currentUser.seguidos.contains(otherUser.idUser) ? dejar : seguir,
+                          text: currentUser.seguidos.contains(otherUser.idUser)
+                              ? 'Dejar'
+                              : 'Seguir',
+                          funcion:
+                              currentUser.seguidos.contains(otherUser.idUser)
+                                  ? dejar
+                                  : seguir,
                         ),
                       ),
                       const SizedBox(width: 10.0),

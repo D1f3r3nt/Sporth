@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -14,9 +13,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
+    final EventosProvider eventosProvider =
+        Provider.of<EventosProvider>(context);
 
-    eventosProvider.getAllEventos();
+    // Wait for build
+    Future.delayed(Duration.zero, () => eventosProvider.getAllEventos());
     eventos = eventosProvider.allEvents;
 
     return SafeArea(
@@ -31,7 +32,8 @@ class HomePage extends StatelessWidget {
             : RefreshIndicator(
                 onRefresh: () => eventosProvider.refresh(),
                 child: ListView.builder(
-                  padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
+                  padding:
+                      const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
                   itemCount: eventos.length,
                   itemBuilder: (context, index) {
                     return CardPublicacion(eventoDto: eventos[index]);
