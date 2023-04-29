@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-class DeportesLocal {
-  DeportesLocal({
+class DeportesAsset {
+  DeportesAsset({
     required this.id,
     required this.imagen,
     required this.nombre,
@@ -11,11 +11,11 @@ class DeportesLocal {
   String imagen;
   String nombre;
 
-  factory DeportesLocal.fromJson(String str) => DeportesLocal.fromMap(json.decode(str));
+  factory DeportesAsset.fromJson(String str) => DeportesAsset.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory DeportesLocal.fromMap(Map<String, dynamic> json) => DeportesLocal(
+  factory DeportesAsset.fromMap(Map<String, dynamic> json) => DeportesAsset(
         id: json["id"],
         imagen: json["imagen"],
         nombre: json["nombre"],

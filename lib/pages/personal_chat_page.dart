@@ -1,20 +1,44 @@
 import 'package:flutter/material.dart';
-
 import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class PersonalChatPage extends StatelessWidget {
-  const PersonalChatPage({super.key});
+  PersonalChatPage({super.key});
+
+  final TextEditingController messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final UserDto user = ModalRoute.of(context)!.settings.arguments as UserDto;
-    final TextEditingController messageController = TextEditingController();
+    final ChatDto currentChat =
+        ModalRoute.of(context)!.settings.arguments as ChatDto;
+    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
+    final EventosProvider eventosProvider =
+        Provider.of<EventosProvider>(context);
+    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+
+    chatProvider.getChat(currentChat.idChat!);
+
+    List<MensajeDto> mensajes = chatProvider.mensajes;
+    UserDto? otherUser;
+
+    if (currentChat.idEvent != null) {
+      eventosProvider.getEvento(currentChat.idEvent!);
+    } else {
+      otherUser = currentChat.anfitriones
+          .where((user) => user.idUser != currentUser.idUser)
+          .toList()
+          .first;
+    }
 
     atras() => Navigator.pushReplacementNamed(context, 'chats');
 
-    enviar() {}
+    enviar() async {
+      chatProvider.sendMessage(
+          currentChat.idChat!, messageController.text, currentUser.idUser);
+      messageController.text = '';
+    }
 
     return Scaffold(
       body: Container(
@@ -37,7 +61,13 @@ class PersonalChatPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 20.0, top: 5.0),
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage(user.imagen),
+                      backgroundImage: eventosProvider.eventoChat == null
+                          ? NetworkImage(otherUser!.urlImagen)
+                          : eventosProvider.eventoChat!.imagen.contains('http')
+                              ? NetworkImage(eventosProvider.eventoChat!.imagen)
+                              : AssetImage(
+                                      'image/banners/${eventosProvider.eventoChat!.imagen}')
+                                  as ImageProvider,
                       radius: 20.0,
                     ),
                   )
@@ -48,7 +78,8 @@ class PersonalChatPage extends StatelessWidget {
                 child: Container(
                   decoration: const BoxDecoration(
                     color: ColorsUtils.white,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(70.0)),
+                    borderRadius:
+                        BorderRadius.only(topLeft: Radius.circular(70.0)),
                   ),
                   width: double.infinity,
                   child: Column(
@@ -58,27 +89,30 @@ class PersonalChatPage extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 10.0),
                         alignment: Alignment.center,
                         child: Text(
-                          user.nombre,
+                          eventosProvider.eventoChat == null
+                              ? otherUser!.nombre
+                              : eventosProvider.eventoChat!.name,
                           style: TextUtils.kanitItalic_24_black,
                         ),
                       ),
                       Expanded(
-                        child: ListView.builder(
-                          reverse: true,
-                          itemCount: 20,
-                          itemBuilder: (context, index) {
-                            if (index % 2 == 0) {
-                              return const ChatMessage(
-                                ourMessage: true,
-                                message: 'Hola que des fsefvse few tal?',
-                              );
-                            }
-                            return const ChatMessage(
-                              ourMessage: false,
-                              message: 'Hola que ddscdes fsefvse few ffwe few fwe few ftal?',
-                            );
-                          },
-                        ),
+                        child: mensajes.isEmpty
+                            ? Center(
+                                child:
+                                    Image.asset('image/no_tienes_mensajes.png'))
+                            : ListView.builder(
+                                reverse: true,
+                                itemCount: mensajes.length,
+                                itemBuilder: (context, index) {
+                                  MensajeDto mensaje = mensajes[index];
+
+                                  return ChatMessage(
+                                    ourMessage: mensaje.editor.idUser ==
+                                        currentUser.idUser,
+                                    message: mensaje.mensaje,
+                                  );
+                                },
+                              ),
                       ),
                       SizedBox(
                         height: 80.0,

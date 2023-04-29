@@ -1,34 +1,26 @@
 import 'package:flutter/material.dart';
-
 import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class ChatsPage extends StatelessWidget {
-  final user = UserDto(
-    email: 'sanitstebanmarc@gmail.com',
-    gustos: [],
-    idUser: '',
-    imagen: 'https://m8p8m9h3.stackpathcdn.com/wp-content/uploads/2021/11/que-tipo-de-persona-te-gustaria-ser-730x411-SP.jpg',
-    logros: [],
-    nacimiento: DateTime.now(),
-    nombre: 'Marc Santisteban',
-    seguidores: [],
-    seguidos: [],
-    telefono: '',
-    username: 'msantisteban',
-  );
-
-  ChatsPage({super.key});
+  const ChatsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
+    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+
+    chatProvider.getChats();
+    List<ChatDto> chats = chatProvider.chats;
+
     atras() => Navigator.pushReplacementNamed(context, 'home');
 
-    tapChat() => Navigator.pushReplacementNamed(
+    tapChat(ChatDto chatDto) => Navigator.pushReplacementNamed(
           context,
           'chat-personal',
-          arguments: user,
+          arguments: chatDto,
         );
 
     return Scaffold(
@@ -51,7 +43,8 @@ class ChatsPage extends StatelessWidget {
                 child: Container(
                   decoration: const BoxDecoration(
                     color: ColorsUtils.white,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(70.0)),
+                    borderRadius:
+                        BorderRadius.only(topLeft: Radius.circular(70.0)),
                   ),
                   width: double.infinity,
                   child: Column(
@@ -66,17 +59,36 @@ class ChatsPage extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: ListView.builder(
-                          itemCount: 20,
-                          itemBuilder: (context, index) {
-                            return ChatCard(
-                              onTap: tapChat,
-                              nombre: user.nombre,
-                              username: user.username,
-                              image: user.imagen,
-                            );
-                          },
-                        ),
+                        child: chats.isEmpty
+                            ? Center(
+                                child: Image.asset('image/no_tienes_chats.png'))
+                            : ListView.builder(
+                                itemCount: chats.length,
+                                itemBuilder: (context, index) {
+                                  ChatDto chat = chats[index];
+
+                                  if (chat.idEvent == null) {
+                                    UserDto otherUser = chat
+                                        .getOtherAnfitrion(currentUser.idUser);
+
+                                    return ChatCard(
+                                      onTap: () => tapChat(chat),
+                                      nombre: otherUser.nombre,
+                                      username: otherUser.username,
+                                      image: otherUser.urlImagen,
+                                    );
+                                  } else {
+                                    // TODO: Hacer llamada a la API
+
+                                    /*return  ChatCard(
+                                      onTap: () => tapChat(chat),
+                                      nombre: chat.nombreEvento!,
+                                      username: chat.datosEvento!,
+                                      image: chat.fotoEvento!,
+                                    );*/
+                                  }
+                                },
+                              ),
                       )
                     ],
                   ),

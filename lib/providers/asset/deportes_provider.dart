@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
 import 'package:sporth/models/models.dart';
 
 class DeportesProvider extends ChangeNotifier {
-  List<DeportesLocal> deportes = [];
+  List<DeportesAsset> deportes = [];
   List<DeportesDto> deportesGustos = [];
   List<DeportesDto> deportesFilter = [];
   List<DeportesDto> deportesAdd = [];
@@ -15,25 +14,30 @@ class DeportesProvider extends ChangeNotifier {
     getData();
   }
 
+  Future<DeportesAsset> getDeporteById(int id) async {
+    if (deportes.isEmpty) await getData();
+    return deportes.where((e) => e.id == id).toList().first;
+  }
+
   getData() async {
     final String response = await rootBundle.loadString('data/deportes.json');
     List dataMap = json.decode(response);
 
     for (var value in dataMap) {
-      deportes.add(DeportesLocal.fromMap(value));
+      deportes.add(DeportesAsset.fromMap(value));
     }
 
     notifyListeners();
     dataToSelect();
   }
 
-  Future<List<DeportesLocal>> getDataCurrent() async {
-    List<DeportesLocal> returnment = [];
+  Future<List<DeportesAsset>> getDataCurrent() async {
+    List<DeportesAsset> returnment = [];
     final String response = await rootBundle.loadString('data/deportes.json');
     List dataMap = json.decode(response);
 
     for (var value in dataMap) {
-      returnment.add(DeportesLocal.fromMap(value));
+      returnment.add(DeportesAsset.fromMap(value));
     }
     return returnment;
   }
