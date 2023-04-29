@@ -117,19 +117,20 @@ class _OtherUserPageState extends State<OtherUserPage> {
                 otherUser.nombre,
                 style: TextUtils.kanitItalic_24_black,
               ),
-              SizedBox(
-                height: 60,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: otherUser.logros.length,
-                  itemBuilder: (context, index) {
-                    return const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: CardAchievement(),
-                    );
-                  },
+              if (otherUser.logros.isNotEmpty)
+                SizedBox(
+                  height: 60,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: otherUser.logros.length,
+                    itemBuilder: (context, index) {
+                      return const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: CardAchievement(),
+                      );
+                    },
+                  ),
                 ),
-              ),
               SizedBox(
                 height: 80.0,
                 child: Padding(
@@ -156,22 +157,23 @@ class _OtherUserPageState extends State<OtherUserPage> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 48,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: listDeportes.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ToastCard(
-                        active: true,
-                        nombre: listDeportes[index].nombre,
-                      ),
-                    );
-                  },
+              if (listDeportes.isNotEmpty)
+                SizedBox(
+                  height: 48,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: listDeportes.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: ToastCard(
+                          active: true,
+                          nombre: listDeportes[index].nombre,
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
               Expanded(
                 child: ListView.builder(
                   itemCount: 0 + 1,
