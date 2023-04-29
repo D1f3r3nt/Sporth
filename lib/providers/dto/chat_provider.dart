@@ -19,8 +19,8 @@ class ChatProvider extends ChangeNotifier {
     List<MensajeApi> list = await databaseChat.getChat(idChat);
     mensajes =
         await MensajeMapper.INSTANCE.listMensajeApiToListMensajeDto(list);
+    mensajes.sort((a, b) => a.creacion.compareTo(b.creacion));
     mensajes = mensajes.reversed.toList();
-
     notifyListeners();
   }
 
