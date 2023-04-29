@@ -26,10 +26,13 @@ class EventosProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getEvento(String idEvento) async {
+  Future<EventoDto> getEvento(String idEvento) async {
     EventoApi eventoApi = await databaseEvento.getEvento(idEvento);
-    eventoChat =
-        await EventoMapper.INSTANCE.eventoApiToEventoDto(idEvento, eventoApi);
-    notifyListeners();
+    return await EventoMapper.INSTANCE
+        .eventoApiToEventoDto(idEvento, eventoApi);
+  }
+
+  Future<void> inscribe(String idEvento, String idUser) async {
+    await databaseEvento.inscribe(idEvento, idUser);
   }
 }

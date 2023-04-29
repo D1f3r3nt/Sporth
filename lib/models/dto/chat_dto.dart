@@ -4,25 +4,28 @@ class ChatDto {
   ChatDto({
     this.idChat,
     required this.anfitriones,
-    this.idEvent,
+    this.event,
   });
 
   final String? idChat;
   final List<UserDto> anfitriones;
-  final String? idEvent;
+  final EventoDto? event;
 
   ChatDto copyWith({
     String? idChat,
     List<UserDto>? anfitriones,
-    String? idEvent,
+    EventoDto? event,
   }) =>
       ChatDto(
         idChat: idChat ?? this.idChat,
         anfitriones: anfitriones ?? this.anfitriones,
-        idEvent: idEvent ?? this.idEvent,
+        event: event ?? this.event,
       );
 
   UserDto getOtherAnfitrion(String idUser) {
-    return anfitriones.where((element) => element.idUser != idUser).toList().first;
+    return anfitriones
+        .where((element) => element.idUser != idUser)
+        .toList()
+        .first;
   }
 }

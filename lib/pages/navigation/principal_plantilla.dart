@@ -10,11 +10,16 @@ class PrincipalPlantilla extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BottomNavProvider bottomNavProvider = Provider.of<BottomNavProvider>(context);
+    final BottomNavProvider bottomNavProvider =
+        Provider.of<BottomNavProvider>(context);
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     final UserDto user = userProvider.currentUser!;
+    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
 
-    chats() => Navigator.pushReplacementNamed(context, 'chats');
+    chats() {
+      chatProvider.refresh();
+      Navigator.pushReplacementNamed(context, 'chats');
+    }
 
     settings() => Navigator.pushReplacementNamed(context, 'settings');
 

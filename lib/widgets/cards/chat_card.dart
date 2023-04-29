@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:sporth/utils/utils.dart';
 
 class ChatCard extends StatelessWidget {
@@ -28,7 +27,9 @@ class ChatCard extends StatelessWidget {
         style: TextUtils.kanit_16_grey,
       ),
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(image),
+        backgroundImage: image.contains('http')
+            ? NetworkImage(image)
+            : AssetImage('image/banners/$image') as ImageProvider,
         radius: 30.0,
       ),
       onTap: onTap,

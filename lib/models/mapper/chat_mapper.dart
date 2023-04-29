@@ -5,6 +5,7 @@ class ChatMapper {
   static final ChatMapper INSTANCE = ChatMapper._();
 
   final DatabaseUser _databaseUser = DatabaseUser();
+  final DatabaseEvento _databaseEvento = DatabaseEvento();
 
   ChatMapper._();
 
@@ -12,7 +13,7 @@ class ChatMapper {
     return ChatApi(
       anfitriones: chatDto.anfitriones.map((e) => e.idUser).toList(),
       idChat: chatDto.idChat,
-      idEvent: chatDto.idEvent,
+      idEvent: chatDto.event?.id,
     );
   }
 
@@ -20,7 +21,7 @@ class ChatMapper {
     return ChatDto(
       anfitriones: await _convertRefToDto(chatApi.anfitriones),
       idChat: chatApi.idChat,
-      idEvent: chatApi.idEvent,
+      event: await _convertRefToEvent(chatApi.idEvent),
     );
   }
 
@@ -35,6 +36,12 @@ class ChatMapper {
     }
 
     return result;
+  }
+
+  Future<EventoDto?> _convertRefToEvent(String? idEvent) async {
+    if (idEvent == null) return null;
+    EventoApi eventoApi = await _databaseEvento.getEvento(idEvent);
+    return EventoMapper.INSTANCE.eventoApiToEventoDto(idEvent, eventoApi);
   }
 
   Future<List<UserDto>> _convertRefToDto(List<String> ref) async {

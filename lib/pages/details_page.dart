@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
@@ -14,29 +13,63 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   bool _containsUser(List<UserDto> participantes, UserDto user) {
-    return participantes.where((element) => element.idUser == user.idUser).toList().isEmpty;
+    return participantes
+        .where((element) => element.idUser == user.idUser)
+        .toList()
+        .isEmpty;
   }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final EventoDto eventoDto = ModalRoute.of(context)!.settings.arguments as EventoDto;
+    final EventoDto eventoDto =
+        ModalRoute.of(context)!.settings.arguments as EventoDto;
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final DatabaseEvento databaseEvento = DatabaseEvento();
+    final EventosProvider eventosProvider =
+        Provider.of<EventosProvider>(context);
     final ShareProvider shareProvider = ShareProvider();
+    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
 
-    inscribirse() {
+    inscribirse() async {
       if (userProvider.currentUser!.idUser == eventoDto.anfitrion.idUser) {
         Snackbar.errorSnackbar(context, 'Este es tu evento');
       } else {
-        databaseEvento.inscribe(eventoDto.id, userProvider.currentUser!.idUser);
+        await eventosProvider.inscribe(
+            eventoDto.id, userProvider.currentUser!.idUser);
+        eventosProvider.refresh();
         Navigator.pop(context);
       }
     }
 
-    message() {
-      // TODO: Cambiar por privado
-      Navigator.pushReplacementNamed(context, 'chats');
+    message() async {
+      ChatApi? chat = await chatProvider.getChatByEvent(eventoDto.id);
+      ChatDto chatDto;
+
+      if (chat == null) {
+        ChatApi newChat = ChatApi(
+          anfitriones: [currentUser.idUser, eventoDto.anfitrion.idUser],
+          idEvent: eventoDto.id,
+        );
+
+        String chatId = await chatProvider.saveChat(newChat);
+
+        chatDto = await ChatMapper.INSTANCE
+            .chatApiToChatDto(newChat.copyWith(idChat: chatId));
+      } else {
+        if (chat.anfitriones.contains(currentUser.idUser)) {
+          chatDto = await ChatMapper.INSTANCE.chatApiToChatDto(chat);
+        } else {
+          chat.anfitriones.add(currentUser.idUser);
+          await chatProvider.updateChat(chat);
+
+          chatDto = await ChatMapper.INSTANCE.chatApiToChatDto(chat);
+        }
+      }
+
+      eventosProvider.eventoChat = eventoDto;
+      Navigator.pushReplacementNamed(context, 'chat-personal',
+          arguments: chatDto);
     }
 
     showPeople() {
@@ -66,7 +99,10 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: eventoDto.imagen.contains('http') ? NetworkImage(eventoDto.imagen) : AssetImage('image/banners/${eventoDto.imagen}') as ImageProvider,
+                      image: eventoDto.imagen.contains('http')
+                          ? NetworkImage(eventoDto.imagen)
+                          : AssetImage('image/banners/${eventoDto.imagen}')
+                              as ImageProvider,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -87,11 +123,13 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: Container(
                   decoration: const BoxDecoration(
                     color: ColorsUtils.white,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(70.0)),
+                    borderRadius:
+                        BorderRadius.only(topLeft: Radius.circular(70.0)),
                   ),
                   width: double.infinity,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 15.0, left: 35.0, right: 20.0),
+                    padding: const EdgeInsets.only(
+                        top: 15.0, left: 35.0, right: 20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -148,7 +186,9 @@ class _DetailsPageState extends State<DetailsPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  (eventoDto.precio == 0) ? 'Free' : '${eventoDto.precio} €',
+                                  (eventoDto.precio == 0)
+                                      ? 'Free'
+                                      : '${eventoDto.precio} €',
                                   style: TextUtils.kanitItalic_24_blue,
                                 ),
                                 const Text(
@@ -213,8 +253,15 @@ class _DetailsPageState extends State<DetailsPage> {
                             children: [
                               Expanded(
                                 child: ButtonInput(
-                                  text: _containsUser(eventoDto.participantes, userProvider.currentUser!) ? 'Inscribirse' : 'Chat',
-                                  funcion: _containsUser(eventoDto.participantes, userProvider.currentUser!) ? inscribirse : message,
+                                  text: _containsUser(eventoDto.participantes,
+                                          userProvider.currentUser!)
+                                      ? 'Inscribirse'
+                                      : 'Chat',
+                                  funcion: _containsUser(
+                                          eventoDto.participantes,
+                                          userProvider.currentUser!)
+                                      ? inscribirse
+                                      : message,
                                 ),
                               ),
                               const SizedBox(width: 10.0),
