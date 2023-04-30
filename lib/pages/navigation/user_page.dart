@@ -69,17 +69,14 @@ class UserPage extends StatelessWidget {
               user.nombre,
               style: TextUtils.kanitItalic_24_black,
             ),
-            if (user.logros.isNotEmpty)
+            if (listLogros.isNotEmpty)
               SizedBox(
                 height: 60,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: user.logros.length,
+                  itemCount: listLogros.length,
                   itemBuilder: (context, index) {
-                    return const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: CardAchievement(),
-                    );
+                    return CardAchievement(logro: listLogros[index]);
                   },
                 ),
               ),
