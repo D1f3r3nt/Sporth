@@ -20,12 +20,17 @@ class _OtherUserPageState extends State<OtherUserPage> {
     final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
     final DeportesProvider deportesProvider =
         Provider.of<DeportesProvider>(context);
+    final LogrosProvider logrosProvider = Provider.of<LogrosProvider>(context);
     final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final DatabaseUser databaseUser = DatabaseUser();
 
     final List<DeportesAsset> listDeportes = deportesProvider.deportes
         .where((element) => otherUser.gustos.contains(element.id))
         .toList();
-    final DatabaseUser databaseUser = DatabaseUser();
+
+    final List<LogrosAsset> listLogros = logrosProvider.logros
+        .where((element) => otherUser.logros.contains(element.id))
+        .toList();
 
     atras() => Navigator.pop(context);
 
@@ -117,17 +122,14 @@ class _OtherUserPageState extends State<OtherUserPage> {
                 otherUser.nombre,
                 style: TextUtils.kanitItalic_24_black,
               ),
-              if (otherUser.logros.isNotEmpty)
+              if (listLogros.isNotEmpty)
                 SizedBox(
                   height: 60,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: otherUser.logros.length,
+                    itemCount: listLogros.length,
                     itemBuilder: (context, index) {
-                      return const Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: CardAchievement(),
-                      );
+                      return CardAchievement(logro: listLogros[index]);
                     },
                   ),
                 ),

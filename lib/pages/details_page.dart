@@ -73,7 +73,7 @@ class _DetailsPageState extends State<DetailsPage> {
     }
 
     showPeople() {
-      PopupUtils().dialogScrollUsers(context, eventoDto.participantes);
+      PopupUtils.dialogScrollUsers(context, eventoDto.participantes);
     }
 
     tapShare() {

@@ -7,19 +7,21 @@ import 'package:sporth/widgets/widgets.dart';
 class UserPage extends StatelessWidget {
   const UserPage({super.key});
 
-  _filterDeportes(int id, List<int> gustos) {
-    return gustos.contains(id);
-  }
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     final DeportesProvider deportesProvider =
         Provider.of<DeportesProvider>(context);
+    final LogrosProvider logrosProvider = Provider.of<LogrosProvider>(context);
     final UserDto user = userProvider.currentUser!;
+
     final List<DeportesAsset> listDeportes = deportesProvider.deportes
-        .where((element) => _filterDeportes(element.id, user.gustos))
+        .where((element) => user.gustos.contains(element.id))
+        .toList();
+
+    final List<LogrosAsset> listLogros = logrosProvider.logros
+        .where((element) => user.logros.contains(element.id))
         .toList();
 
     return SafeArea(
@@ -67,17 +69,14 @@ class UserPage extends StatelessWidget {
               user.nombre,
               style: TextUtils.kanitItalic_24_black,
             ),
-            if (user.logros.isNotEmpty)
+            if (listLogros.isNotEmpty)
               SizedBox(
                 height: 60,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: user.logros.length,
+                  itemCount: listLogros.length,
                   itemBuilder: (context, index) {
-                    return const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: CardAchievement(),
-                    );
+                    return CardAchievement(logro: listLogros[index]);
                   },
                 ),
               ),

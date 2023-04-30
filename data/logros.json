@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Chat",
+    "description": "Participar en el primer chat",
+    "image": "chat.png"
+  },
+  {
+    "id": 2,
+    "name": "Primer evento",
+    "description": "Crear o inscribirse en tu primer evento",
+    "image": "first_event.png"
+  },
+  {
+    "id": 3,
+    "name": "Eventos periodicos",
+    "description": "Participar en 10 eventos",
+    "image": "event.png"
+  },
+  {
+    "id": 4,
+    "name": "Amigos",
+    "description": "Tener amigos en esta red social",
+    "image": "friend.png"
+  },
+  {
+    "id": 5,
+    "name": "Sporth",
+    "description": "Participar en 50 eventos",
+    "image": "sporth.png"
+  }
+]
