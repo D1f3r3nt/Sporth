@@ -80,6 +80,19 @@ class DatabaseEvento {
         (value) => EventoApi.fromJson(value.data() as Map<String, dynamic>));
   }
 
+  Future<List<EventoApi>> getEventsByAnfitrion(String idUser) async {
+    log('GET -- EVENTO ANFITRION');
+
+    CollectionReference eventsReference = _db.collection(COLLECTION_NAME);
+
+    QuerySnapshot query =
+        await eventsReference.where('anfitrion', isEqualTo: idUser).get();
+
+    return query.docs
+        .map((e) => EventoApi.fromJson(e.data() as Map<String, dynamic>))
+        .toList();
+  }
+
   Future<List<EventoDto>> getAllEventos() async {
     log('GET -- ALL EVENTOS');
 

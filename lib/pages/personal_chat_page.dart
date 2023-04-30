@@ -33,7 +33,7 @@ class PersonalChatPage extends StatelessWidget {
 
     enviar() async {
       chatProvider.sendMessage(
-          currentChat.idChat!, messageController.text, currentUser.idUser);
+          currentChat.idChat!, messageController.text, currentUser);
       messageController.text = '';
     }
 
