@@ -2,6 +2,7 @@
 export 'package:provider/provider.dart';
 
 export './asset/deportes_provider.dart';
+export './asset/logros_provider.dart';
 export './dto/bottom_nav_provider.dart';
 export './dto/chat_provider.dart';
 export './dto/eventos_provider.dart';

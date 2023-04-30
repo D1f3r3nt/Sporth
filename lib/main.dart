@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:sporth/providers/asset/logros_provider.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/routes/routes.dart';
 
@@ -18,6 +19,7 @@ class AppState extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => DeportesProvider()),
+        ChangeNotifierProvider(create: (_) => LogrosProvider()),
         ChangeNotifierProvider(create: (_) => BottomNavProvider()),
         ChangeNotifierProvider(create: (_) => SingUpProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),

@@ -39,6 +39,7 @@ flutter:
     - image/
     - image/icons/
     - image/banners/
+    - image/logros/
     - data/
 
   fonts:

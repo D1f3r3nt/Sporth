@@ -10,6 +10,7 @@ export './api/mensaje_api.dart';
 export './api/plus_code.dart';
 export './api/viewport.dart';
 export './asset/deportes_asset.dart';
+export './asset/logros_asset.dart';
 export './dto/chat_dto.dart';
 export './dto/deportes_dto.dart';
 export './dto/evento_dto.dart';
