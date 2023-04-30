@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/dto/logros_provider_impl.dart';
 import 'package:sporth/providers/providers.dart';
 
 class EventosProvider extends ChangeNotifier {
   final DatabaseEvento databaseEvento = DatabaseEvento();
+  final LogrosProviderImpl _logrosProviderImpl = LogrosProviderImpl();
 
   List<EventoDto> allEvents = [];
   List<EventoDto> filteredEventos = [];
@@ -34,5 +36,10 @@ class EventosProvider extends ChangeNotifier {
 
   Future<void> inscribe(String idEvento, String idUser) async {
     await databaseEvento.inscribe(idEvento, idUser);
+  }
+
+  Future<void> saveEvento(EventoApi evento, UserDto user) async {
+    await databaseEvento.saveEvento(evento);
+    await _logrosProviderImpl.getEventLogro(user);
   }
 }

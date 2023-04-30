@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/dto/logros_provider_impl.dart';
 import 'package:sporth/providers/providers.dart';
 
 class ChatProvider extends ChangeNotifier {
   final DatabaseChat databaseChat = DatabaseChat();
+  final LogrosProviderImpl _logrosProviderImpl = LogrosProviderImpl();
 
   List<ChatDto> chats = [];
   List<MensajeDto> mensajes = [];
@@ -49,7 +51,8 @@ class ChatProvider extends ChangeNotifier {
     await databaseChat.updateChat(chatApi);
   }
 
-  void sendMessage(String idChat, String mensaje, String idUser) async {
-    await databaseChat.updateMessage(idChat, mensaje, idUser);
+  void sendMessage(String idChat, String mensaje, UserDto user) async {
+    await databaseChat.updateMessage(idChat, mensaje, user.idUser);
+    await _logrosProviderImpl.getChatLogro(user);
   }
 }

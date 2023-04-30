@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
@@ -24,7 +23,8 @@ class _AddPageState extends State<AddPage> {
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _ubicacionesController = TextEditingController();
   final TextEditingController _maxPersonasController = TextEditingController();
-  final TextEditingController _precioController = TextEditingController(text: '0');
+  final TextEditingController _precioController =
+      TextEditingController(text: '0');
   final TextEditingController _privadoController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
@@ -39,7 +39,8 @@ class _AddPageState extends State<AddPage> {
   bool _privado = false;
 
   Future<void> _pickImageFromGallery() async {
-    final pickedfile = await _pickerImage.pickImage(source: ImageSource.gallery);
+    final pickedfile =
+        await _pickerImage.pickImage(source: ImageSource.gallery);
     if (pickedfile != null) setState(() => _imageFile = File(pickedfile.path));
   }
 
@@ -78,15 +79,19 @@ class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
+    final DeportesProvider deportesProvider =
+        Provider.of<DeportesProvider>(context);
+    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final GoogleAutocompleteProvider googleAutocompleteProvider =
+        Provider.of<GoogleAutocompleteProvider>(context);
     final PositionProvider positionProvider = PositionProvider();
     final List<DeportesDto> listDeportes = deportesProvider.deportesAdd;
-    final DatabaseEvento eventoDatabase = DatabaseEvento();
+    final EventosProvider eventosProvider =
+        Provider.of<EventosProvider>(context);
 
     _dateController.text = DateFormat('dd/MM/yyyy').format(_date);
-    _timeController.text = '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
+    _timeController.text =
+        '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
 
     subirEvento() async {
       if (_formKey.currentState!.validate()) {
@@ -105,7 +110,8 @@ class _AddPageState extends State<AddPage> {
 
           EventoApi evento = EventoApi(
             name: _nombreController.text,
-            hora: DateTime(now.year, now.month, now.day, _time.hour, _time.minute),
+            hora: DateTime(
+                now.year, now.month, now.day, _time.hour, _time.minute),
             dia: _date,
             ubicacion: _ubicacionesController.text,
             precio: int.parse(_precioController.text),
@@ -113,13 +119,15 @@ class _AddPageState extends State<AddPage> {
             deporte: list.first.id,
             imagen: imagen,
             descripcion: _descripcionController.text,
-            anfitrion: userProvider.currentUser!.idUser,
+            anfitrion: currentUser.idUser,
             participantes: [],
             geo: _geo!,
-            privado: _privadoController.text.isEmpty ? null : _privadoController.text,
+            privado: _privadoController.text.isEmpty
+                ? null
+                : _privadoController.text,
           );
 
-          eventoDatabase.saveEvento(evento);
+          eventosProvider.saveEvento(evento, currentUser);
           Navigator.pushReplacementNamed(context, 'home');
         }
       }
@@ -153,7 +161,8 @@ class _AddPageState extends State<AddPage> {
     miUbicacion() async {
       _geo = _miGeo ?? await positionProvider.getPosition(context);
       if (_geo == null) return;
-      _ubicacionesController.text = await _googleDetailsProvider.getNameByGeolocation(_geo!);
+      _ubicacionesController.text =
+          await _googleDetailsProvider.getNameByGeolocation(_geo!);
     }
 
     String subtitle(List<Term> terms) {
@@ -184,7 +193,8 @@ class _AddPageState extends State<AddPage> {
                 child: Container(
                   decoration: _imageFile != null
                       ? BoxDecoration(
-                          image: DecorationImage(image: FileImage(_imageFile!), fit: BoxFit.cover),
+                          image: DecorationImage(
+                              image: FileImage(_imageFile!), fit: BoxFit.cover),
                         )
                       : null,
                   child: GestureDetector(
@@ -221,7 +231,8 @@ class _AddPageState extends State<AddPage> {
                 child: Container(
                   decoration: const BoxDecoration(
                     color: ColorsUtils.white,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(70.0)),
+                    borderRadius:
+                        BorderRadius.only(topLeft: Radius.circular(70.0)),
                   ),
                   width: double.infinity,
                   child: Form(
@@ -241,7 +252,8 @@ class _AddPageState extends State<AddPage> {
                                   placeholder: 'Nombre',
                                   controller: _nombreController,
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) return 'Ponga un valor';
+                                    if (value == null || value.isEmpty)
+                                      return 'Ponga un valor';
                                     return null;
                                   },
                                 ),
@@ -260,9 +272,11 @@ class _AddPageState extends State<AddPage> {
                                       return Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: GestureDetector(
-                                          onTap: () => selectActivity(listDeportes, index),
+                                          onTap: () => selectActivity(
+                                              listDeportes, index),
                                           child: ToastCard(
-                                            active: listDeportes[index].selected,
+                                            active:
+                                                listDeportes[index].selected,
                                             nombre: listDeportes[index].nombre,
                                           ),
                                         ),
@@ -317,15 +331,20 @@ class _AddPageState extends State<AddPage> {
                                   controller: _ubicacionesController,
                                   fillColor: ColorsUtils.white,
                                   styleText: TextUtils.kanit_18_grey,
-                                  onChanged: (value) => onChangedUbicacion(value),
+                                  onChanged: (value) =>
+                                      onChangedUbicacion(value),
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) return 'Ponga un valor';
-                                    if (_geo == null) return 'Seleccione un valor';
+                                    if (value == null || value.isEmpty)
+                                      return 'Ponga un valor';
+                                    if (_geo == null)
+                                      return 'Seleccione un valor';
                                     return null;
                                   },
                                 ),
-                                if (googleAutocompleteProvider.lugares.isNotEmpty)
-                                  ...googleAutocompleteProvider.lugares.map((lugar) {
+                                if (googleAutocompleteProvider
+                                    .lugares.isNotEmpty)
+                                  ...googleAutocompleteProvider.lugares
+                                      .map((lugar) {
                                     return ListTile(
                                       leading: const Icon(Icons.map_outlined),
                                       title: Text(lugar.terms[0].value),
@@ -335,7 +354,8 @@ class _AddPageState extends State<AddPage> {
                                   }),
                                 const SizedBox(height: 5.0),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 20.0),
                                   child: ButtonInput(
                                     text: 'Mi ubicacion',
                                     color: ColorsUtils.lightblue,
@@ -359,8 +379,12 @@ class _AddPageState extends State<AddPage> {
                                   styleText: TextUtils.kanit_18_black,
                                   textInputType: TextInputType.number,
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) return 'Ponga un valor';
-                                    if (value.contains('-') || value.contains(',') || value.contains('.')) return 'Ponga numero enteros';
+                                    if (value == null || value.isEmpty)
+                                      return 'Ponga un valor';
+                                    if (value.contains('-') ||
+                                        value.contains(',') ||
+                                        value.contains('.'))
+                                      return 'Ponga numero enteros';
                                     return null;
                                   },
                                 ),
@@ -377,13 +401,15 @@ class _AddPageState extends State<AddPage> {
                                   fillColor: ColorsUtils.white,
                                   styleText: TextUtils.kanit_18_black,
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) return 'Ponga un valor';
+                                    if (value == null || value.isEmpty)
+                                      return 'Ponga un valor';
                                     return null;
                                   },
                                 ),
                                 const SizedBox(height: 20.0),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     const Text(
                                       'Precio',
@@ -399,7 +425,8 @@ class _AddPageState extends State<AddPage> {
                                 ),
                                 if (_precio)
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20.0),
                                     child: FormInput(
                                       icon: const Icon(Icons.euro),
                                       placeholder: 'Precio',
@@ -407,14 +434,19 @@ class _AddPageState extends State<AddPage> {
                                       fillColor: ColorsUtils.white,
                                       textInputType: TextInputType.number,
                                       validator: (value) {
-                                        if (value == null || value.isEmpty) return 'Ponga un valor';
-                                        if (value.contains('-') || value.contains(',') || value.contains('.')) return 'Ponga numero enteros';
+                                        if (value == null || value.isEmpty)
+                                          return 'Ponga un valor';
+                                        if (value.contains('-') ||
+                                            value.contains(',') ||
+                                            value.contains('.'))
+                                          return 'Ponga numero enteros';
                                         return null;
                                       },
                                     ),
                                   ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     const Text(
                                       'Privado',
@@ -430,14 +462,16 @@ class _AddPageState extends State<AddPage> {
                                 ),
                                 if (_privado)
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20.0),
                                     child: FormInput(
                                       icon: const Icon(Icons.lock),
                                       placeholder: 'Contraseña',
                                       controller: _privadoController,
                                       fillColor: ColorsUtils.white,
                                       validator: (value) {
-                                        if (value == null || value.isEmpty) return 'Ponga un valor';
+                                        if (value == null || value.isEmpty)
+                                          return 'Ponga un valor';
                                         return null;
                                       },
                                     ),
