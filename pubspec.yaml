@@ -25,6 +25,15 @@ dependencies:
   share_plus: ^6.3.2
   table_calendar: ^3.0.0
   google_mobile_ads: 3.0.0
+  flutter_native_splash: ^2.2.19
+  
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+  
+  background_image: "image/background_splash.png"
+  image: "image/logo_transparente.png"
 
 dev_dependencies:
   build_runner:
