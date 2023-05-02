@@ -1,12 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:sporth/providers/asset/logros_provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/routes/routes.dart';
+import 'package:sporth/utils/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Firebase
   await Firebase.initializeApp();
+
+  // Mobile Ads
+  await MobileAds.instance.initialize();
+
+  AdUtils.instance.configure(test: true);
 
   runApp(const AppState());
 }
