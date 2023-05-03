@@ -68,7 +68,7 @@ class _DetailsPageState extends State<DetailsPage> {
       }
 
       eventosProvider.eventoChat = eventoDto;
-      Navigator.pushReplacementNamed(context, 'chat-personal',
+      Navigator.pushReplacementNamed(context, CHAT_PERSONAL,
           arguments: chatDto);
     }
 

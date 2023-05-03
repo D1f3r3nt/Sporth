@@ -128,7 +128,7 @@ class _AddPageState extends State<AddPage> {
           );
 
           eventosProvider.saveEvento(evento, currentUser);
-          Navigator.pushReplacementNamed(context, 'home');
+          Navigator.pushReplacementNamed(context, HOME);
         }
       }
     }
@@ -145,7 +145,7 @@ class _AddPageState extends State<AddPage> {
           },
         );
 
-    atras() => Navigator.pushReplacementNamed(context, 'home');
+    atras() => Navigator.pushReplacementNamed(context, HOME);
 
     tapOnAutocomplete(GooglePlaceAutocomplete lugar) async {
       _ubicacionesController.text = lugar.terms[0].value;

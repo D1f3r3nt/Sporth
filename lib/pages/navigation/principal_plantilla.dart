@@ -18,14 +18,14 @@ class PrincipalPlantilla extends StatelessWidget {
 
     chats() {
       chatProvider.refresh();
-      Navigator.pushReplacementNamed(context, 'chats');
+      Navigator.pushReplacementNamed(context, CHATS);
     }
 
-    settings() => Navigator.pushReplacementNamed(context, 'settings');
+    settings() => Navigator.pushReplacementNamed(context, SETTINGS);
 
     tapNavigation(int value) {
       if (value == 2) {
-        Navigator.pushReplacementNamed(context, 'add-page');
+        Navigator.pushReplacementNamed(context, ADD_PAGE);
         value = 0;
       }
       bottomNavProvider.index = value;

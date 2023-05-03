@@ -19,14 +19,14 @@ class Gateway extends StatelessWidget {
       return;
     }*/
 
-    Navigator.pushReplacementNamed(context, 'home');
+    Navigator.pushReplacementNamed(context, HOME);
   }
 
   @override
   Widget build(BuildContext context) {
     Future.delayed(Duration.zero, () {
       if (FirebaseAuth.instance.currentUser == null) {
-        Navigator.pushReplacementNamed(context, 'login');
+        Navigator.pushReplacementNamed(context, LOGIN);
       } else {
         home(context);
       }

@@ -65,7 +65,7 @@ class _SettingsPageState extends State<SettingsPage> {
     logout() async {
       emailAuth.logOut(context);
       googleAuth.logout();
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushReplacementNamed(context, INITIAL);
     }
 
     guardar() async {
@@ -100,10 +100,10 @@ class _SettingsPageState extends State<SettingsPage> {
       }
 
       userProvider.currentUser = updateUser;
-      Navigator.pushReplacementNamed(context, 'home');
+      Navigator.pushReplacementNamed(context, HOME);
     }
 
-    atras() => Navigator.pushReplacementNamed(context, 'home');
+    atras() => Navigator.pushReplacementNamed(context, HOME);
 
     addImage() => showModalBottomSheet(
           context: context,

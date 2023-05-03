@@ -30,13 +30,13 @@ class _LoginPageState extends State<LoginPage> {
           password: _passwordController.text,
         );
 
-        Navigator.pushReplacementNamed(context, '/');
+        Navigator.pushReplacementNamed(context, INITIAL);
       }
     }
 
-    tapRecuperarContrasenia() => Navigator.pushReplacementNamed(context, 'new-password');
+    tapRecuperarContrasenia() => Navigator.pushReplacementNamed(context, NEW_PASSWORD);
 
-    tapRegistrarse() => Navigator.pushReplacementNamed(context, 'sing-up');
+    tapRegistrarse() => Navigator.pushReplacementNamed(context, SING_UP);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

@@ -52,7 +52,7 @@ class _OtherUserPageState extends State<OtherUserPage> {
       ChatDto chatDto = await ChatMapper.INSTANCE
           .chatApiToChatDto(newChat.copyWith(idChat: chatId));
 
-      Navigator.pushReplacementNamed(context, 'chat-personal',
+      Navigator.pushReplacementNamed(context, CHAT_PERSONAL,
           arguments: chatDto);
     }
 
