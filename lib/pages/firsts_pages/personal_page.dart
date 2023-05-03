@@ -60,7 +60,7 @@ class _PersonalPageState extends State<PersonalPage> {
 
         singUPProvider.addPersonal(_nombreController.text, _apellidosController.text, imagen, _time, _telefonoController.text);
 
-        Navigator.pushReplacementNamed(context, 'gustos');
+        Navigator.pushReplacementNamed(context, GUSTOS);
       }
     }
 

@@ -18,7 +18,7 @@ class UserTile extends StatelessWidget {
 
     goUser() {
       if (userDto.idUser == currentUser.currentUser!.idUser) return;
-      Navigator.pushNamed(context, 'other-user', arguments: userDto);
+      Navigator.pushNamed(context, OTHER_USER, arguments: userDto);
     }
 
     return GestureDetector(

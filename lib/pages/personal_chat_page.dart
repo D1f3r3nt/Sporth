@@ -28,7 +28,7 @@ class PersonalChatPage extends StatelessWidget {
 
     atras() {
       eventosProvider.eventoChat = null;
-      Navigator.pushReplacementNamed(context, 'chats');
+      Navigator.pushReplacementNamed(context, CHATS);
     }
 
     enviar() async {
