@@ -20,14 +20,14 @@ class ButtonGoogleInput extends StatelessWidget {
       User user = FirebaseAuth.instance.currentUser!;
 
       if (await databaseUser.existsUser(user.uid)) {
-        Navigator.pushReplacementNamed(context, '/');
+        Navigator.pushReplacementNamed(context, INITIAL);
         return;
       }
 
       singUpProvider.addDatos(user.email!, user.displayName ?? '', user.uid);
       singUpProvider.addPersonal(user.displayName ?? '', '', user.photoURL ?? '', DateTime.now(), user.phoneNumber ?? '');
 
-      Navigator.pushReplacementNamed(context, 'gustos');
+      Navigator.pushReplacementNamed(context, GUSTOS);
     }
 
     return GestureDetector(

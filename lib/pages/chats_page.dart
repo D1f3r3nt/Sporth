@@ -17,11 +17,11 @@ class ChatsPage extends StatelessWidget {
     chatProvider.getChats();
     List<ChatDto> chats = chatProvider.chats;
 
-    atras() => Navigator.pushReplacementNamed(context, 'home');
+    atras() => Navigator.pushReplacementNamed(context, HOME);
 
     tapChat(ChatDto chatDto) => Navigator.pushReplacementNamed(
           context,
-          'chat-personal',
+          CHAT_PERSONAL,
           arguments: chatDto,
         );
 

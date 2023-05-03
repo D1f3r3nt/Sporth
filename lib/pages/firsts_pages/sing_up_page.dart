@@ -40,13 +40,13 @@ class _SingUpPageState extends State<SingUpPage> {
 
           if (uid.isNotEmpty) {
             singUpProvider.addDatos(_emailController.text, _userController.text, uid);
-            Navigator.pushReplacementNamed(context, 'personal');
+            Navigator.pushReplacementNamed(context, PERSONAL);
           }
         }
       }
     }
 
-    entrar() => Navigator.pushReplacementNamed(context, 'login');
+    entrar() => Navigator.pushReplacementNamed(context, LOGIN);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

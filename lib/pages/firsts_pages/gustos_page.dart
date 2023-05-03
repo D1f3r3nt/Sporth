@@ -26,7 +26,7 @@ class _GustosPageState extends State<GustosPage> {
 
       databaseUser.saveUser(singUpProvider.newUser);
 
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushReplacementNamed(context, INITIAL);
     }
 
     tapGustosButtons(DeportesDto element) => setState(() {

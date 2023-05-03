@@ -10,7 +10,7 @@ class CardEvent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    goEvento() => Navigator.pushNamed(context, 'details', arguments: eventoDto);
+    goEvento() => Navigator.pushNamed(context, DETAILS, arguments: eventoDto);
 
     return GestureDetector(
       onTap: goEvento,

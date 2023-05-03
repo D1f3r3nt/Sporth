@@ -24,11 +24,11 @@ class _PasswordPageState extends State<PasswordPage> {
       if (_formKey.currentState!.validate()) {
         emailProvider.newPassword(context, email: _emailController.text);
 
-        Navigator.pushReplacementNamed(context, 'login');
+        Navigator.pushReplacementNamed(context, LOGIN);
       }
     }
 
-    tapAtras() => Navigator.pushReplacementNamed(context, 'login');
+    tapAtras() => Navigator.pushReplacementNamed(context, LOGIN);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
