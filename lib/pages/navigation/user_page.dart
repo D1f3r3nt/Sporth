@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
+import 'package:sporth/widgets/cards/banner_ad_card.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class UserPage extends StatelessWidget {
@@ -11,8 +12,8 @@ class UserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final DeportesProvider deportesProvider =
-        Provider.of<DeportesProvider>(context);
+    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final LogrosProvider logrosProvider = Provider.of<LogrosProvider>(context);
     final UserDto user = userProvider.currentUser!;
 
@@ -98,13 +99,27 @@ class UserPage extends StatelessWidget {
                 ),
               ),
             Expanded(
-              child: ListView.builder(
-                itemCount: 0 + 1,
+              child: eventosProvider.eventsByUser.isEmpty
+              ? Image.asset(
+                'image/usuario_no_tiene_evento.png',
+                height: size.height * 0.4,
+              )
+              : ListView.builder(
+                itemCount: eventosProvider.eventsByUser.length,
+                padding:
+                const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
                 itemBuilder: (context, index) {
-                  return Image.asset(
-                    'image/usuario_no_tiene_evento.png',
-                    height: size.height * 0.4,
-                  );
+                  if (index > 0 && index % 2 == 0) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        BannerAdCard(width: size.width * 0.85),
+                        const SizedBox(height: 25),
+                        CardPublicacion(eventoDto: eventosProvider.eventsByUser[index]),
+                      ],
+                    );
+                  }
+                  return CardPublicacion(eventoDto: eventosProvider.eventsByUser[index]);
                 },
               ),
             )

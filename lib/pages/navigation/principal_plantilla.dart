@@ -10,8 +10,8 @@ class PrincipalPlantilla extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BottomNavProvider bottomNavProvider =
-        Provider.of<BottomNavProvider>(context);
+    final BottomNavProvider bottomNavProvider = Provider.of<BottomNavProvider>(context);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     final UserDto user = userProvider.currentUser!;
     final ChatProvider chatProvider = Provider.of<ChatProvider>(context);

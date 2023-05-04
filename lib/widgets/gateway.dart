@@ -9,7 +9,8 @@ class Gateway extends StatelessWidget {
   final databaseUser = DatabaseUser();
 
   void home(BuildContext context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context, listen: false);
 
     userProvider.currentUser = await databaseUser.getUser(FirebaseAuth.instance.currentUser!.uid);
 
@@ -19,6 +20,9 @@ class Gateway extends StatelessWidget {
       return;
     }*/
 
+    // Para traer los eventos del usuario
+    eventosProvider.getEventosByUser(userProvider.currentUser!.idUser);
+    
     Navigator.pushReplacementNamed(context, HOME);
   }
 

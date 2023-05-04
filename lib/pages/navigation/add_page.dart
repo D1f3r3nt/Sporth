@@ -127,7 +127,11 @@ class _AddPageState extends State<AddPage> {
                 : _privadoController.text,
           );
 
-          eventosProvider.saveEvento(evento, currentUser);
+          await eventosProvider.saveEvento(evento, currentUser);
+
+          // Para traer los eventos del usuario
+          eventosProvider.getEventosByUser(currentUser.idUser);
+          
           Navigator.pushReplacementNamed(context, HOME);
         }
       }
@@ -145,7 +149,12 @@ class _AddPageState extends State<AddPage> {
           },
         );
 
-    atras() => Navigator.pushReplacementNamed(context, HOME);
+    atras() {
+      // Para traer los eventos del usuario
+      eventosProvider.getEventosByUser(currentUser.idUser);
+      
+      Navigator.pushReplacementNamed(context, HOME);
+    }
 
     tapOnAutocomplete(GooglePlaceAutocomplete lugar) async {
       _ubicacionesController.text = lugar.terms[0].value;
