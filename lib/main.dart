@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/routes/routes.dart';
@@ -7,6 +8,9 @@ import 'package:sporth/utils/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Para evitar que la pantalla se voltee
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // Firebase
   await Firebase.initializeApp();
