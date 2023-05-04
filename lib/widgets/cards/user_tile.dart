@@ -15,9 +15,14 @@ class UserTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserProvider currentUser = Provider.of<UserProvider>(context);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
 
     goUser() {
       if (userDto.idUser == currentUser.currentUser!.idUser) return;
+      
+      // Para traer los eventos del usuario
+      eventosProvider.getEventosByUser(userDto.idUser);
+      
       Navigator.pushNamed(context, OTHER_USER, arguments: userDto);
     }
 

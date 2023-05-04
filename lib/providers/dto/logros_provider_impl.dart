@@ -13,7 +13,7 @@ class LogrosProviderImpl {
 
   Future<void> getEventLogro(UserDto user) async {
     List<EventoApi> list =
-        await _databaseEvento.getEventsByAnfitrion(user.idUser);
+        await _databaseEvento.getEventsApiByAnfitrion(user.idUser);
 
     if (list.length == 1) {
       await _databaseUser.updateLogro(user, 2);
