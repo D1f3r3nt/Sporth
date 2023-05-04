@@ -54,7 +54,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final GoogleAuth googleAuth = GoogleAuth();
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
-    final DatabaseUser databaseUser = DatabaseUser();
+    final DatabaseUser _databaseUser = DatabaseUser();
     final ImageRepository imageRepository = ImageRepository();
 
     if (_time == null) {
@@ -73,22 +73,27 @@ class _SettingsPageState extends State<SettingsPage> {
       UserDto updateUser = userProvider.currentUser!;
       if (_nombreController.text.trim().isNotEmpty) {
         updateUser = updateUser.copyOf(nombre: _nombreController.text);
-        await databaseUser.updateUser(updateUser);
+        await _databaseUser.updateUser(updateUser);
       }
 
       if (_usernameController.text.trim().isNotEmpty) {
+        bool exists = await _databaseUser.existsUsername(_usernameController.text.trim());
+        if (exists) {
+          Snackbar.errorSnackbar(context, 'Este usuario ya existe');
+          return;
+        }
         updateUser = updateUser.copyOf(username: _usernameController.text);
-        await databaseUser.updateUser(updateUser);
+        await _databaseUser.updateUser(updateUser);
       }
 
       if (_telefonoController.text.trim().isNotEmpty) {
         updateUser = updateUser.copyOf(telefono: _telefonoController.text);
-        await databaseUser.updateUser(updateUser);
+        await _databaseUser.updateUser(updateUser);
       }
 
       if (_time != null) {
         updateUser = updateUser.copyOf(nacimiento: _time);
-        await databaseUser.updateUser(updateUser);
+        await _databaseUser.updateUser(updateUser);
       }
 
       if (_imageFile != null) {
@@ -97,7 +102,7 @@ class _SettingsPageState extends State<SettingsPage> {
           await imageRepository.deleteImage(updateUser.imagen);
         }
         updateUser = updateUser.copyOf(imagen: newUrl);
-        await databaseUser.updateUser(updateUser);
+        await _databaseUser.updateUser(updateUser);
       }
 
       userProvider.currentUser = updateUser;

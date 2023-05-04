@@ -26,8 +26,8 @@ class _LoginPageState extends State<LoginPage> {
       if (_formKey.currentState!.validate()) {
         await _emailAuth.logIn(
           context,
-          email: _emailController.text,
-          password: _passwordController.text,
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
         );
 
         Navigator.pushReplacementNamed(context, INITIAL);
