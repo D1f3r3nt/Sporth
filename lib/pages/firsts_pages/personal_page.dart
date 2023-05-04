@@ -58,7 +58,7 @@ class _PersonalPageState extends State<PersonalPage> {
 
         if (_imageFile != null) imagen = await _imageRepository.uploadFile(_imageFile!);
 
-        singUPProvider.addPersonal(_nombreController.text, _apellidosController.text, imagen, _time, _telefonoController.text);
+        singUPProvider.addPersonal(_nombreController.text.trim(), _apellidosController.text.trim(), imagen, _time, _telefonoController.text.trim());
 
         Navigator.pushReplacementNamed(context, GUSTOS);
       }

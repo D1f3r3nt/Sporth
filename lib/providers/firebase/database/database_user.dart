@@ -47,6 +47,13 @@ class DatabaseUser {
     return await documentReference.get().then((value) => value.exists);
   }
 
+  Future<bool> existsUsername(String username) async {
+    log('GET -- EXISTS USERNAME');
+    CollectionReference userReference = _db.collection(COLLECTION_NAME);
+    QuerySnapshot query = await userReference.where('username', isEqualTo: username).get();
+    return query.docs.isNotEmpty;
+  }
+
   // =============
   // POST
   // =============

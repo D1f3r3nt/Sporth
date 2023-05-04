@@ -18,6 +18,7 @@ class _SingUpPageState extends State<SingUpPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordCheckController = TextEditingController();
   final TextEditingController _userController = TextEditingController();
+  final DatabaseUser _databaseUser = DatabaseUser();
 
   bool _checkbox = false;
 
@@ -31,15 +32,21 @@ class _SingUpPageState extends State<SingUpPage> {
         if (!_checkbox) {
           Snackbar.errorSnackbar(context, 'Tienes que aceptar las condiciones');
         } else {
+          bool exists = await _databaseUser.existsUsername(_userController.text.trim());
+          if (exists) {
+            Snackbar.errorSnackbar(context, 'Este usuario ya existe');
+            return;
+          }
+          
           String uid = await emailAuth.singUp(
             context,
-            email: _emailController.text,
-            password: _passwordController.text,
-            name: _userController.text,
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+            name: _userController.text.trim(),
           );
 
           if (uid.isNotEmpty) {
-            singUpProvider.addDatos(_emailController.text, _userController.text, uid);
+            singUpProvider.addDatos(_emailController.text.trim(), _userController.text.trim(), uid);
             Navigator.pushReplacementNamed(context, PERSONAL);
           }
         }
