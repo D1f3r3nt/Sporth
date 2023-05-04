@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/utils/decimal_formatter.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -114,7 +115,7 @@ class _AddPageState extends State<AddPage> {
                 now.year, now.month, now.day, _time.hour, _time.minute),
             dia: _date,
             ubicacion: _ubicacionesController.text,
-            precio: int.parse(_precioController.text),
+            precio: double.parse(_precioController.text),
             maximo: int.parse(_maxPersonasController.text),
             deporte: list.first.id,
             imagen: imagen,
@@ -441,14 +442,11 @@ class _AddPageState extends State<AddPage> {
                                       placeholder: 'Precio',
                                       controller: _precioController,
                                       fillColor: ColorsUtils.white,
-                                      textInputType: TextInputType.number,
+                                      inputFormatters: [DecimalFormatter(decimalRange: 2)],
+                                      textInputType: const TextInputType.numberWithOptions(decimal: true),
                                       validator: (value) {
                                         if (value == null || value.isEmpty)
                                           return 'Ponga un valor';
-                                        if (value.contains('-') ||
-                                            value.contains(',') ||
-                                            value.contains('.'))
-                                          return 'Ponga numero enteros';
                                         return null;
                                       },
                                     ),

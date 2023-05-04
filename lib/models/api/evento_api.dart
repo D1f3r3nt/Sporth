@@ -28,7 +28,7 @@ class EventoApi {
   DateTime hora;
   DateTime dia;
   String ubicacion;
-  int precio;
+  double precio;
   int maximo;
   int deporte;
   String imagen;
@@ -43,7 +43,7 @@ class EventoApi {
         hora: DateFormat.Hm().parse(json["hora"]),
         dia: DateFormat.yMd().parse(json["dia"]),
         ubicacion: json["ubicacion"],
-        precio: json["precio"],
+        precio: json["precio"].toDouble(),
         maximo: json["maximo"],
         deporte: json["deporte"],
         imagen: json["imagen"],
