@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:sporth/utils/utils.dart';
 
@@ -14,6 +15,7 @@ class FormInput extends StatelessWidget {
   final TextEditingController controller;
   final Function()? onTap;
   final Function(String)? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
 
   const FormInput({
     super.key,
@@ -27,7 +29,8 @@ class FormInput extends StatelessWidget {
     this.form,
     this.onTap,
     this.onChanged,
-    this.styleText = TextUtils.kanit_18_black,
+    this.styleText = TextUtils.kanit_18_black, 
+    this.inputFormatters,
   });
 
   @override
@@ -42,6 +45,7 @@ class FormInput extends StatelessWidget {
         child: TextFormField(
           controller: controller,
           keyboardType: textInputType,
+          inputFormatters: inputFormatters,
           obscureText: password,
           validator: validator,
           onTap: onTap,

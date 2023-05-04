@@ -185,19 +185,21 @@ class _OtherUserPageState extends State<OtherUserPage> {
                   height: size.height * 0.4,
                 )
                     : ListView.builder(
-                  itemCount: eventosProvider.eventsByUser.length,
-                  itemBuilder: (context, index) {
-                    if (index > 0 && index % 2 == 0) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          BannerAdCard(width: size.width * 0.85),
-                          const SizedBox(height: 25),
-                          CardPublicacion(eventoDto: eventosProvider.eventsByUser[index]),
-                        ],
-                      );
-                    }
-                    return CardPublicacion(eventoDto: eventosProvider.eventsByUser[index]);
+                      itemCount: eventosProvider.eventsByUser.length,
+                      padding:
+                      const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
+                      itemBuilder: (context, index) {
+                        if (index > 0 && index % 2 == 0) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              BannerAdCard(width: size.width * 0.85),
+                              const SizedBox(height: 25),
+                              CardPublicacion(eventoDto: eventosProvider.eventsByUser[index]),
+                            ],
+                          );
+                        }
+                        return CardPublicacion(eventoDto: eventosProvider.eventsByUser[index]);
                   },
                 ),
               )

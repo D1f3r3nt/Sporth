@@ -24,7 +24,7 @@ class EventoDto {
   DateTime hora;
   DateTime dia;
   String ubicacion;
-  int precio;
+  double precio;
   int maximo;
   DeportesAsset deporte;
   String imagen;
