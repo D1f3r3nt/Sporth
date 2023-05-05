@@ -24,12 +24,12 @@ class _AddPageState extends State<AddPage> {
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _ubicacionesController = TextEditingController();
   final TextEditingController _maxPersonasController = TextEditingController();
-  final TextEditingController _precioController =
-      TextEditingController(text: '0');
+  final TextEditingController _precioController = TextEditingController(text: '0');
   final TextEditingController _privadoController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _descripcionController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   File? _imageFile;
   DateTime _date = DateTime.now();
@@ -40,8 +40,7 @@ class _AddPageState extends State<AddPage> {
   bool _privado = false;
 
   Future<void> _pickImageFromGallery() async {
-    final pickedfile =
-        await _pickerImage.pickImage(source: ImageSource.gallery);
+    final pickedfile = await _pickerImage.pickImage(source: ImageSource.gallery);
     if (pickedfile != null) setState(() => _imageFile = File(pickedfile.path));
   }
 
@@ -80,19 +79,15 @@ class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final DeportesProvider deportesProvider =
-        Provider.of<DeportesProvider>(context);
+    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
-    final GoogleAutocompleteProvider googleAutocompleteProvider =
-        Provider.of<GoogleAutocompleteProvider>(context);
+    final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
     final PositionProvider positionProvider = PositionProvider();
     final List<DeportesDto> listDeportes = deportesProvider.deportesAdd;
-    final EventosProvider eventosProvider =
-        Provider.of<EventosProvider>(context);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
 
     _dateController.text = DateFormat('dd/MM/yyyy').format(_date);
-    _timeController.text =
-        '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
+    _timeController.text = '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
 
     subirEvento() async {
       if (_formKey.currentState!.validate()) {
@@ -111,8 +106,7 @@ class _AddPageState extends State<AddPage> {
 
           EventoApi evento = EventoApi(
             name: _nombreController.text,
-            hora: DateTime(
-                now.year, now.month, now.day, _time.hour, _time.minute),
+            hora: DateTime(now.year, now.month, now.day, _time.hour, _time.minute),
             dia: _date,
             ubicacion: _ubicacionesController.text,
             precio: double.parse(_precioController.text),
@@ -137,6 +131,22 @@ class _AddPageState extends State<AddPage> {
         }
       }
     }
+    
+    scrollTo(double position) {
+      _scrollController.animateTo(
+        position,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+      );
+    }
+    
+
+    atras() {
+      // Para traer los eventos del usuario
+      eventosProvider.getEventosByUser(currentUser.idUser);
+
+      Navigator.pushReplacementNamed(context, HOME);
+    }
 
     addImage() => showModalBottomSheet(
           context: context,
@@ -150,11 +160,24 @@ class _AddPageState extends State<AddPage> {
           },
         );
 
-    atras() {
-      // Para traer los eventos del usuario
-      eventosProvider.getEventosByUser(currentUser.idUser);
-      
-      Navigator.pushReplacementNamed(context, HOME);
+    tapLocalizacion() {
+      scrollTo(300);
+    }
+
+    tapMaxPersonas() {
+      scrollTo(450);
+    }
+
+    tapDescription() {
+      scrollTo(550);
+    }
+    
+    tapPrecio() {
+      scrollTo(650);
+    }
+    
+    tapPassword() {
+      scrollTo(800);
     }
 
     tapOnAutocomplete(GooglePlaceAutocomplete lugar) async {
@@ -257,6 +280,7 @@ class _AddPageState extends State<AddPage> {
                               right: 20.0,
                             ),
                             child: ListView(
+                              controller: _scrollController,
                               children: [
                                 TextInput(
                                   placeholder: 'Nombre',
@@ -282,11 +306,9 @@ class _AddPageState extends State<AddPage> {
                                       return Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: GestureDetector(
-                                          onTap: () => selectActivity(
-                                              listDeportes, index),
+                                          onTap: () => selectActivity(listDeportes, index),
                                           child: ToastCard(
-                                            active:
-                                                listDeportes[index].selected,
+                                            active: listDeportes[index].selected,
                                             nombre: listDeportes[index].nombre,
                                           ),
                                         ),
@@ -341,8 +363,8 @@ class _AddPageState extends State<AddPage> {
                                   controller: _ubicacionesController,
                                   fillColor: ColorsUtils.white,
                                   styleText: TextUtils.kanit_18_grey,
-                                  onChanged: (value) =>
-                                      onChangedUbicacion(value),
+                                  onTap: tapLocalizacion,
+                                  onChanged: (value) => onChangedUbicacion(value),
                                   validator: (value) {
                                     if (value == null || value.isEmpty)
                                       return 'Ponga un valor';
@@ -386,6 +408,7 @@ class _AddPageState extends State<AddPage> {
                                   placeholder: 'Max. Personas',
                                   controller: _maxPersonasController,
                                   fillColor: ColorsUtils.white,
+                                  onTap: tapMaxPersonas,
                                   styleText: TextUtils.kanit_18_black,
                                   textInputType: TextInputType.number,
                                   validator: (value) {
@@ -410,6 +433,7 @@ class _AddPageState extends State<AddPage> {
                                   controller: _descripcionController,
                                   fillColor: ColorsUtils.white,
                                   styleText: TextUtils.kanit_18_black,
+                                  onTap: tapDescription,
                                   validator: (value) {
                                     if (value == null || value.isEmpty)
                                       return 'Ponga un valor';
@@ -441,6 +465,7 @@ class _AddPageState extends State<AddPage> {
                                       icon: const Icon(Icons.euro),
                                       placeholder: 'Precio',
                                       controller: _precioController,
+                                      onTap: tapPrecio,
                                       fillColor: ColorsUtils.white,
                                       inputFormatters: [DecimalFormatter(decimalRange: 2)],
                                       textInputType: const TextInputType.numberWithOptions(decimal: true),
@@ -474,6 +499,7 @@ class _AddPageState extends State<AddPage> {
                                     child: FormInput(
                                       icon: const Icon(Icons.lock),
                                       placeholder: 'Contraseña',
+                                      onTap: tapPassword,
                                       controller: _privadoController,
                                       fillColor: ColorsUtils.white,
                                       validator: (value) {
@@ -483,13 +509,13 @@ class _AddPageState extends State<AddPage> {
                                       },
                                     ),
                                   ),
-                                const SizedBox(height: 20.0),
+                                const SizedBox(height: 200.0),
                               ],
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(30.0),
+                          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 30.0, bottom: 50.0),
                           child: ButtonInput(
                             text: 'SUBIR',
                             funcion: subirEvento,
