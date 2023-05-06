@@ -138,6 +138,8 @@ class _DetailsPageState extends State<DetailsPage> {
                         Text(
                           eventoDto.name,
                           style: TextUtils.kanitItalic_24_black,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                         ),
                         const SizedBox(height: 10.0),
                         Row(
@@ -156,10 +158,14 @@ class _DetailsPageState extends State<DetailsPage> {
                             Row(
                               children: [
                                 const Icon(Icons.location_on_outlined),
-                                const SizedBox(width: 10),
-                                Text(
-                                  eventoDto.ubicacion,
-                                  style: TextUtils.kanit_18_black,
+                                SizedBox(
+                                  width: size.width * 0.45,
+                                  child: Text(
+                                    eventoDto.ubicacion,
+                                    style: TextUtils.kanit_18_black,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
                                 ),
                               ],
                             ),
@@ -272,7 +278,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 60.0),
                       ],
                     ),
                   ),

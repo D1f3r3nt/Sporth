@@ -194,6 +194,11 @@ class _SettingsPageState extends State<SettingsPage> {
                     controller: _usernameController,
                     fillColor: ColorsUtils.white,
                     validator: (value) {
+                      if (value != null) {
+                        if (value.length < 4 || value.length > 15) {
+                          return 'El usuario ha de tener entre 4 y 15 letras';
+                        }
+                      }
                       return null;
                     },
                   ),
@@ -239,9 +244,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     funcion: guardar,
                   ),
                 ),
-                const Expanded(child: SizedBox()),
+                const Expanded(flex: 3, child: SizedBox()),
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: ButtonIconInput(
                     icono: const Icon(
                       Icons.logout,
@@ -252,6 +257,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     funcion: logout,
                   ),
                 ),
+                const Expanded(child: SizedBox(), flex: 1),
               ],
             ),
           ),

@@ -515,7 +515,7 @@ class _AddPageState extends State<AddPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 30.0, bottom: 50.0),
+                          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 30.0, bottom: 70.0),
                           child: ButtonInput(
                             text: 'SUBIR',
                             funcion: subirEvento,
