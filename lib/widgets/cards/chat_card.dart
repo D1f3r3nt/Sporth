@@ -21,6 +21,8 @@ class ChatCard extends StatelessWidget {
       title: Text(
         nombre,
         style: TextUtils.kanit_18_black,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
       subtitle: Text(
         username,

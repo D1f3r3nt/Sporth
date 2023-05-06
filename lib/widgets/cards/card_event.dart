@@ -10,6 +10,8 @@ class CardEvent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    
     goEvento() => Navigator.pushNamed(context, DETAILS, arguments: eventoDto);
 
     return GestureDetector(
@@ -58,13 +60,23 @@ class CardEvent extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        eventoDto.name,
-                        style: TextUtils.kanit_18_black,
+                      SizedBox(
+                        width: size.width * 0.6,
+                        child: Text(
+                          eventoDto.name,
+                          style: TextUtils.kanit_18_black,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                       ),
-                      Text(
-                        '${eventoDto.ubicacion} | ${eventoDto.diaFormatShow}',
-                        style: TextUtils.kanit_16_grey,
+                      SizedBox(
+                        width: size.width * 0.6,
+                        child: Text(
+                          '${eventoDto.ubicacion} | ${eventoDto.diaFormatShow}',
+                          style: TextUtils.kanit_16_grey,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                       ),
                     ],
                   ),

@@ -69,6 +69,8 @@ class UserPage extends StatelessWidget {
             Text(
               user.nombre,
               style: TextUtils.kanitItalic_24_black,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
             if (listLogros.isNotEmpty)
               SizedBox(
