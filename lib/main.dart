@@ -18,7 +18,7 @@ void main() async {
   // Mobile Ads
   await MobileAds.instance.initialize();
 
-  AdUtils.instance.configure(test: true);
+  AdUtils.instance.configure(test: false);
 
   runApp(const AppState());
 }
