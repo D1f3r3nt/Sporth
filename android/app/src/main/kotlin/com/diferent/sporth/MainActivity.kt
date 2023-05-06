@@ -1,0 +1,6 @@
+package com.diferent.sporth
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}

@@ -1,0 +1,87 @@
+[
+  {
+    "id": 1,
+    "imagen": "badminton.png",
+    "nombre": "Badminton"
+  },
+  {
+    "id": 2,
+    "imagen": "baloncesto.png",
+    "nombre": "Baloncesto"
+  },
+  {
+    "id": 3,
+    "imagen": "bolos.png",
+    "nombre": "Bolos"
+  },
+  {
+    "id": 4,
+    "imagen": "ciclismo.png",
+    "nombre": "Ciclismo"
+  },
+  {
+    "id": 5,
+    "imagen": "crossfit.png",
+    "nombre": "Crossfit"
+  },
+  {
+    "id": 6,
+    "imagen": "dardos.png",
+    "nombre": "Dardos"
+  },
+  {
+    "id": 7,
+    "imagen": "futbol.png",
+    "nombre": "Futbol"
+  },
+  {
+    "id": 8,
+    "imagen": "futbolin.png",
+    "nombre": "Futbolin"
+  },
+  {
+    "id": 9,
+    "imagen": "juegos_de_rol.png",
+    "nombre": "Rol"
+  },
+  {
+    "id": 10,
+    "imagen": "padel.png",
+    "nombre": "Padel"
+  },
+  {
+    "id": 11,
+    "imagen": "ping_pong.png",
+    "nombre": "Ping Pong"
+  },
+  {
+    "id": 12,
+    "imagen": "runner.png",
+    "nombre": "Running"
+  },
+  {
+    "id": 13,
+    "imagen": "senderismo.png",
+    "nombre": "Senderismo"
+  },
+  {
+    "id": 14,
+    "imagen": "skate.png",
+    "nombre": "Skate"
+  },
+  {
+    "id": 15,
+    "imagen": "tenis.png",
+    "nombre": "Tenis"
+  },
+  {
+    "id": 16,
+    "imagen": "volley.png",
+    "nombre": "Volley"
+  },
+  {
+    "id": 17,
+    "imagen": "yoga.png",
+    "nombre": "Yoga"
+  }
+]
