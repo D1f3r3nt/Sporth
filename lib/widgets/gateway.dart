@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:sporth/preferences/preferences.dart';
 import 'package:sporth/providers/providers.dart';
 
 import 'package:sporth/utils/utils.dart';
@@ -12,14 +14,23 @@ class Gateway extends StatelessWidget {
     final UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context, listen: false);
 
+    LocationPermission permission = await Geolocator.checkPermission();
+    
+    if (permission == LocationPermission.denied 
+        || permission == LocationPermission.deniedForever 
+        || !await Geolocator.isLocationServiceEnabled()) {
+      
+      Navigator.pushReplacementNamed(context, PERMISOS);
+      return;
+    }
+
     userProvider.currentUser = await databaseUser.getUser(FirebaseAuth.instance.currentUser!.uid);
 
-    // Tutorial
     /*if (Preferences.isFirstTime) {
       Navigator.pushReplacementNamed(context, 'tutorial');
       return;
     }*/
-
+    
     // Para traer los eventos del usuario
     eventosProvider.getEventosByUser(userProvider.currentUser!.idUser);
     

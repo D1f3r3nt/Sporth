@@ -6,6 +6,14 @@ import 'package:sporth/utils/utils.dart';
 
 class PositionProvider {
   Future<GeograficoDto?> getPosition(BuildContext context) async {
+    checkAll(context);
+
+    Position position = await Geolocator.getCurrentPosition();
+
+    return GeograficoDto(lat: position.latitude, lng: position.longitude);
+  }
+  
+  Future<void> checkAll(BuildContext context) async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -30,9 +38,5 @@ class PositionProvider {
       Snackbar.errorSnackbar(context, 'La app necesita permisos de ubicacion');
       return null;
     }
-
-    Position position = await Geolocator.getCurrentPosition();
-
-    return GeograficoDto(lat: position.latitude, lng: position.longitude);
   }
 }
