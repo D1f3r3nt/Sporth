@@ -18,4 +18,5 @@ Map<String, WidgetBuilder> getRoutes = {
   OTHER_USER: (context) => const OtherUserPage(),
   SETTINGS: (context) => const SettingsPage(),
   DETAILS: (context) => const DetailsPage(),
+  PERMISOS: (context) => const PermisosPage(),
 };

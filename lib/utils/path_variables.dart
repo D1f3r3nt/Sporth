@@ -11,3 +11,4 @@ const String CHAT_PERSONAL = 'chat-personal';
 const String OTHER_USER = 'other-user';
 const String SETTINGS = 'settings';
 const String DETAILS = 'details';
+const String PERMISOS = 'permisos';
