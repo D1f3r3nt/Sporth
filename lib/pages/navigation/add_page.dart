@@ -85,6 +85,7 @@ class _AddPageState extends State<AddPage> {
     final PositionProvider positionProvider = PositionProvider();
     final List<DeportesDto> listDeportes = deportesProvider.deportesAdd;
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
+    final AnalyticsUtils analyticsUtils = AnalyticsUtils();
 
     _dateController.text = DateFormat('dd/MM/yyyy').format(_date);
     _timeController.text = '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
@@ -126,6 +127,12 @@ class _AddPageState extends State<AddPage> {
 
           // Para traer los eventos del usuario
           eventosProvider.getEventosByUser(currentUser.idUser);
+          
+          analyticsUtils.registerEvent('Event_create', {
+            "deporte": list.first.nombre,
+            "privado": _privadoController.text.isEmpty,
+            "precio": _precioController.text == "0",
+          });
           
           Navigator.pushReplacementNamed(context, HOME);
         }

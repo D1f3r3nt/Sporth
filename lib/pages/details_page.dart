@@ -22,21 +22,22 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final EventoDto eventoDto =
-        ModalRoute.of(context)!.settings.arguments as EventoDto;
+    final EventoDto eventoDto = ModalRoute.of(context)!.settings.arguments as EventoDto;
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final EventosProvider eventosProvider =
-        Provider.of<EventosProvider>(context);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final ShareProvider shareProvider = ShareProvider();
     final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
     final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
+    final AnalyticsUtils analyticsUtils = AnalyticsUtils();
 
     inscribirse() async {
       if (userProvider.currentUser!.idUser == eventoDto.anfitrion.idUser) {
         Snackbar.errorSnackbar(context, 'Este es tu evento');
       } else {
-        await eventosProvider.inscribe(
-            eventoDto.id, userProvider.currentUser!.idUser);
+        await eventosProvider.inscribe(eventoDto.id, userProvider.currentUser!.idUser);
+        analyticsUtils.registerEvent('Inscribe_to_event', {
+          "deporte": eventoDto.deporte.nombre
+        });
         eventosProvider.refresh();
         Navigator.pop(context);
       }
@@ -78,6 +79,9 @@ class _DetailsPageState extends State<DetailsPage> {
 
     tapShare() {
       shareProvider.shareEvent(eventoDto.imagen, eventoDto.name);
+      analyticsUtils.registerEvent('Share_event', {
+        "deporte": eventoDto.deporte.nombre
+      });
     }
 
     atras() => Navigator.pop(context);
