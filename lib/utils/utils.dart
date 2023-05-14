@@ -8,3 +8,4 @@ export 'path_variables.dart';
 export 'popup_utils.dart'; 
 export 'snackbar.dart'; 
 export 'text_utils.dart'; 
+export 'trasnform_utils.dart'; 

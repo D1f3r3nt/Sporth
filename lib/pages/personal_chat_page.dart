@@ -11,16 +11,11 @@ class PersonalChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ChatDto currentChat =
-        ModalRoute.of(context)!.settings.arguments as ChatDto;
+    final ChatDto currentChat = ModalRoute.of(context)!.settings.arguments as ChatDto;
     final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
-    final EventosProvider eventosProvider =
-        Provider.of<EventosProvider>(context);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
-
-    chatProvider.getChat(currentChat.idChat!);
-
-    List<MensajeDto> mensajes = chatProvider.mensajes;
+    
     UserDto? otherUser = currentChat.anfitriones
         .where((user) => user.idUser != currentUser.idUser)
         .toList()
@@ -93,29 +88,42 @@ class PersonalChatPage extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: mensajes.isEmpty
-                            ? Center(
-                                child:
-                                    Image.asset('image/no_tienes_mensajes.png'))
-                            : ListView.builder(
-                                reverse: true,
-                                itemCount: mensajes.length,
-                                itemBuilder: (context, index) {
-                                  MensajeDto mensaje = mensajes[index];
-                                  String? user;
-                                  if (eventosProvider.eventoChat != null &&
-                                      mensaje.editor.idUser !=
-                                          currentUser.idUser) {
-                                    user = mensaje.editor.username;
-                                  }
-                                  return ChatMessage(
-                                    ourMessage: mensaje.editor.idUser ==
-                                        currentUser.idUser,
-                                    message: mensaje.mensaje,
-                                    user: user,
-                                  );
-                                },
-                              ),
+                        child: StreamBuilder<List<MensajeApi>>(
+                              stream: chatProvider.getMensajes(currentChat.idChat!),
+                              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                dynamic mensajes = snapshot.data;
+                                
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator.adaptive();
+                                } else {
+                                 return mensajes.isEmpty
+                                      ? Center(
+                                            child:
+                                            Image.asset('image/no_tienes_mensajes.png'),
+                                        )
+                                      : ListView.builder(
+                                        reverse: true,
+                                        itemCount: mensajes.length,
+                                        itemBuilder: (context, index) {
+                                          MensajeDto mensaje = mensajes[index];
+                                          String? user;
+                                          /*
+                                          if (eventosProvider.eventoChat != null &&
+                                              mensaje.editor != currentUser.idUser) {
+                                            user = mensaje.editor.username;
+                                          }
+                                          */
+                                           
+                                          return ChatMessage(
+                                            ourMessage: mensaje.editor.idUser == currentUser.idUser,
+                                            message: mensaje.mensaje,
+                                            user: user,
+                                          );
+                                        },
+                                      );
+                                }
+                              },
+                        ),
                       ),
                       SizedBox(
                         height: 80.0,

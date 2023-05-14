@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/dto/logros_provider_impl.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/utils/trasnform_utils.dart';
 
 class ChatProvider extends ChangeNotifier {
   final DatabaseChat databaseChat = DatabaseChat();
@@ -23,14 +25,12 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getChat(String idChat) async {
-    List<MensajeApi> list = await databaseChat.getChat(idChat);
-    if (list.length == mensajes.length) return;
-    mensajes =
-        await MensajeMapper.INSTANCE.listMensajeApiToListMensajeDto(list);
-    mensajes.sort((a, b) => a.creacion.compareTo(b.creacion));
-    mensajes = mensajes.reversed.toList();
-    notifyListeners();
+  Stream<List<MensajeApi>> getMensajes(String idChat) async* {
+    yield* FirebaseFirestore.instance
+        .collection('chats/$idChat/mensajes')
+        .orderBy('creacion', descending: true)
+        .snapshots()
+        .map((event) => event.docs.map((e) => MensajeApi.fromJson(e as Map<String, dynamic>)).toList());
   }
 
   Future<ChatApi?> getChatByEvent(String idEvent) async {
