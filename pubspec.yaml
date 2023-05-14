@@ -27,6 +27,7 @@ dependencies:
   google_mobile_ads: 3.0.0
   flutter_native_splash: ^2.2.19
   shared_preferences: 2.1.1
+  firebase_analytics: ^10.4.0
   
 flutter_native_splash:
   android: true
