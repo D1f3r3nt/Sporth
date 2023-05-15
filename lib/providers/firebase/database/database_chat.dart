@@ -54,19 +54,6 @@ class DatabaseChat {
             .first;
   }
 
-  Future<List<MensajeApi>> getChat(String idChat) async {
-    log('GET -- MENSAJE CHAT');
-
-    final CollectionReference chatsReference =
-        _db.collection("$COLLECTION_NAME/$idChat/$SUBCOLLECTION_NAME");
-    QuerySnapshot query = await chatsReference.get();
-
-    return query.docs
-        .map((mensaje) =>
-            MensajeApi.fromJson(mensaje.data() as Map<String, dynamic>))
-        .toList();
-  }
-
   Future<String> anyChatUser(String idUser, String idOtherUser) async {
     log('GET -- ANY CHAT USER');
 

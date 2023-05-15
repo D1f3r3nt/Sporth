@@ -23,7 +23,7 @@ const String URL_BASE = 'us-central1-sporth-c3c47.cloudfunctions.net';
 ///  idOtherUser
 /// }
 /// 
-/// RETURN boolean
+/// RETURN string
 const String ANY_CHAT_USER = 'any_chat_user';
 
 /// RETURN json
@@ -85,13 +85,6 @@ const String EVENT_SAVE = 'event_save';
 /// 
 /// RETURN json
 const String EVENTS_BY_ANFITRION = 'events_by_anfitrion';
-
-/// PATH VARIABLE {
-///   idChat
-/// }
-/// 
-/// RETURN json
-const String MESSAGE_BY_CHAT = 'message_by_chat';
 
 /// PATH VARIABLE {
 ///   idChat
