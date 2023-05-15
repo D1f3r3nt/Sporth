@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:sporth/models/request/user_request.dart';
+import 'package:intl/intl.dart';
+import 'package:sporth/models/models.dart';
 
 EventRequest eventRequestFromJson(String str) => EventRequest.fromJson(json.decode(str));
 
@@ -11,15 +12,15 @@ class EventRequest {
   final String descripcion;
   final String ubicacion;
   final int deporte;
-  final String hora;
+  final DateTime hora;
   final int maximo;
   final String imagen;
-  final String geo;
+  final GeograficoDto geo;
   final int precio;
   final UserRequest anfitrion;
   final String name;
   final dynamic privado;
-  final String dia;
+  final DateTime dia;
   final List<UserRequest> participantes;
 
   EventRequest({
@@ -44,15 +45,15 @@ class EventRequest {
     String? descripcion,
     String? ubicacion,
     int? deporte,
-    String? hora,
+    DateTime? hora,
     int? maximo,
     String? imagen,
-    String? geo,
+    GeograficoDto? geo,
     int? precio,
     UserRequest? anfitrion,
     String? name,
     dynamic privado,
-    String? dia,
+    DateTime? dia,
     List<UserRequest>? participantes,
   }) =>
       EventRequest(
@@ -81,15 +82,15 @@ class EventRequest {
     descripcion: json["descripcion"],
     ubicacion: json["ubicacion"],
     deporte: json["deporte"],
-    hora: json["hora"],
+    hora: DateFormat.Hm().parse(json["hora"]),
     maximo: json["maximo"],
     imagen: json["imagen"],
-    geo: json["geo"],
+    geo: GeograficoDto.fromString(json["geo"]),
     precio: json["precio"],
     anfitrion: UserRequest.fromJson(json["anfitrion"]),
     name: json["name"],
     privado: json["privado"],
-    dia: json["dia"],
+    dia: DateFormat.yMd().parse(json["dia"]),
     participantes: List<UserRequest>.from(json["participantes"].map((x) => UserRequest.fromJson(x))),
   );
 
@@ -98,15 +99,31 @@ class EventRequest {
     "descripcion": descripcion,
     "ubicacion": ubicacion,
     "deporte": deporte,
-    "hora": hora,
+    "hora": DateFormat.Hm().format(hora),
     "maximo": maximo,
     "imagen": imagen,
-    "geo": geo,
+    "geo": geo.toString(),
     "precio": precio,
     "anfitrion": anfitrion.idUser,
     "name": name,
     "privado": privado,
-    "dia": dia,
+    "dia": DateFormat.yMd().format(dia),
     "participantes": List<dynamic>.from(participantes.map((x) => x.idUser)),
   };
+
+  String get diaFormatShow {
+    return DateFormat('dd MMM').format(dia);
+  }
+
+  String get month {
+    return DateFormat('MMM').format(dia);
+  }
+
+  String get diaFormat {
+    return DateFormat.yMd().format(dia);
+  }
+
+  String get timeFormat {
+    return DateFormat.Hm().format(hora);
+  }
 }

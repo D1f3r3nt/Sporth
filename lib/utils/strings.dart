@@ -55,7 +55,7 @@ const String CHAT_SAVE = 'chat_save';
 const String CHAT_UPDATE = 'chat_update';
 
 /// RETURN json
-const String EVET_ALL = 'event_all';
+const String EVENT_ALL = 'event_all';
 
 /// PATH VARIABLE {
 ///  idEvent,
