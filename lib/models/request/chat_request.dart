@@ -28,6 +28,10 @@ class ChatRequest {
         idChat: idChat ?? this.idChat,
       );
 
+  factory ChatRequest.fromRawJson(String str) => ChatRequest.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
   factory ChatRequest.fromJson(Map<String, dynamic> json) => ChatRequest(
     anfitriones: List<UserRequest>.from(json["anfitriones"].map((x) => UserRequest.fromJson(x))),
     idEvent: json["idEvent"],

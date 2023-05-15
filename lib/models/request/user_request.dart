@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class UserRequest {
   final String idUser;
   final String imagen;
@@ -51,6 +53,10 @@ class UserRequest {
         logros: logros ?? this.logros,
         seguidores: seguidores ?? this.seguidores,
       );
+
+  factory UserRequest.fromRawJson(String str) => UserRequest.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 
   factory UserRequest.fromJson(Map<String, dynamic> json) => UserRequest(
     idUser: json["idUser"],

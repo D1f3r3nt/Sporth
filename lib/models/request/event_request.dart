@@ -72,6 +72,10 @@ class EventRequest {
         participantes: participantes ?? this.participantes,
       );
 
+  factory EventRequest.fromRawJson(String str) => EventRequest.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
   factory EventRequest.fromJson(Map<String, dynamic> json) => EventRequest(
     id: json["id"],
     descripcion: json["descripcion"],

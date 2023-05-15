@@ -28,6 +28,10 @@ class MessageRequest {
         mensaje: mensaje ?? this.mensaje,
       );
 
+  factory MessageRequest.fromRawJson(String str) => MessageRequest.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+  
   factory MessageRequest.fromJson(Map<String, dynamic> json) => MessageRequest(
     editor: UserRequest.fromJson(json["editor"]),
     creacion: DateTime.fromMicrosecondsSinceEpoch(json["creacion"].microsecondsSinceEpoch),
