@@ -25,12 +25,11 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Stream<List<MensajeApi>> getMensajes(String idChat) async* {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getMensajes(String idChat) async* {
     yield* FirebaseFirestore.instance
         .collection('chats/$idChat/mensajes')
         .orderBy('creacion', descending: true)
-        .snapshots()
-        .map((event) => event.docs.map((e) => MensajeApi.fromJson(e as Map<String, dynamic>)).toList());
+        .snapshots();
   }
 
   Future<ChatApi?> getChatByEvent(String idEvent) async {

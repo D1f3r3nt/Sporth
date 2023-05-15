@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
@@ -26,10 +27,11 @@ class PersonalChatPage extends StatelessWidget {
       Navigator.pushReplacementNamed(context, CHATS);
     }
 
-    enviar() async {
-      chatProvider.sendMessage(
-          currentChat.idChat!, messageController.text, currentUser);
-      messageController.text = '';
+    enviar() {
+      FocusScope.of(context).unfocus();
+      
+      chatProvider.sendMessage(currentChat.idChat!, messageController.text, currentUser);
+      messageController.clear();
     }
 
     return Scaffold(
@@ -88,14 +90,17 @@ class PersonalChatPage extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: StreamBuilder<List<MensajeApi>>(
+                        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                               stream: chatProvider.getMensajes(currentChat.idChat!),
                               builder: (BuildContext context, AsyncSnapshot snapshot) {
-                                dynamic mensajes = snapshot.data;
                                 
                                 if (snapshot.connectionState == ConnectionState.waiting) {
                                   return CircularProgressIndicator.adaptive();
                                 } else {
+                                  dynamic data = snapshot.data;
+                                  List<dynamic> mensajes = data.docs.map((e) => MensajeApi.fromJson(e.data())).toList();
+                                  
+                                  
                                  return mensajes.isEmpty
                                       ? Center(
                                             child:
@@ -105,7 +110,7 @@ class PersonalChatPage extends StatelessWidget {
                                         reverse: true,
                                         itemCount: mensajes.length,
                                         itemBuilder: (context, index) {
-                                          MensajeDto mensaje = mensajes[index];
+                                          MensajeApi mensaje = mensajes[index];
                                           String? user;
                                           /*
                                           if (eventosProvider.eventoChat != null &&
@@ -115,7 +120,7 @@ class PersonalChatPage extends StatelessWidget {
                                           */
                                            
                                           return ChatMessage(
-                                            ourMessage: mensaje.editor.idUser == currentUser.idUser,
+                                            ourMessage: mensaje.editor == currentUser.idUser,
                                             message: mensaje.mensaje,
                                             user: user,
                                           );
