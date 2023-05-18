@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ShareProvider {
+class ShareService {
   void shareEvent(String urlImage, String text) async {
     Uint8List imageBytes;
 

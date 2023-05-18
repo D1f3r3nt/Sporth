@@ -3,7 +3,7 @@ import 'package:sporth/utils/strings.dart';
 
 import 'package:http/http.dart' as http;
 
-class MessageService {
+class MessageRepository {
 
   Future<void> sendMessage(String idChat, MessageRequest message) async {
     Uri url = Uri.https(URL_BASE, MESSAGE_SAVE, {

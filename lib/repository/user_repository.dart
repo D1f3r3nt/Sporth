@@ -1,9 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'package:sporth/models/models.dart';
 
-import '../../utils/utils.dart';
+import '../utils/utils.dart';
 
-class UserService {
+class UserRepository {
 
   Future<void> getFriendLogro(UserRequest user) async {
     if (!user.logros.contains(4)) {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
-import 'package:sporth/providers/dto/logros_provider_impl.dart';
-import 'package:sporth/services/functions/event_service.dart';
+import 'package:sporth/service/ui/logros_service.dart';
+import 'package:sporth/repository/event_repository.dart';
 
 class EventosProvider extends ChangeNotifier {
-  final EventService _eventService = EventService();
-  final LogrosProviderImpl _logrosProviderImpl = LogrosProviderImpl();
+  final EventRepository _eventService = EventRepository();
+  final LogrosService _logrosProviderImpl = LogrosService();
 
   EventRequest? eventoChat;
 

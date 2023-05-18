@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sporth/preferences/preferences.dart';
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/services/functions/user_service.dart';
+import 'package:sporth/repository/user_repository.dart';
 
 import 'package:sporth/utils/utils.dart';
 
 class Gateway extends StatelessWidget {
   Gateway({super.key});
-  final UserService userService = UserService();
+  final UserRepository userService = UserRepository();
 
   void home(BuildContext context) async {
     final UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);

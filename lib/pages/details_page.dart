@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/services/functions/chat_service.dart';
+import 'package:sporth/repository/chat_repository.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -26,9 +27,10 @@ class _DetailsPageState extends State<DetailsPage> {
     final EventRequest eventRequest = ModalRoute.of(context)!.settings.arguments as EventRequest;
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
-    final ShareProvider shareProvider = ShareProvider();
+    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
+    final ShareService shareProvider = ShareService();
     final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
-    final ChatProvider chatProvider = ChatProvider();
+    final ChatService chatProvider = ChatService();
     final AnalyticsUtils analyticsUtils = AnalyticsUtils();
 
     inscribirse() async {
@@ -36,10 +38,10 @@ class _DetailsPageState extends State<DetailsPage> {
         Snackbar.errorSnackbar(context, 'Este es tu evento');
       } else {
         await eventosProvider.inscribe(eventRequest.id!, userProvider.currentUser!.idUser);
-        /*analyticsUtils.registerEvent('Inscribe_to_event', {
-          // TODO get en deportes
-          "deporte": eventoDto.deporte.nombre
-        });*/
+        DeportesAsset deporte = await deportesProvider.getDeporteById(eventRequest.deporte);
+        analyticsUtils.registerEvent('Inscribe_to_event', {
+          "deporte": deporte.nombre
+        });
         Navigator.pop(context);
       }
     }
@@ -70,12 +72,12 @@ class _DetailsPageState extends State<DetailsPage> {
       PopupUtils.dialogScrollUsers(context, eventRequest.participantes);
     }
 
-    tapShare() {
+    tapShare() async {
       shareProvider.shareEvent(eventRequest.imagen, eventRequest.name);
-      /*analyticsUtils.registerEvent('Share_event', {
-        // TODO get en deportes
-        "deporte": eventoDto.deporte.nombre
-      });*/
+      DeportesAsset deporte = await deportesProvider.getDeporteById(eventRequest.deporte);
+      analyticsUtils.registerEvent('Share_event', {
+        "deporte": deporte.nombre
+      });
     }
 
     atras() => Navigator.pop(context);
@@ -221,7 +223,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ToastCard(
-                              nombre: eventRequest.deporte.toString(), // TODO get en deportes 
+                              nombre: deportesProvider.deportes.where((element) => element.id == eventRequest.deporte).first.nombre, 
                               active: true,
                             ),
                             GestureDetector(

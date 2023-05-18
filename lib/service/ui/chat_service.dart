@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
-import 'package:sporth/providers/dto/logros_provider_impl.dart';
-import 'package:sporth/providers/providers.dart';
-import 'package:sporth/services/functions/chat_service.dart';
-import 'package:sporth/services/functions/message_service.dart';
+import 'package:sporth/service/ui/logros_service.dart';
+import 'package:sporth/repository/repository.dart';
 
-class ChatProvider {
-  final ChatService _chatService = ChatService();
-  final MessageService _messageService = MessageService();
-  final LogrosProviderImpl _logrosProviderImpl = LogrosProviderImpl();
+class ChatService {
+  final ChatRepository _chatService = ChatRepository();
+  final MessageRepository _messageService = MessageRepository();
+  final LogrosService _logrosProviderImpl = LogrosService();
 
   Future<List<ChatRequest>> getChats() async {
     return await _chatService.getChats();

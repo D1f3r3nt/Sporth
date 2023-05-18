@@ -1,10 +1,10 @@
 import 'package:sporth/models/models.dart';
-import 'package:sporth/services/functions/event_service.dart';
-import 'package:sporth/services/functions/user_service.dart';
+import 'package:sporth/repository/event_repository.dart';
+import 'package:sporth/repository/user_repository.dart';
 
-class LogrosProviderImpl {
-  UserService _userService = UserService();
-  EventService _eventService = EventService();
+class LogrosService {
+  UserRepository _userService = UserRepository();
+  EventRepository _eventService = EventRepository();
 
   Future<void> getChatLogro(UserRequest user) async {
     if (!user.logros.contains(1)) {

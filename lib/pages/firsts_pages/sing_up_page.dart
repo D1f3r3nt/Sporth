@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/services/functions/user_service.dart';
+import 'package:sporth/repository/repository.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -19,13 +20,13 @@ class _SingUpPageState extends State<SingUpPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordCheckController = TextEditingController();
   final TextEditingController _userController = TextEditingController();
-  final UserService _userService = UserService();
+  final UserRepository _userService = UserRepository();
 
   bool _checkbox = false;
 
   @override
   Widget build(BuildContext context) {
-    final emailAuth = EmailAuth();
+    final EmailAuth emailAuth = EmailAuth();
     final singUpProvider = Provider.of<SingUpProvider>(context);
 
     singUp() async {

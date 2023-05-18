@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:sporth/models/models.dart';
 import 'package:sporth/utils/strings.dart';
 
-class EventService {
+class EventRepository {
   Future<List<EventRequest>> getFilterEvents(SearchDto searchDto) async {
     List<EventRequest> listResponse = await getAllEvents();
 

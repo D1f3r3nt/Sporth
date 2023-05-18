@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/services/functions/chat_service.dart';
-import 'package:sporth/services/functions/user_service.dart';
+import 'package:sporth/repository/repository.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
-import 'package:sporth/widgets/cards/banner_ad_card.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class OtherUserPage extends StatefulWidget {
@@ -22,12 +21,12 @@ class _OtherUserPageState extends State<OtherUserPage> {
     final Size size = MediaQuery.of(context).size;
     final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
     
-    final ChatProvider chatProvider = ChatProvider();
+    final ChatService chatProvider = ChatService();
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final LogrosProvider logrosProvider = Provider.of<LogrosProvider>(context);
     
-    final UserService userService = UserService();
+    final UserRepository userService = UserRepository();
 
     final List<DeportesAsset> listDeportes = deportesProvider.deportes
         .where((element) => otherUser.gustos.contains(element.id))

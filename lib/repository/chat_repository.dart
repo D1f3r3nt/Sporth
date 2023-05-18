@@ -5,7 +5,7 @@ import 'package:sporth/utils/strings.dart';
 
 import 'package:http/http.dart' as http;
 
-class ChatService {
+class ChatRepository {
   Future<List<ChatRequest>> getChats() async {
     Uri url = Uri.https(URL_BASE, CHAT_ALL);
 

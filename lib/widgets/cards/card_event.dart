@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sporth/models/models.dart';
+import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 
 class CardEvent extends StatelessWidget {
@@ -12,12 +13,13 @@ class CardEvent extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final AnalyticsUtils analyticsUtils = AnalyticsUtils();
+    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     
-    goEvento() {
-      /*analyticsUtils.registerEvent('Event_selected', {
-        // TODO get en deportes
-        "deporte": eventRequest.deporte.nombre,
-      });*/
+    goEvento() async {
+      DeportesAsset deporte = await deportesProvider.getDeporteById(eventRequest.deporte);
+      analyticsUtils.registerEvent('Event_selected', {
+        "deporte": deporte.nombre,
+      });
       Navigator.pushNamed(context, DETAILS, arguments: eventRequest);
     }
 

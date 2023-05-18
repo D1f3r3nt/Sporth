@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/services/functions/user_service.dart';
+import 'package:sporth/repository/repository.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -18,7 +18,7 @@ class _GustosPageState extends State<GustosPage> {
   Widget build(BuildContext context) {
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final SingUpProvider singUpProvider = Provider.of<SingUpProvider>(context);
-    final UserService userService = UserService();
+    final UserRepository userService = UserRepository();
 
     List<DeportesDto> gustos = deportesProvider.deportesGustos;
 

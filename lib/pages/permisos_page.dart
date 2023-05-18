@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -12,7 +12,7 @@ class PermisosPage extends StatefulWidget {
 }
 
 class _PermisosPageState extends State<PermisosPage> {
-  final PositionProvider _positionProvider = PositionProvider();
+  final PositionService _positionProvider = PositionService();
 
   @override
   Widget build(BuildContext context) {

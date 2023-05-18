@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/utils/decimal_formatter.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -19,8 +19,8 @@ class AddPage extends StatefulWidget {
 class _AddPageState extends State<AddPage> {
   final ImagePicker _pickerImage = ImagePicker();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GoogleDetailsProvider _googleDetailsProvider = GoogleDetailsProvider();
-  final ImageRepository _imageRepository = ImageRepository();
+  final GoogleDetailsService _googleDetailsProvider = GoogleDetailsService();
+  final ImageService _imageRepository = ImageService();
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _ubicacionesController = TextEditingController();
   final TextEditingController _maxPersonasController = TextEditingController();
@@ -82,7 +82,7 @@ class _AddPageState extends State<AddPage> {
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
     final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
-    final PositionProvider positionProvider = PositionProvider();
+    final PositionService positionProvider = PositionService();
     final List<DeportesDto> listDeportes = deportesProvider.deportesAdd;
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final AnalyticsUtils analyticsUtils = AnalyticsUtils();

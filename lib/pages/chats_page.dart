@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -14,7 +15,7 @@ class ChatsPage extends StatefulWidget {
 class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
-    final ChatProvider chatProvider = ChatProvider();
+    final ChatService chatProvider = ChatService();
     final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
 

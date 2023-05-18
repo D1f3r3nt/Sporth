@@ -6,7 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sporth/models/models.dart';
 
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/services/functions/user_service.dart';
+import 'package:sporth/repository/repository.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -54,8 +55,8 @@ class _SettingsPageState extends State<SettingsPage> {
     final EmailAuth emailAuth = EmailAuth();
     final GoogleAuth googleAuth = GoogleAuth();
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final UserService userService = UserService();
-    final ImageRepository imageRepository = ImageRepository();
+    final UserRepository userService = UserRepository();
+    final ImageService imageRepository = ImageService();
 
     if (_time == null) {
       _timeController.text = DateFormat('dd/MM/yyyy').format(userProvider.currentUser!.nacimiento);

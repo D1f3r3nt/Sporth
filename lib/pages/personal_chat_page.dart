@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -16,7 +17,7 @@ class PersonalChatPage extends StatelessWidget {
 
     final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
     
-    final ChatProvider chatProvider = ChatProvider();
+    final ChatService chatProvider = ChatService();
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     
     UserRequest? otherUser = currentChat.anfitriones
