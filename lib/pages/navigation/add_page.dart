@@ -105,7 +105,7 @@ class _AddPageState extends State<AddPage> {
 
           final now = DateTime.now();
 
-          EventoApi evento = EventoApi(
+           EventRequest evento = EventRequest(
             name: _nombreController.text,
             hora: DateTime(now.year, now.month, now.day, _time.hour, _time.minute),
             dia: _date,
@@ -115,7 +115,7 @@ class _AddPageState extends State<AddPage> {
             deporte: list.first.id,
             imagen: imagen,
             descripcion: _descripcionController.text,
-            anfitrion: currentUser.idUser,
+            anfitrion: UserRequest.only(idUser: currentUser.idUser, nacimiento: DateTime.now()),
             participantes: [],
             geo: _geo!,
             privado: _privadoController.text.isEmpty
@@ -123,10 +123,7 @@ class _AddPageState extends State<AddPage> {
                 : _privadoController.text,
           );
 
-          await eventosProvider.saveEvento(evento, currentUser);
-
-          // Para traer los eventos del usuario
-          eventosProvider.getEventosByUser(currentUser.idUser);
+          await eventosProvider.saveEvent(evento, currentUser);
           
           analyticsUtils.registerEvent('Event_create', {
             "deporte": list.first.nombre,
@@ -149,9 +146,6 @@ class _AddPageState extends State<AddPage> {
     
 
     atras() {
-      // Para traer los eventos del usuario
-      eventosProvider.getEventosByUser(currentUser.idUser);
-
       Navigator.pushReplacementNamed(context, HOME);
     }
 

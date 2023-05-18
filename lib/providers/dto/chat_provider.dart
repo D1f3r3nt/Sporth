@@ -3,26 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/dto/logros_provider_impl.dart';
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/utils/trasnform_utils.dart';
+import 'package:sporth/services/functions/chat_service.dart';
+import 'package:sporth/services/functions/message_service.dart';
 
-class ChatProvider extends ChangeNotifier {
-  final DatabaseChat databaseChat = DatabaseChat();
+class ChatProvider {
+  final ChatService _chatService = ChatService();
+  final MessageService _messageService = MessageService();
   final LogrosProviderImpl _logrosProviderImpl = LogrosProviderImpl();
 
-  List<ChatDto> chats = [];
-  List<MensajeDto> mensajes = [];
-
-  void getChats() async {
-    if (chats.isNotEmpty) return;
-    List<ChatApi> listChats = await databaseChat.getChats();
-    chats = await ChatMapper.INSTANCE.listChatApiToListChatDto(listChats);
-    notifyListeners();
-  }
-
-  void refresh() async {
-    List<ChatApi> listChats = await databaseChat.getChats();
-    chats = await ChatMapper.INSTANCE.listChatApiToListChatDto(listChats);
-    notifyListeners();
+  Future<List<ChatRequest>> getChats() async {
+    return await _chatService.getChats();
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getMensajes(String idChat) async* {
@@ -32,26 +22,27 @@ class ChatProvider extends ChangeNotifier {
         .snapshots();
   }
 
-  Future<ChatApi?> getChatByEvent(String idEvent) async {
-    return await databaseChat.getChatByEvent(idEvent);
-
-    //return chatApi == null ? null : ChatMapper.INSTANCE.chatApiToChatDto(chatApi);
+  Future<ChatRequest?> getChatByEvent(String idEvent) async {
+    return await _chatService.getChatByEvent(idEvent);
   }
 
   Future<String> anyChatUser(String idUser, String idOtherUser) async {
-    return await databaseChat.anyChatUser(idUser, idOtherUser);
+    return await _chatService.anyChatUser(idUser, idOtherUser);
   }
 
-  Future<String> saveChat(ChatApi newChat) async {
-    return await databaseChat.saveChat(newChat);
+  Future<void> saveChat(ChatRequest newChat) async {
+    return await _chatService.saveChat(newChat);
   }
 
-  Future<void> updateChat(ChatApi chatApi) async {
-    await databaseChat.updateChat(chatApi);
+  Future<void> updateChat(ChatRequest chatApi) async {
+    await _chatService.updateChat(chatApi);
   }
 
-  void sendMessage(String idChat, String mensaje, UserDto user) async {
-    await databaseChat.updateMessage(idChat, mensaje, user.idUser);
+  void sendMessage(String idChat, String mensaje, UserRequest user) async {
+
+    MessageRequest messageRequest = MessageRequest(editor: user, creacion: DateTime.now(), mensaje: mensaje);
+    
+    await _messageService.sendMessage(idChat, messageRequest);
     await _logrosProviderImpl.getChatLogro(user);
   }
 }

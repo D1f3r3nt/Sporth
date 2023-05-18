@@ -53,7 +53,6 @@ class _SettingsPageState extends State<SettingsPage> {
     final EmailAuth emailAuth = EmailAuth();
     final GoogleAuth googleAuth = GoogleAuth();
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final DatabaseUser _databaseUser = DatabaseUser();
     final ImageRepository imageRepository = ImageRepository();
 
@@ -107,16 +106,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
       userProvider.currentUser = updateUser;
 
-      // Para traer los eventos del usuario
-      eventosProvider.getEventosByUser(userProvider.currentUser!.idUser);
-      
       Navigator.pushReplacementNamed(context, HOME);
     }
 
     atras() {
-      // Para traer los eventos del usuario
-      eventosProvider.getEventosByUser(userProvider.currentUser!.idUser);
-
       Navigator.pushReplacementNamed(context, HOME);
     }
 

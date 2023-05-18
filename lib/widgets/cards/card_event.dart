@@ -4,9 +4,9 @@ import 'package:sporth/models/models.dart';
 import 'package:sporth/utils/utils.dart';
 
 class CardEvent extends StatelessWidget {
-  const CardEvent({super.key, required this.eventoDto});
+  const CardEvent({super.key, required this.eventRequest});
 
-  final EventoDto eventoDto;
+  final EventRequest eventRequest;
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +14,11 @@ class CardEvent extends StatelessWidget {
     final AnalyticsUtils analyticsUtils = AnalyticsUtils();
     
     goEvento() {
-      analyticsUtils.registerEvent('Event_selected', {
-        "deporte": eventoDto.deporte.nombre,
-      });
-      Navigator.pushNamed(context, DETAILS, arguments: eventoDto);
+      /*analyticsUtils.registerEvent('Event_selected', {
+        // TODO get en deportes
+        "deporte": eventRequest.deporte.nombre,
+      });*/
+      Navigator.pushNamed(context, DETAILS, arguments: eventRequest);
     }
 
       return GestureDetector(
@@ -28,7 +29,7 @@ class CardEvent extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: eventoDto.imagen.contains('http') ? NetworkImage(eventoDto.imagen) : AssetImage('image/banners/${eventoDto.imagen}') as ImageProvider,
+                  image: eventRequest.imagen.contains('http') ? NetworkImage(eventRequest.imagen) : AssetImage('image/banners/${eventRequest.imagen}') as ImageProvider,
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.circular(8.0),
@@ -69,7 +70,7 @@ class CardEvent extends StatelessWidget {
                         SizedBox(
                           width: size.width * 0.6,
                           child: Text(
-                            eventoDto.name,
+                            eventRequest.name,
                             style: TextUtils.kanit_18_black,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
@@ -78,7 +79,7 @@ class CardEvent extends StatelessWidget {
                         SizedBox(
                           width: size.width * 0.6,
                           child: Text(
-                            '${eventoDto.ubicacion} | ${eventoDto.diaFormatShow}',
+                            '${eventRequest.ubicacion} | ${eventRequest.diaFormatShow}',
                             style: TextUtils.kanit_16_grey,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
@@ -87,7 +88,7 @@ class CardEvent extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      (eventoDto.precio == 0) ? 'Free' : '${eventoDto.precio} €',
+                      (eventRequest.precio == 0) ? 'Free' : '${eventRequest.precio} €',
                       style: TextUtils.kanitItalic_24_black,
                     ),
                   ],

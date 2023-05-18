@@ -4,7 +4,7 @@ import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class PopupUtils {
-  static dialogScrollUsers(BuildContext context, List<UserDto> users) {
+  static dialogScrollUsers(BuildContext context, List<UserRequest> users) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -18,7 +18,7 @@ class PopupUtils {
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: UserTile(userDto: users[index]),
+                  child: UserTile(userRequest: users[index]),
                 );
               },
             ),

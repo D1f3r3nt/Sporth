@@ -1,11 +1,12 @@
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/services/functions/event_service.dart';
 
 class ChatMapper {
   static final ChatMapper INSTANCE = ChatMapper._();
 
   final DatabaseUser _databaseUser = DatabaseUser();
-  final DatabaseEvento _databaseEvento = DatabaseEvento();
+  final EventService _eventService = EventService();
 
   ChatMapper._();
 
@@ -40,8 +41,8 @@ class ChatMapper {
 
   Future<EventoDto?> _convertRefToEvent(String? idEvent) async {
     if (idEvent == null) return null;
-    EventoApi eventoApi = await _databaseEvento.getEvento(idEvent);
-    return EventoMapper.INSTANCE.eventoApiToEventoDto(idEvent, eventoApi);
+    /*EventoApi eventoApi = await _eventService.getEvent(idEvent!);
+    return EventoMapper.INSTANCE.eventoApiToEventoDto(idEvent, eventoApi);*/
   }
 
   Future<List<UserDto>> _convertRefToDto(List<String> ref) async {

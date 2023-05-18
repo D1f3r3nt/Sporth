@@ -26,6 +26,20 @@ class UserRequest {
     required this.logros,
     required this.seguidores,
   });
+  
+  UserRequest.only({
+    required this.idUser,
+    required this.nacimiento,
+    this.imagen = '',
+    this.gustos = const [],
+    this.nombre = '',
+    this.username = '',
+    this.logros = const [],
+    this.email = '',
+    this.seguidores = const [],
+    this.seguidos = const [],
+    this.telefono = ''
+  });
 
   UserRequest copyWith({
     String? idUser,
@@ -85,4 +99,9 @@ class UserRequest {
     "logros": List<dynamic>.from(logros.map((x) => x)),
     "seguidores": List<dynamic>.from(seguidores.map((x) => x)),
   };
+
+  String get urlImagen {
+    if (imagen.isEmpty) return 'https://firebasestorage.googleapis.com/v0/b/sporth-c3c47.appspot.com/o/user.png?alt=media&token=7ad26cc5-02f3-4160-8802-eecd875ac101';
+    return imagen;
+  }
 }

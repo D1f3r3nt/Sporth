@@ -67,7 +67,7 @@ class EventService {
     }
   }
 
-  Future<List<EventRequest>> getEventsApiByAnfitrion(String idAnfitrion) async {
+  Future<List<EventRequest>> getEventsByAnfitrion(String idAnfitrion) async {
     Uri url = Uri.https(URL_BASE, EVENTS_BY_ANFITRION, {
       'idAnfitrion': idAnfitrion
     });

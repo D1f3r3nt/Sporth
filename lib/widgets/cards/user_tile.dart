@@ -7,23 +7,19 @@ import 'package:sporth/utils/utils.dart';
 class UserTile extends StatelessWidget {
   const UserTile({
     super.key,
-    required this.userDto,
+    required this.userRequest,
   });
 
-  final UserDto userDto;
+  final UserRequest userRequest;
 
   @override
   Widget build(BuildContext context) {
     final UserProvider currentUser = Provider.of<UserProvider>(context);
-    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
 
     goUser() {
-      if (userDto.idUser == currentUser.currentUser!.idUser) return;
+      if (userRequest.idUser == currentUser.currentUser!.idUser) return;
       
-      // Para traer los eventos del usuario
-      eventosProvider.getEventosByUser(userDto.idUser);
-      
-      Navigator.pushNamed(context, OTHER_USER, arguments: userDto);
+      Navigator.pushNamed(context, OTHER_USER, arguments: userRequest);
     }
 
     return GestureDetector(
@@ -31,11 +27,11 @@ class UserTile extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(userDto.urlImagen),
+            backgroundImage: NetworkImage(userRequest.urlImagen),
           ),
           const SizedBox(width: 10),
           Text(
-            userDto.username,
+            userRequest.username,
             style: TextUtils.kanitBold_18,
           ),
         ],

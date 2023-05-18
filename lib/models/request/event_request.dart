@@ -16,7 +16,7 @@ class EventRequest {
   final int maximo;
   final String imagen;
   final GeograficoDto geo;
-  final int precio;
+  final double precio;
   final UserRequest anfitrion;
   final String name;
   final dynamic privado;
@@ -49,7 +49,7 @@ class EventRequest {
     int? maximo,
     String? imagen,
     GeograficoDto? geo,
-    int? precio,
+    double? precio,
     UserRequest? anfitrion,
     String? name,
     dynamic privado,

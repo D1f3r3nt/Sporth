@@ -12,7 +12,6 @@ class Gateway extends StatelessWidget {
 
   void home(BuildContext context) async {
     final UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context, listen: false);
 
     LocationPermission permission = await Geolocator.checkPermission();
     
@@ -30,9 +29,6 @@ class Gateway extends StatelessWidget {
       Navigator.pushReplacementNamed(context, 'tutorial');
       return;
     }*/
-    
-    // Para traer los eventos del usuario
-    eventosProvider.getEventosByUser(userProvider.currentUser!.idUser);
     
     Navigator.pushReplacementNamed(context, HOME);
   }

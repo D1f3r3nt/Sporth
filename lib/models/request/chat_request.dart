@@ -43,4 +43,11 @@ class ChatRequest {
     "idEvent": idEvent,
     "idChat": idChat,
   };
+
+  UserRequest getOtherAnfitrion(String idUser) {
+    return anfitriones
+        .where((element) => element.idUser != idUser)
+        .toList()
+        .first;
+  }
 }

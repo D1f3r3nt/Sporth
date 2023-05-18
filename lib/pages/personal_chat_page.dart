@@ -12,12 +12,14 @@ class PersonalChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ChatDto currentChat = ModalRoute.of(context)!.settings.arguments as ChatDto;
-    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
-    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
+    final ChatRequest currentChat = ModalRoute.of(context)!.settings.arguments as ChatRequest;
+
     final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
     
-    UserDto? otherUser = currentChat.anfitriones
+    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
+    
+    UserRequest? otherUser = currentChat.anfitriones
         .where((user) => user.idUser != currentUser.idUser)
         .toList()
         .first;
