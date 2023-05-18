@@ -86,7 +86,7 @@ class EventRequest {
     maximo: json["maximo"],
     imagen: json["imagen"],
     geo: GeograficoDto.fromString(json["geo"]),
-    precio: json["precio"],
+    precio: json["precio"].toDouble(),
     anfitrion: UserRequest.fromJson(json["anfitrion"]),
     name: json["name"],
     privado: json["privado"],

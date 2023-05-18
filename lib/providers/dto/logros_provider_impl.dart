@@ -1,14 +1,14 @@
 import 'package:sporth/models/models.dart';
-import 'package:sporth/providers/providers.dart';
 import 'package:sporth/services/functions/event_service.dart';
+import 'package:sporth/services/functions/user_service.dart';
 
 class LogrosProviderImpl {
-  DatabaseUser _databaseUser = DatabaseUser();
+  UserService _userService = UserService();
   EventService _eventService = EventService();
 
   Future<void> getChatLogro(UserRequest user) async {
     if (!user.logros.contains(1)) {
-      await _databaseUser.updateLogro(user, 1);
+      await _userService.updateLogro(user, 1);
     }
   }
 
@@ -17,11 +17,11 @@ class LogrosProviderImpl {
         await _eventService.getEventsByAnfitrion(user.idUser);
 
     if (list.length == 1) {
-      await _databaseUser.updateLogro(user, 2);
+      await _userService.updateLogro(user, 2);
     } else if (list.length == 11) {
-      await _databaseUser.updateLogro(user, 3);
+      await _userService.updateLogro(user, 3);
     } else if (list.length == 51) {
-      await _databaseUser.updateLogro(user, 5);
+      await _userService.updateLogro(user, 5);
     }
   }
 

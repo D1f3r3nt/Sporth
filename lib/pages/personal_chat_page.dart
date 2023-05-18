@@ -14,9 +14,9 @@ class PersonalChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ChatRequest currentChat = ModalRoute.of(context)!.settings.arguments as ChatRequest;
 
-    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
     
-    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
+    final ChatProvider chatProvider = ChatProvider();
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     
     UserRequest? otherUser = currentChat.anfitriones
@@ -61,8 +61,7 @@ class PersonalChatPage extends StatelessWidget {
                           ? NetworkImage(otherUser.urlImagen)
                           : eventosProvider.eventoChat!.imagen.contains('http')
                               ? NetworkImage(eventosProvider.eventoChat!.imagen)
-                              : AssetImage(
-                                      'image/banners/${eventosProvider.eventoChat!.imagen}')
+                              : AssetImage('image/banners/${eventosProvider.eventoChat!.imagen}')
                                   as ImageProvider,
                       radius: 20.0,
                     ),
@@ -97,7 +96,7 @@ class PersonalChatPage extends StatelessWidget {
                               builder: (BuildContext context, AsyncSnapshot snapshot) {
                                 
                                 if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return CircularProgressIndicator.adaptive();
+                                  return const Center(child: CircularProgressIndicator.adaptive());
                                 } else {
                                   dynamic data = snapshot.data;
                                   List<dynamic> mensajes = data.docs.map((e) => MensajeApi.fromJson(e.data())).toList();

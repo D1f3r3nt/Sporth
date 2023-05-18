@@ -14,8 +14,8 @@ class ChatsPage extends StatefulWidget {
 class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
-    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
-    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final ChatProvider chatProvider = ChatProvider();
+    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
 
     atras() {

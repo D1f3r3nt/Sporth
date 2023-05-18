@@ -80,7 +80,7 @@ class _AddPageState extends State<AddPage> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
-    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
     final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
     final PositionProvider positionProvider = PositionProvider();
     final List<DeportesDto> listDeportes = deportesProvider.deportesAdd;

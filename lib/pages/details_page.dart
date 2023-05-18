@@ -13,7 +13,7 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  bool _containsUser(List<UserRequest> participantes, UserDto user) {
+  bool _containsUser(List<UserRequest> participantes, UserRequest user) {
     return participantes
         .where((element) => element.idUser == user.idUser)
         .toList()
@@ -27,8 +27,8 @@ class _DetailsPageState extends State<DetailsPage> {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final ShareProvider shareProvider = ShareProvider();
-    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
-    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
+    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final ChatProvider chatProvider = ChatProvider();
     final AnalyticsUtils analyticsUtils = AnalyticsUtils();
 
     inscribirse() async {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/services/functions/chat_service.dart';
+import 'package:sporth/services/functions/user_service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/cards/banner_ad_card.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -19,14 +20,14 @@ class _OtherUserPageState extends State<OtherUserPage> {
     final UserRequest otherUser = ModalRoute.of(context)!.settings.arguments as UserRequest;
     
     final Size size = MediaQuery.of(context).size;
-    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
     
-    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
+    final ChatProvider chatProvider = ChatProvider();
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final LogrosProvider logrosProvider = Provider.of<LogrosProvider>(context);
     
-    final DatabaseUser databaseUser = DatabaseUser();
+    final UserService userService = UserService();
 
     final List<DeportesAsset> listDeportes = deportesProvider.deportes
         .where((element) => otherUser.gustos.contains(element.id))
@@ -39,7 +40,7 @@ class _OtherUserPageState extends State<OtherUserPage> {
     atras() => Navigator.pop(context);
 
     seguir() async {
-      await databaseUser.updateSeguidor(currentUser, otherUser.idUser);
+      await userService.updateSeguidor(currentUser, otherUser.idUser);
       setState(() {});
     }
 
@@ -56,7 +57,7 @@ class _OtherUserPageState extends State<OtherUserPage> {
     }
 
     dejar() async {
-      await databaseUser.updateDejar(currentUser, otherUser.idUser);
+      await userService.updateDejar(currentUser, otherUser.idUser);
       setState(() {});
     }
 

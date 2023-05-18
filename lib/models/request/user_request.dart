@@ -79,7 +79,7 @@ class UserRequest {
     telefono: json["telefono"],
     nombre: json["nombre"],
     email: json["email"],
-    nacimiento: DateTime.fromMicrosecondsSinceEpoch(json["nacimiento"].microsecondsSinceEpoch),
+    nacimiento: DateTime.fromMillisecondsSinceEpoch(json["nacimiento"]["_seconds"] * 1000),
     username: json["username"],
     seguidos: List<String>.from(json["seguidos"].map((x) => x)),
     logros: List<int>.from(json["logros"].map((x) => x)),

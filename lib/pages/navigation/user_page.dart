@@ -15,7 +15,7 @@ class UserPage extends StatelessWidget {
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final LogrosProvider logrosProvider = Provider.of<LogrosProvider>(context);
-    final UserDto user = userProvider.currentUser!;
+    final UserRequest user = userProvider.currentUser!;
 
     final List<DeportesAsset> listDeportes = deportesProvider.deportes
         .where((element) => user.gustos.contains(element.id))

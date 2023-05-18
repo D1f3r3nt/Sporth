@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator.adaptive());
             } else if (snapshot.hasError) {
-              return ErrorWidget(snapshot.error as Exception);
+              return ErrorWidget(snapshot.error as TypeError);
             } else {
               List<EventRequest> events = snapshot.data!;
               return (events.isEmpty)

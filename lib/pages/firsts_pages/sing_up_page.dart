@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/services/functions/user_service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -18,7 +19,7 @@ class _SingUpPageState extends State<SingUpPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordCheckController = TextEditingController();
   final TextEditingController _userController = TextEditingController();
-  final DatabaseUser _databaseUser = DatabaseUser();
+  final UserService _userService = UserService();
 
   bool _checkbox = false;
 
@@ -32,7 +33,7 @@ class _SingUpPageState extends State<SingUpPage> {
         if (!_checkbox) {
           Snackbar.errorSnackbar(context, 'Tienes que aceptar las condiciones');
         } else {
-          bool exists = await _databaseUser.existsUsername(_userController.text.trim());
+          bool exists = await _userService.existsUsername(_userController.text.trim());
           if (exists) {
             Snackbar.errorSnackbar(context, 'Este usuario ya existe');
             return;

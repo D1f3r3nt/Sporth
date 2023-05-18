@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/services/functions/user_service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -17,14 +18,14 @@ class _GustosPageState extends State<GustosPage> {
   Widget build(BuildContext context) {
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final SingUpProvider singUpProvider = Provider.of<SingUpProvider>(context);
-    final DatabaseUser databaseUser = DatabaseUser();
+    final UserService userService = UserService();
 
     List<DeportesDto> gustos = deportesProvider.deportesGustos;
 
     finalizar() {
       singUpProvider.addGustos(gustos.where((element) => element.selected).toList());
 
-      databaseUser.saveUser(singUpProvider.newUser);
+      userService.saveUser(singUpProvider.newUser);
 
       Navigator.pushReplacementNamed(context, INITIAL);
     }
