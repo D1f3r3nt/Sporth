@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/repository/user_repository.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 
 class ButtonGoogleInput extends StatelessWidget {
@@ -11,15 +13,15 @@ class ButtonGoogleInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final singUpProvider = Provider.of<SingUpProvider>(context);
-    final databaseUser = DatabaseUser();
-    final googleAuth = GoogleAuth();
+    final UserRepository userService = UserRepository();
+    final GoogleAuth googleAuth = GoogleAuth();
 
     loginGoogle() async {
       await googleAuth.login();
 
       User user = FirebaseAuth.instance.currentUser!;
 
-      if (await databaseUser.existsUser(user.uid)) {
+      if (await userService.existsUser(user.uid)) {
         Navigator.pushReplacementNamed(context, INITIAL);
         return;
       }

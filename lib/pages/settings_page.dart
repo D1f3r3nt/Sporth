@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sporth/models/dto/user_dto.dart';
+import 'package:sporth/models/models.dart';
 
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/repository/repository.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -53,9 +55,8 @@ class _SettingsPageState extends State<SettingsPage> {
     final EmailAuth emailAuth = EmailAuth();
     final GoogleAuth googleAuth = GoogleAuth();
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
-    final DatabaseUser _databaseUser = DatabaseUser();
-    final ImageRepository imageRepository = ImageRepository();
+    final UserRepository userService = UserRepository();
+    final ImageService imageRepository = ImageService();
 
     if (_time == null) {
       _timeController.text = DateFormat('dd/MM/yyyy').format(userProvider.currentUser!.nacimiento);
@@ -70,30 +71,30 @@ class _SettingsPageState extends State<SettingsPage> {
     }
 
     guardar() async {
-      UserDto updateUser = userProvider.currentUser!;
+      UserRequest updateUser = userProvider.currentUser!;
       if (_nombreController.text.trim().isNotEmpty) {
-        updateUser = updateUser.copyOf(nombre: _nombreController.text);
-        await _databaseUser.updateUser(updateUser);
+        updateUser = updateUser.copyWith(nombre: _nombreController.text);
+        await userService.updateUser(updateUser);
       }
 
       if (_usernameController.text.trim().isNotEmpty) {
-        bool exists = await _databaseUser.existsUsername(_usernameController.text.trim());
+        bool exists = await userService.existsUsername(_usernameController.text.trim());
         if (exists) {
           Snackbar.errorSnackbar(context, 'Este usuario ya existe');
           return;
         }
-        updateUser = updateUser.copyOf(username: _usernameController.text);
-        await _databaseUser.updateUser(updateUser);
+        updateUser = updateUser.copyWith(username: _usernameController.text);
+        await userService.updateUser(updateUser);
       }
 
       if (_telefonoController.text.trim().isNotEmpty) {
-        updateUser = updateUser.copyOf(telefono: _telefonoController.text);
-        await _databaseUser.updateUser(updateUser);
+        updateUser = updateUser.copyWith(telefono: _telefonoController.text);
+        await userService.updateUser(updateUser);
       }
 
       if (_time != null) {
-        updateUser = updateUser.copyOf(nacimiento: _time);
-        await _databaseUser.updateUser(updateUser);
+        updateUser = updateUser.copyWith(nacimiento: _time);
+        await userService.updateUser(updateUser);
       }
 
       if (_imageFile != null) {
@@ -101,22 +102,16 @@ class _SettingsPageState extends State<SettingsPage> {
         if (updateUser.imagen.isNotEmpty && updateUser.imagen.contains(NAME_PROYECT_FIREBASE)) {
           await imageRepository.deleteImage(updateUser.imagen);
         }
-        updateUser = updateUser.copyOf(imagen: newUrl);
-        await _databaseUser.updateUser(updateUser);
+        updateUser = updateUser.copyWith(imagen: newUrl);
+        await userService.updateUser(updateUser);
       }
 
       userProvider.currentUser = updateUser;
 
-      // Para traer los eventos del usuario
-      eventosProvider.getEventosByUser(userProvider.currentUser!.idUser);
-      
       Navigator.pushReplacementNamed(context, HOME);
     }
 
     atras() {
-      // Para traer los eventos del usuario
-      eventosProvider.getEventosByUser(userProvider.currentUser!.idUser);
-
       Navigator.pushReplacementNamed(context, HOME);
     }
 

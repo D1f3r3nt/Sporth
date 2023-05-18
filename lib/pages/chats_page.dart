@@ -1,38 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
-class ChatsPage extends StatelessWidget {
+class ChatsPage extends StatefulWidget {
   const ChatsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
-    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
-    final EventosProvider eventosProvider =
-        Provider.of<EventosProvider>(context);
+  State<ChatsPage> createState() => _ChatsPageState();
+}
 
-    chatProvider.getChats();
-    List<ChatDto> chats = chatProvider.chats;
+class _ChatsPageState extends State<ChatsPage> {
+  @override
+  Widget build(BuildContext context) {
+    final ChatService chatProvider = ChatService();
+    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
 
     atras() {
-      // Para traer los eventos del usuario
-      eventosProvider.getEventosByUser(currentUser.idUser);
-      
       Navigator.pushReplacementNamed(context, HOME);
     }
 
-      tapChat(ChatDto chatDto) => Navigator.pushReplacementNamed(
-        context,
-        CHAT_PERSONAL,
-        arguments: chatDto,
-      );
-
-      refresh() async {
-        chatProvider.refresh();
-      }
+    tapChat(ChatRequest chatRequest) => Navigator.pushReplacementNamed(
+      context,
+      CHAT_PERSONAL,
+      arguments: chatRequest,
+    );
 
       return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -70,42 +65,68 @@ class ChatsPage extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          child: chats.isEmpty
-                              ? Center(
-                              child: Image.asset('image/no_tienes_chats.png'))
-                              : RefreshIndicator(
-                            onRefresh: refresh,
-                            child: ListView.builder(
-                              itemCount: chats.length,
-                              itemBuilder: (context, index) {
-                                ChatDto chat = chats[index];
-
-                                if (chat.event == null) {
-                                  UserDto otherUser =
-                                  chat.getOtherAnfitrion(
-                                      currentUser.idUser);
-
-                                  return ChatCard(
-                                    onTap: () => tapChat(chat),
-                                    nombre: otherUser.nombre,
-                                    username: otherUser.username,
-                                    image: otherUser.urlImagen,
-                                  );
-                                } else {
-                                  return ChatCard(
-                                    onTap: () {
-                                      eventosProvider.eventoChat =
-                                          chat.event;
-                                      tapChat(chat);
-                                    },
-                                    nombre: chat.event!.name,
-                                    username:
-                                    '${chat.event!.diaFormat} - ${chat.event!.timeFormat}',
-                                    image: chat.event!.imagen,
-                                  );
-                                }
-                              },
-                            ),
+                          child: FutureBuilder<List<ChatRequest>>(
+                            future: chatProvider.getChats(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return const Center(child: CircularProgressIndicator.adaptive());
+                              } else if (snapshot.hasError) {
+                                return ErrorWidget(snapshot.error as Exception);
+                              } else {
+                                List<ChatRequest> chats = snapshot.data!;
+                                
+                                return chats.isEmpty
+                                    ? Center(
+                                        child: Image.asset('image/no_tienes_chats.png'),
+                                      )
+                                    : RefreshIndicator(
+                                        onRefresh: () async {
+                                          setState(() {});
+                                        },
+                                        child: ListView.builder(
+                                          itemCount: chats.length,
+                                          itemBuilder: (context, index) {
+                                            ChatRequest chat = chats[index];
+      
+                                            if (chat.idEvent == null) {
+                                              UserRequest otherUser = chat.getOtherAnfitrion(currentUser.idUser);
+      
+                                              return ChatCard(
+                                                onTap: () => tapChat(chat),
+                                                nombre: otherUser.nombre,
+                                                username: otherUser.username,
+                                                image: otherUser.urlImagen,
+                                              );
+                                            } else {
+                                              return FutureBuilder<EventRequest>(
+                                                future: eventosProvider.getEvent(chat.idEvent!),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.connectionState != ConnectionState.waiting) {
+                                                    EventRequest event = snapshot.data!;
+                                                    return ChatCard(
+                                                      onTap: () async {
+                                                        eventosProvider.eventoChat = event;
+                                                        tapChat(chat);
+                                                      },
+                                                      nombre: event.name,
+                                                      username: '${event.diaFormat} - ${event.timeFormat}',
+                                                      image: event.imagen,
+                                                    );
+                                                  }
+                                                  return ChatCard(
+                                                    onTap: () async {},
+                                                    nombre: 'Cargando...',
+                                                    username: 'Cargando...',
+                                                    image: 'https://firebasestorage.googleapis.com/v0/b/sporth-c3c47.appspot.com/o/eventos.png?alt=media&token=9d33229e-ce18-4dc9-81db-d12e9971f65a',
+                                                  );
+                                                },
+                                              );
+                                            }
+                                          },
+                                        ),
+                                    );
+                              }
+                            },
                           ),
                         )
                       ],
@@ -118,5 +139,5 @@ class ChatsPage extends StatelessWidget {
         ),
       );
     }
-  }
+}
 

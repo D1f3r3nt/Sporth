@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:sporth/models/models.dart';
 
-class GoogleDetailsProvider {
+class GoogleDetailsService {
   static const String URL_BASE = "maps.googleapis.com";
   static const String ENPOINT_AUTOCOMPLETE = "maps/api/place/details/json";
   static const String ENPOINT_GEOLOCATION = "maps/api/geocode/json";

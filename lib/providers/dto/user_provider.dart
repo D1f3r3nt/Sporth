@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 
 class UserProvider extends ChangeNotifier {
-  UserDto? _currentUser;
+  UserRequest? _currentUser;
 
-  UserDto? get currentUser => _currentUser;
+  UserRequest? get currentUser => _currentUser;
 
-  set currentUser(UserDto? user) {
+  set currentUser(UserRequest? user) {
     _currentUser = user;
     notifyListeners();
   }

@@ -36,7 +36,6 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SingUpProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => EventosProvider()),
-        ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => SearchProvider()),
         ChangeNotifierProvider(create: (_) => GoogleAutocompleteProvider()),
       ],

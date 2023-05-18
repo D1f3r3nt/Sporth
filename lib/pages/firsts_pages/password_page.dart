@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -18,11 +18,11 @@ class _PasswordPageState extends State<PasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    final emailProvider = EmailAuth();
+    final EmailAuth emailService = EmailAuth();
 
     enviar() {
       if (_formKey.currentState!.validate()) {
-        emailProvider.newPassword(context, email: _emailController.text);
+        emailService.newPassword(context, email: _emailController.text);
 
         Navigator.pushReplacementNamed(context, LOGIN);
       }

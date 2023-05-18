@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sporth/service/service.dart';
 
-import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 

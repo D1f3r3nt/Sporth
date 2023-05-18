@@ -15,7 +15,7 @@ class UserPage extends StatelessWidget {
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final LogrosProvider logrosProvider = Provider.of<LogrosProvider>(context);
-    final UserDto user = userProvider.currentUser!;
+    final UserRequest user = userProvider.currentUser!;
 
     final List<DeportesAsset> listDeportes = deportesProvider.deportes
         .where((element) => user.gustos.contains(element.id))
@@ -101,29 +101,41 @@ class UserPage extends StatelessWidget {
                 ),
               ),
             Expanded(
-              child: eventosProvider.eventsByUser.isEmpty
-              ? Image.asset(
-                'image/usuario_no_tiene_evento.png',
-                height: size.height * 0.4,
-              )
-              : ListView.builder(
-                itemCount: eventosProvider.eventsByUser.length,
-                padding:
-                const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
-                itemBuilder: (context, index) {
-                  if (index > 0 && index % 2 == 0) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        BannerAdCard(width: size.width * 0.85),
-                        const SizedBox(height: 25),
-                        CardPublicacion(eventoDto: eventosProvider.eventsByUser[index]),
-                      ],
-                    );
+              child: FutureBuilder<List<EventRequest>>(
+                future: eventosProvider.getEventsByUser(user.idUser),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return ErrorWidget(snapshot.error as Exception);
+                  } else {
+                    List<EventRequest> events = snapshot.data!;
+                    return events.isEmpty
+                        ? Image.asset(
+                          'image/usuario_no_tiene_evento.png',
+                          height: size.height * 0.4,
+                        )
+                        : ListView.builder(
+                          itemCount: events.length,
+                          padding:
+                          const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
+                          itemBuilder: (context, index) {
+                            if (index > 0 && index % 2 == 0) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  BannerAdCard(width: size.width * 0.85),
+                                  const SizedBox(height: 25),
+                                  CardPublicacion(eventRequest: events[index]),
+                                ],
+                              );
+                            }
+                            return CardPublicacion(eventRequest: events[index]);
+                          },
+                        );
                   }
-                  return CardPublicacion(eventoDto: eventosProvider.eventsByUser[index]);
                 },
-              ),
+              )
             )
           ],
         ),

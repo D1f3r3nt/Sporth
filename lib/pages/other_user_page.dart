@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/repository/repository.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
-import 'package:sporth/widgets/cards/banner_ad_card.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class OtherUserPage extends StatefulWidget {
@@ -15,17 +16,17 @@ class OtherUserPage extends StatefulWidget {
 class _OtherUserPageState extends State<OtherUserPage> {
   @override
   Widget build(BuildContext context) {
+    final UserRequest otherUser = ModalRoute.of(context)!.settings.arguments as UserRequest;
+    
     final Size size = MediaQuery.of(context).size;
-    final UserDto otherUser = ModalRoute.of(context)!.settings.arguments as UserDto;
-    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
+    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
+    
+    final ChatService chatProvider = ChatService();
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final LogrosProvider logrosProvider = Provider.of<LogrosProvider>(context);
-    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
-    final DatabaseUser databaseUser = DatabaseUser();
-
-    // Para traer los eventos del usuario
-    eventosProvider.getEventosByUser(otherUser.idUser);
+    
+    final UserRepository userService = UserRepository();
 
     final List<DeportesAsset> listDeportes = deportesProvider.deportes
         .where((element) => otherUser.gustos.contains(element.id))
@@ -38,28 +39,24 @@ class _OtherUserPageState extends State<OtherUserPage> {
     atras() => Navigator.pop(context);
 
     seguir() async {
-      await databaseUser.updateSeguidor(currentUser, otherUser.idUser);
+      await userService.updateSeguidor(currentUser, otherUser.idUser);
       setState(() {});
     }
 
     chat() async {
-      ChatApi newChat = ChatApi(
-        anfitriones: [currentUser.idUser, otherUser.idUser],
+      ChatRequest chat = ChatRequest(
+        anfitriones: [currentUser, otherUser],
       );
 
-      String chatId =
-          await chatProvider.anyChatUser(currentUser.idUser, otherUser.idUser);
+      String chatId = await chatProvider.anyChatUser(currentUser.idUser, otherUser.idUser);
 
-      if (chatId.isEmpty) chatId = await chatProvider.saveChat(newChat);
+      if (chatId.isEmpty) await chatProvider.saveChat(chat);
 
-      ChatDto chatDto = await ChatMapper.INSTANCE
-          .chatApiToChatDto(newChat.copyWith(idChat: chatId));
-
-      Navigator.pushReplacementNamed(context, CHAT_PERSONAL, arguments: chatDto);
+      Navigator.pushReplacementNamed(context, CHAT_PERSONAL, arguments: chat);
     }
 
     dejar() async {
-      await databaseUser.updateDejar(currentUser, otherUser.idUser);
+      await userService.updateDejar(currentUser, otherUser.idUser);
       setState(() {});
     }
 
@@ -179,29 +176,41 @@ class _OtherUserPageState extends State<OtherUserPage> {
                   ),
                 ),
               Expanded(
-                child: eventosProvider.eventsByUser.isEmpty
-                    ? Image.asset(
-                  'image/usuario_no_tiene_evento.png',
-                  height: size.height * 0.4,
-                )
-                    : ListView.builder(
-                      itemCount: eventosProvider.eventsByUser.length,
-                      padding:
-                      const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
-                      itemBuilder: (context, index) {
-                        if (index > 0 && index % 2 == 0) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              BannerAdCard(width: size.width * 0.85),
-                              const SizedBox(height: 25),
-                              CardPublicacion(eventoDto: eventosProvider.eventsByUser[index]),
-                            ],
+                child: FutureBuilder<List<EventRequest>>(
+                  future: eventosProvider.getEventsByUser(otherUser.idUser),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return ErrorWidget(snapshot.error as Exception);
+                    } else {
+                      List<EventRequest> events = snapshot.data!;
+                      return events.isEmpty
+                          ? Image.asset(
+                            'image/usuario_no_tiene_evento.png',
+                            height: size.height * 0.4,
+                          )
+                          : ListView.builder(
+                            itemCount: events.length,
+                            padding:
+                            const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
+                            itemBuilder: (context, index) {
+                              if (index > 0 && index % 2 == 0) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    BannerAdCard(width: size.width * 0.85),
+                                    const SizedBox(height: 25),
+                                    CardPublicacion(eventRequest: events[index]),
+                                  ],
+                                );
+                              }
+                              return CardPublicacion(eventRequest: events[index]);
+                            },
                           );
-                        }
-                        return CardPublicacion(eventoDto: eventosProvider.eventsByUser[index]);
+                    }
                   },
-                ),
+                )
               )
             ],
           ),
@@ -210,3 +219,7 @@ class _OtherUserPageState extends State<OtherUserPage> {
     );
   }
 }
+
+/*
+
+*/

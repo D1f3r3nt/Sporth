@@ -4,7 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/utils/utils.dart';
 
-class PositionProvider {
+class PositionService {
   Future<GeograficoDto?> getPosition(BuildContext context) async {
     checkAll(context);
 

@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/utils/decimal_formatter.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -19,8 +19,8 @@ class AddPage extends StatefulWidget {
 class _AddPageState extends State<AddPage> {
   final ImagePicker _pickerImage = ImagePicker();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GoogleDetailsProvider _googleDetailsProvider = GoogleDetailsProvider();
-  final ImageRepository _imageRepository = ImageRepository();
+  final GoogleDetailsService _googleDetailsProvider = GoogleDetailsService();
+  final ImageService _imageRepository = ImageService();
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _ubicacionesController = TextEditingController();
   final TextEditingController _maxPersonasController = TextEditingController();
@@ -80,9 +80,9 @@ class _AddPageState extends State<AddPage> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
-    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
     final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
-    final PositionProvider positionProvider = PositionProvider();
+    final PositionService positionProvider = PositionService();
     final List<DeportesDto> listDeportes = deportesProvider.deportesAdd;
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final AnalyticsUtils analyticsUtils = AnalyticsUtils();
@@ -105,7 +105,7 @@ class _AddPageState extends State<AddPage> {
 
           final now = DateTime.now();
 
-          EventoApi evento = EventoApi(
+           EventRequest evento = EventRequest(
             name: _nombreController.text,
             hora: DateTime(now.year, now.month, now.day, _time.hour, _time.minute),
             dia: _date,
@@ -115,7 +115,7 @@ class _AddPageState extends State<AddPage> {
             deporte: list.first.id,
             imagen: imagen,
             descripcion: _descripcionController.text,
-            anfitrion: currentUser.idUser,
+            anfitrion: UserRequest.only(idUser: currentUser.idUser, nacimiento: DateTime.now()),
             participantes: [],
             geo: _geo!,
             privado: _privadoController.text.isEmpty
@@ -123,10 +123,7 @@ class _AddPageState extends State<AddPage> {
                 : _privadoController.text,
           );
 
-          await eventosProvider.saveEvento(evento, currentUser);
-
-          // Para traer los eventos del usuario
-          eventosProvider.getEventosByUser(currentUser.idUser);
+          await eventosProvider.saveEvent(evento, currentUser);
           
           analyticsUtils.registerEvent('Event_create', {
             "deporte": list.first.nombre,
@@ -149,9 +146,6 @@ class _AddPageState extends State<AddPage> {
     
 
     atras() {
-      // Para traer los eventos del usuario
-      eventosProvider.getEventosByUser(currentUser.idUser);
-
       Navigator.pushReplacementNamed(context, HOME);
     }
 

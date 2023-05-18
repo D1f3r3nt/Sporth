@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -14,7 +15,7 @@ class BottomDesplegate extends StatefulWidget {
 }
 
 class _BottomDesplegateState extends State<BottomDesplegate> {
-  final GoogleDetailsProvider _googleDetailsProvider = GoogleDetailsProvider();
+  final GoogleDetailsService _googleDetailsProvider = GoogleDetailsService();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _ubicacionController = TextEditingController();
@@ -60,7 +61,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
     final SearchProvider searchProvider = Provider.of<SearchProvider>(context);
     final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
     final Size size = MediaQuery.of(context).size;
-    final PositionProvider positionProvider = PositionProvider();
+    final PositionService positionProvider = PositionService();
 
     _dateController.text = searchProvider.search.dia == null ? '' : searchProvider.search.dia!;
     _timeController.text = searchProvider.search.hora == null ? '' : searchProvider.search.hora!;

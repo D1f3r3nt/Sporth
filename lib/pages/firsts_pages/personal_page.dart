@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -17,7 +18,7 @@ class PersonalPage extends StatefulWidget {
 
 class _PersonalPageState extends State<PersonalPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final ImageRepository _imageRepository = ImageRepository();
+  final ImageService _imageRepository = ImageService();
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _apellidosController = TextEditingController();
   final TextEditingController _telefonoController = TextEditingController();

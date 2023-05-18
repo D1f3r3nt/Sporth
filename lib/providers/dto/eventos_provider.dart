@@ -1,51 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
-import 'package:sporth/providers/dto/logros_provider_impl.dart';
-import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/ui/logros_service.dart';
+import 'package:sporth/repository/event_repository.dart';
 
 class EventosProvider extends ChangeNotifier {
-  final DatabaseEvento _databaseEvento = DatabaseEvento();
-  final LogrosProviderImpl _logrosProviderImpl = LogrosProviderImpl();
+  final EventRepository _eventService = EventRepository();
+  final LogrosService _logrosProviderImpl = LogrosService();
 
-  List<EventoDto> allEvents = [];
-  List<EventoDto> filteredEventos = [];
-  List<EventoDto> eventsByUser = [];
-  EventoDto? eventoChat;
+  EventRequest? eventoChat;
 
-  Future<void> refresh() async {
-    allEvents = await _databaseEvento.getAllEventos();
-    notifyListeners();
+  Future<List<EventRequest>> getAllEvents() async {
+      return await _eventService.getAllEvents();
   }
 
-  void getAllEventos() async {
-    if (allEvents.isEmpty) {
-      allEvents = await _databaseEvento.getAllEventos();
-    }
-    notifyListeners();
-  }
-  
-  void getEventosByUser(String idUser) async {
-    eventsByUser = await _databaseEvento.getEventsDtoByAnfitrion(idUser);
-    notifyListeners();
+  Future<List<EventRequest>> getEventsByUser(String idUser) async {
+    return await _eventService.getEventsByAnfitrion(idUser);
   }
 
-  void getFilteredEventos(SearchDto searchDto) async {
-    filteredEventos = await _databaseEvento.getFilterEventos(searchDto);
-    notifyListeners();
+  Future<List<EventRequest>> getFilteredEvents(SearchDto searchDto) async {
+    return await _eventService.getFilterEvents(searchDto);
   }
 
-  Future<EventoDto> getEvento(String idEvento) async {
-    EventoApi eventoApi = await _databaseEvento.getEvento(idEvento);
-    return await EventoMapper.INSTANCE
-        .eventoApiToEventoDto(idEvento, eventoApi);
+  Future<EventRequest> getEvent(String idEvento) async {
+    return await _eventService.getEvent(idEvento);
   }
 
   Future<void> inscribe(String idEvento, String idUser) async {
-    await _databaseEvento.inscribe(idEvento, idUser);
+    await _eventService.inscribe(idEvento, idUser);
   }
 
-  Future<void> saveEvento(EventoApi evento, UserDto user) async {
-    await _databaseEvento.saveEvento(evento);
+  Future<void> saveEvent(EventRequest evento, UserRequest user) async {
+    await _eventService.saveEvent(evento);
     await _logrosProviderImpl.getEventLogro(user);
   }
 }

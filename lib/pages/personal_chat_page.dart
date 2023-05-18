@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -12,12 +13,14 @@ class PersonalChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ChatDto currentChat = ModalRoute.of(context)!.settings.arguments as ChatDto;
-    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
-    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
-    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final ChatRequest currentChat = ModalRoute.of(context)!.settings.arguments as ChatRequest;
+
+    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
     
-    UserDto? otherUser = currentChat.anfitriones
+    final ChatService chatProvider = ChatService();
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
+    
+    UserRequest? otherUser = currentChat.anfitriones
         .where((user) => user.idUser != currentUser.idUser)
         .toList()
         .first;
@@ -59,8 +62,7 @@ class PersonalChatPage extends StatelessWidget {
                           ? NetworkImage(otherUser.urlImagen)
                           : eventosProvider.eventoChat!.imagen.contains('http')
                               ? NetworkImage(eventosProvider.eventoChat!.imagen)
-                              : AssetImage(
-                                      'image/banners/${eventosProvider.eventoChat!.imagen}')
+                              : AssetImage('image/banners/${eventosProvider.eventoChat!.imagen}')
                                   as ImageProvider,
                       radius: 20.0,
                     ),
@@ -95,7 +97,7 @@ class PersonalChatPage extends StatelessWidget {
                               builder: (BuildContext context, AsyncSnapshot snapshot) {
                                 
                                 if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return CircularProgressIndicator.adaptive();
+                                  return const Center(child: CircularProgressIndicator.adaptive());
                                 } else {
                                   dynamic data = snapshot.data;
                                   List<dynamic> mensajes = data.docs.map((e) => MensajeApi.fromJson(e.data())).toList();
