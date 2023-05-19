@@ -4,6 +4,7 @@ import 'package:sporth/providers/providers.dart';
 import 'package:sporth/repository/repository.dart';
 import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
+import 'package:sporth/widgets/buttons/link_input.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class SingUpPage extends StatefulWidget {
@@ -194,9 +195,9 @@ class _SingUpPageState extends State<SingUpPage> {
                           onChanged: (value) => setState(() {
                             _checkbox = value!;
                           }),
-                          title: const Text(
-                            'Aceptar las condiciones de privacidad',
-                            style: TextUtils.kanit_16_black,
+                          title: LinkInput(
+                            text: 'Aceptar las condiciones de privacidad',
+                            url: 'https://docs.google.com/document/d/1s1mUikdbm_9IwZhGeSOHa7UlcBeDrL0orB6yVEjMkY8/edit?usp=sharing',
                           ),
                           controlAffinity: ListTileControlAffinity.leading,
                         ),
