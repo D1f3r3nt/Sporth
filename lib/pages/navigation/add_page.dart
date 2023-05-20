@@ -127,8 +127,8 @@ class _AddPageState extends State<AddPage> {
           
           analyticsUtils.registerEvent('Event_create', {
             "deporte": list.first.nombre,
-            "privado": _privadoController.text.isEmpty,
-            "precio": _precioController.text == "0",
+            "privado": _privadoController.text,
+            "precio": _precioController.text,
           });
           
           Navigator.pushReplacementNamed(context, HOME);

@@ -14,12 +14,15 @@ class OtherUserPage extends StatefulWidget {
 }
 
 class _OtherUserPageState extends State<OtherUserPage> {
+  bool waiting = false;
+  
   @override
   Widget build(BuildContext context) {
     final UserRequest otherUser = ModalRoute.of(context)!.settings.arguments as UserRequest;
     
     final Size size = MediaQuery.of(context).size;
-    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    final UserRequest currentUser = userProvider.currentUser!;
     
     final ChatService chatProvider = ChatService();
     final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
@@ -39,8 +42,19 @@ class _OtherUserPageState extends State<OtherUserPage> {
     atras() => Navigator.pop(context);
 
     seguir() async {
-      await userService.updateSeguidor(currentUser, otherUser.idUser);
-      setState(() {});
+      setState(() {
+        waiting = true;
+      });
+      try {
+        await userService.updateSeguidor(currentUser, otherUser.idUser);
+        await userProvider.update();
+      } catch (error) {
+        // TODO toast
+        print(error);
+      }
+      setState(() {
+        waiting = false;
+      });
     }
 
     chat() async {
@@ -56,8 +70,19 @@ class _OtherUserPageState extends State<OtherUserPage> {
     }
 
     dejar() async {
-      await userService.updateDejar(currentUser, otherUser.idUser);
-      setState(() {});
+      setState(() {
+        waiting = true;
+      });
+      try {
+        await userService.updateDejar(currentUser, otherUser.idUser);
+        await userProvider.update();
+      } catch (error) {
+        // TODO toast
+        print(error);
+      }
+      setState(() {
+        waiting = false;
+      });
     }
 
     return Scaffold(
@@ -139,7 +164,9 @@ class _OtherUserPageState extends State<OtherUserPage> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: ButtonInput(
+                        child: (waiting) 
+                            ? const Center(child: CircularProgressIndicator.adaptive())
+                            : ButtonInput(
                           text: currentUser.seguidos.contains(otherUser.idUser)
                               ? 'Dejar'
                               : 'Seguir',

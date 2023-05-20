@@ -62,4 +62,33 @@ class PopupUtils {
       },
     );
   }
+  
+  static Future<bool?> dialogTextInput(BuildContext context, String correctText) {
+    TextEditingController controller = TextEditingController();
+    
+    return showDialog<bool>(
+      context: context, 
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+            'Este evento es privado',
+            style: TextUtils.kanit_18_black,
+          ),
+          content: TextField(
+            autofocus: true,
+            decoration: const InputDecoration(hintText: 'Contraseña'),
+            controller: controller,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, controller.text.trim() == correctText);
+              }, 
+              child: const Text('Inscribirse'),
+            )
+          ],
+        );
+      },
+    );
+  }
 }
