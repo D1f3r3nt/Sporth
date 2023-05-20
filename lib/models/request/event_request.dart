@@ -19,7 +19,7 @@ class EventRequest {
   final double precio;
   final UserRequest anfitrion;
   final String name;
-  final dynamic privado;
+  final String? privado;
   final DateTime dia;
   final List<UserRequest> participantes;
 
@@ -52,7 +52,7 @@ class EventRequest {
     double? precio,
     UserRequest? anfitrion,
     String? name,
-    dynamic privado,
+    String? privado,
     DateTime? dia,
     List<UserRequest>? participantes,
   }) =>
