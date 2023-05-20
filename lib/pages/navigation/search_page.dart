@@ -101,7 +101,7 @@ class _SearchPageState extends State<SearchPage> {
                 future: eventosProvider.getFilteredEvents(searchProvider.search),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const Center(child: CircularProgressIndicator.adaptive());
                   } else if (snapshot.hasError) {
                     return ErrorWidget(snapshot.error as Exception);
                   } else {

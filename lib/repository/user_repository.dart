@@ -35,7 +35,7 @@ class UserRepository {
     if (response.statusCode != 200) {
       throw Exception('Error with call');
     } else {
-      return response.body as bool;
+      return response.body == 'true';
     }
   }
 
@@ -49,7 +49,7 @@ class UserRepository {
     if (response.statusCode != 200) {
       throw Exception('Error with call');
     } else {
-      return response.body as bool;
+      return response.body == 'true';
     }
   }
 

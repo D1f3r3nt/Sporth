@@ -29,7 +29,7 @@ class ButtonGoogleInput extends StatelessWidget {
       singUpProvider.addDatos(user.email!, user.displayName ?? '', user.uid);
       singUpProvider.addPersonal(user.displayName ?? '', '', user.photoURL ?? '', DateTime.now(), user.phoneNumber ?? '');
 
-      Navigator.pushReplacementNamed(context, GUSTOS);
+      Navigator.pushReplacementNamed(context, USERNAME_PAGE);
     }
 
     return GestureDetector(
