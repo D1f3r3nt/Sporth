@@ -180,7 +180,7 @@ class _OtherUserPageState extends State<OtherUserPage> {
                   future: eventosProvider.getEventsByUser(otherUser.idUser),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const Center(child: CircularProgressIndicator.adaptive());
                     } else if (snapshot.hasError) {
                       return ErrorWidget(snapshot.error as Exception);
                     } else {

@@ -9,6 +9,11 @@ class SingUpProvider extends ChangeNotifier {
     newUser = newUser.copyWith(email: email, username: usuario, idUser: uid);
     notifyListeners();
   }
+  
+  void addUsername(String usuario) {
+    newUser = newUser.copyWith(username: usuario);
+    notifyListeners();
+  }
 
   void addPersonal(String nombre, String apellidos, String imagen, DateTime nacimiento, String telefono) {
     newUser = newUser.copyWith(

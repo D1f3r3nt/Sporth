@@ -4,6 +4,7 @@ const String HOME = 'home';
 const String LOGIN = 'login';
 const String SING_UP = 'sing-up';
 const String NEW_PASSWORD = 'new-password';
+const String USERNAME_PAGE = 'username_page';
 const String PERSONAL = 'personal';
 const String GUSTOS = 'gustos';
 const String ADD_PAGE = 'add-page';

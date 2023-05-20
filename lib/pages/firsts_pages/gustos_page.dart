@@ -22,10 +22,10 @@ class _GustosPageState extends State<GustosPage> {
 
     List<DeportesDto> gustos = deportesProvider.deportesGustos;
 
-    finalizar() {
+    finalizar() async {
       singUpProvider.addGustos(gustos.where((element) => element.selected).toList());
 
-      userService.saveUser(singUpProvider.newUser);
+      await userService.saveUser(singUpProvider.newUser);
 
       Navigator.pushReplacementNamed(context, INITIAL);
     }
