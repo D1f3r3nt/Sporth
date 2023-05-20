@@ -37,20 +37,26 @@ class _DetailsPageState extends State<DetailsPage> {
       if (userProvider.currentUser!.idUser == eventRequest.anfitrion.idUser) {
         Snackbar.errorSnackbar(context, 'Este es tu evento');
       } else {
+        if (eventRequest.maximo <= eventRequest.participantes.length + 1) {
+          Snackbar.errorSnackbar(context, 'El evento esta lleno');
+          return;
+        }
+        
         if (eventRequest.privado != null) {
           bool? result = await PopupUtils.dialogTextInput(context, eventRequest.privado!);
           
-          if (result != null && result) {
-            await eventosProvider.inscribe(eventRequest.id!, userProvider.currentUser!.idUser);
-            DeportesAsset deporte = await deportesProvider.getDeporteById(eventRequest.deporte);
-            analyticsUtils.registerEvent('Inscribe_to_event', {
-              "deporte": deporte.nombre
-            });
-            Navigator.pop(context);
-          } else {
+          if (result == null || !result) {
             Snackbar.errorSnackbar(context, 'Contraseña incorrecta');
+            return;
           }
-        }
+        } 
+        
+        await eventosProvider.inscribe(eventRequest.id!, userProvider.currentUser!.idUser);
+        DeportesAsset deporte = await deportesProvider.getDeporteById(eventRequest.deporte);
+        analyticsUtils.registerEvent('Inscribe_to_event', {
+          "deporte": deporte.nombre
+        });
+        Navigator.pop(context);
       }
     }
 
