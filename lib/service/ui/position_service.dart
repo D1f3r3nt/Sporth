@@ -6,21 +6,23 @@ import 'package:sporth/utils/utils.dart';
 
 class PositionService {
   Future<GeograficoDto?> getPosition(BuildContext context) async {
-    checkAll(context);
+    bool check = await checkAll(context);
+    
+    if (!check) return null;
 
     Position position = await Geolocator.getCurrentPosition();
 
     return GeograficoDto(lat: position.latitude, lng: position.longitude);
   }
   
-  Future<void> checkAll(BuildContext context) async {
+  Future<bool> checkAll(BuildContext context) async {
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       Snackbar.errorSnackbar(context, 'Ubicacion desactivada');
-      return null;
+      return false;
     }
 
     permission = await Geolocator.checkPermission();
@@ -30,13 +32,38 @@ class PositionService {
 
       if (permission == LocationPermission.denied) {
         Snackbar.errorSnackbar(context, 'La app necesita permisos de ubicacion');
-        return null;
+        return false;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       Snackbar.errorSnackbar(context, 'La app necesita permisos de ubicacion');
-      return null;
+      return false;
     }
+    
+    return true;
+  }
+  
+  Future<bool> isEnabled() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    
+    if (!serviceEnabled) {
+      return false;
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+        return false;
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return false;
+    }
+
+    return true;
   }
 }

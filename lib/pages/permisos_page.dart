@@ -23,7 +23,8 @@ class _PermisosPageState extends State<PermisosPage> {
     }
 
     agree() async {
-        await _positionProvider.checkAll(context);
+        bool check = await _positionProvider.checkAll(context);
+        if (!check) return;
       
         Navigator.pushReplacementNamed(context, INITIAL);
     }
