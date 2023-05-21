@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
         width: double.infinity,
         height: double.infinity,
         child: FutureBuilder<List<EventRequest>>(
-          future: eventosProvider.getAllEvents(),
+          future: eventosProvider.getAllEvents(context),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator.adaptive());
