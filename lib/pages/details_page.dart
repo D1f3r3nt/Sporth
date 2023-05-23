@@ -60,6 +60,15 @@ class _DetailsPageState extends State<DetailsPage> {
       }
     }
 
+    salir() async {
+        await eventosProvider.uninscribe(eventRequest.id!, userProvider.currentUser!.idUser);
+        DeportesAsset deporte = await deportesProvider.getDeporteById(eventRequest.deporte);
+        analyticsUtils.registerEvent('Uninscribe_to_event', {
+          "deporte": deporte.nombre
+        });
+        Navigator.pop(context);
+    }
+
     message() async {
       ChatRequest? chat = await chatProvider.getChatByEvent(eventRequest.id!);
 
@@ -271,17 +280,24 @@ class _DetailsPageState extends State<DetailsPage> {
                           height: 80.0,
                           child: Row(
                             children: [
+                              if (!_containsUser(eventRequest.participantes, userProvider.currentUser!))
+                                IconButton(
+                                  onPressed: message,
+                                  icon: const Icon(Icons.chat),
+                                ),
+                              if (!_containsUser(eventRequest.participantes, userProvider.currentUser!))
+                                const SizedBox(width: 10.0),
                               Expanded(
                                 child: ButtonInput(
                                   text: _containsUser(eventRequest.participantes,
                                           userProvider.currentUser!)
                                       ? 'Inscribirse'
-                                      : 'Chat',
+                                      : 'Salir',
                                   funcion: _containsUser(
                                       eventRequest.participantes,
                                           userProvider.currentUser!)
                                       ? inscribirse
-                                      : message,
+                                      : salir,
                                 ),
                               ),
                               const SizedBox(width: 10.0),

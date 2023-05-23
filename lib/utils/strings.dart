@@ -67,6 +67,14 @@ const String EVENT_ALL = 'event_all';
 const String EVENT_INSCRIBE = 'event_inscribe';
 
 /// PATH VARIABLE {
+///  idEvent,
+///  idUser
+/// }
+/// 
+/// RETURN void
+const String EVENT_UNINSCRIBE = 'event_uninscribe';
+
+/// PATH VARIABLE {
 ///   idEvent
 /// }
 /// 
