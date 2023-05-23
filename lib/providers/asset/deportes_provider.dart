@@ -48,6 +48,7 @@ class DeportesProvider extends ChangeNotifier {
               id: element.id,
               imagen: element.imagen,
               nombre: element.nombre,
+              players: element.players,
               selected: false,
             ))
         .toList();

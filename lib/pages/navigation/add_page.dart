@@ -73,6 +73,8 @@ class _AddPageState extends State<AddPage> {
         element.selected = false;
       }
       listDeportes[index].selected = !listDeportes[index].selected;
+      
+      _maxPersonasController.text = listDeportes[index].players.toString();
     });
   }
 

@@ -5,6 +5,7 @@ class DeportesDto {
     required this.id,
     required this.imagen,
     required this.nombre,
+    required this.players,
     required this.selected,
   });
 
@@ -12,6 +13,7 @@ class DeportesDto {
   String imagen;
   String nombre;
   bool selected;
+  int players;
 
   factory DeportesDto.fromJson(String str) => DeportesDto.fromMap(json.decode(str));
 
@@ -22,6 +24,7 @@ class DeportesDto {
         imagen: json["imagen"],
         nombre: json["nombre"],
         selected: json["selected"] == 1,
+        players: json["players"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -29,6 +32,7 @@ class DeportesDto {
         "imagen": imagen,
         "nombre": nombre,
         "selected": selected,
+        "players": players,
       };
 
   DeportesDto copyOf({
@@ -36,12 +40,14 @@ class DeportesDto {
     String? nombre,
     String? imagen,
     bool? selected,
+    int? players,
   }) {
     return DeportesDto(
       id: id ?? this.id,
       imagen: imagen ?? this.imagen,
       nombre: nombre ?? this.nombre,
       selected: selected ?? this.selected,
+      players: players ?? this.players,
     );
   }
 }
