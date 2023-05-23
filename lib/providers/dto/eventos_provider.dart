@@ -53,6 +53,10 @@ class EventosProvider extends ChangeNotifier {
     await _eventService.inscribe(idEvento, idUser);
   }
 
+  Future<void> uninscribe(String idEvento, String idUser) async {
+    await _eventService.uninscribe(idEvento, idUser);
+  }
+
   Future<void> saveEvent(EventRequest evento, UserRequest user) async {
     await _eventService.saveEvent(evento);
     await _logrosProviderImpl.getEventLogro(user);

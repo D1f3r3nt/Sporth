@@ -117,4 +117,17 @@ class EventRepository {
       throw Exception('Error with call');
     }
   }
+
+  Future<void> uninscribe(String idEvent, String idUser) async {
+    Uri url = Uri.https(URL_BASE, EVENT_UNINSCRIBE, {
+      'idEvent': idEvent,
+      'idUser': idUser,
+    });
+
+    http.Response response = await http.get(url);
+
+    if (response.statusCode != 200) {
+      throw Exception('Error with call');
+    }
+  }
 }
