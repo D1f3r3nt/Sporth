@@ -43,7 +43,12 @@ class EventosProvider extends ChangeNotifier {
   }
 
   void getEventsByUserParticipation(String idUser) async {
-    eventCalendar = await _eventService.getEventsByAnfitrion(idUser);
+    var list = await _eventService.getEventsByAnfitrion(idUser);
+    var list2 = await _eventService.getEventsByParticipante(idUser);
+    
+    eventCalendar = [];
+    eventCalendar.addAll(list);
+    eventCalendar.addAll(list2);
     notifyListeners();
   }
 
