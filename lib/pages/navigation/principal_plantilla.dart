@@ -11,6 +11,7 @@ class PrincipalPlantilla extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BottomNavProvider bottomNavProvider = Provider.of<BottomNavProvider>(context);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     final UserRequest user = userProvider.currentUser!;
 
@@ -36,8 +37,10 @@ class PrincipalPlantilla extends StatelessWidget {
         case 1:
           return const SearchPage();
 
-        case 3:
-          return const CalendarPage();
+        case 3: {
+          eventosProvider.getEventsByUserParticipation(user.idUser);
+          return const CalendarPage(); 
+        }
 
         case 4:
           return const UserPage();

@@ -82,6 +82,21 @@ class EventRepository {
     }
   }
 
+  Future<List<EventRequest>> getEventsByParticipante(String idUser) async {
+    Uri url = Uri.https(URL_BASE, EVENTS_BY_PARTICIPANTE, {
+      'idUser': idUser
+    });
+
+    http.Response response = await http.get(url);
+
+    if (response.statusCode != 200) {
+      throw Exception('Error with call');
+    } else {
+      List<dynamic> list = json.decode(response.body);
+      return list.map((event) => EventRequest.fromJson(event)).toList();
+    }
+  }
+
   Future<List<EventRequest>> getAllEvents() async {
     Uri url = Uri.https(URL_BASE, EVENT_ALL);
 

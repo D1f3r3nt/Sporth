@@ -81,7 +81,7 @@ class CardEvent extends StatelessWidget {
                         SizedBox(
                           width: size.width * 0.6,
                           child: Text(
-                            '${eventRequest.ubicacion} | ${eventRequest.diaFormatShow}',
+                            '${eventRequest.diaFormatShow} | ${eventRequest.ubicacion}',
                             style: TextUtils.kanit_16_grey,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,

@@ -96,6 +96,13 @@ const String EVENT_SAVE = 'event_save';
 const String EVENTS_BY_ANFITRION = 'events_by_anfitrion';
 
 /// PATH VARIABLE {
+///   idUser
+/// }
+/// 
+/// RETURN json
+const String EVENTS_BY_PARTICIPANTE = 'events_by_participante';
+
+/// PATH VARIABLE {
 ///   idChat
 /// }
 /// 

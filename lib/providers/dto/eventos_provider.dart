@@ -11,6 +11,7 @@ class EventosProvider extends ChangeNotifier {
   final PositionService _positionService = PositionService();
 
   EventRequest? eventoChat;
+  List<EventRequest> eventCalendar = [];
 
   Future<List<EventRequest>> getAllEvents(BuildContext context) async {
     UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
@@ -39,6 +40,16 @@ class EventosProvider extends ChangeNotifier {
 
   Future<List<EventRequest>> getEventsByUser(String idUser) async {
     return await _eventService.getEventsByAnfitrion(idUser);
+  }
+
+  void getEventsByUserParticipation(String idUser) async {
+    var list = await _eventService.getEventsByAnfitrion(idUser);
+    var list2 = await _eventService.getEventsByParticipante(idUser);
+    
+    eventCalendar = [];
+    eventCalendar.addAll(list);
+    eventCalendar.addAll(list2);
+    notifyListeners();
   }
 
   Future<List<EventRequest>> getFilteredEvents(SearchDto searchDto) async {
