@@ -29,6 +29,7 @@ dependencies:
   shared_preferences: 2.1.1
   firebase_analytics: ^10.4.0
   url_launcher: ^6.1.11
+  introduction_screen: ^3.1.8
   
 flutter_native_splash:
   android: true
@@ -53,6 +54,7 @@ flutter:
     - image/icons/
     - image/banners/
     - image/logros/
+    - image/tutorial/
     - data/
 
   fonts:

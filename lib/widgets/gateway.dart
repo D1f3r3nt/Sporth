@@ -14,22 +14,12 @@ class Gateway extends StatelessWidget {
   void home(BuildContext context) async {
     final UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    LocationPermission permission = await Geolocator.checkPermission();
-    
-    if (permission == LocationPermission.denied 
-        || permission == LocationPermission.deniedForever 
-        || !await Geolocator.isLocationServiceEnabled()) {
-      
-      Navigator.pushReplacementNamed(context, PERMISOS);
-      return;
-    }
-
     userProvider.currentUser = await userService.getUser(FirebaseAuth.instance.currentUser!.uid);
 
-    /*if (Preferences.isFirstTime) {
-      Navigator.pushReplacementNamed(context, 'tutorial');
+    if (Preferences.isFirstTime) {
+      Navigator.pushReplacementNamed(context, TUTORIAL);
       return;
-    }*/
+    }
     
     Navigator.pushReplacementNamed(context, HOME);
   }
