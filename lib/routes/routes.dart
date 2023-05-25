@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/pages/firsts_pages/username_page.dart';
 
 import 'package:sporth/pages/pages.dart';
 import 'package:sporth/utils/utils.dart';
@@ -21,4 +20,5 @@ Map<String, WidgetBuilder> getRoutes = {
   SETTINGS: (context) => const SettingsPage(),
   DETAILS: (context) => const DetailsPage(),
   PERMISOS: (context) => const PermisosPage(),
+  TUTORIAL: (context) => const TutorialPage(),
 };

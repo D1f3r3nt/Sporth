@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:sporth/preferences/preferences.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/routes/routes.dart';
 import 'package:sporth/utils/utils.dart';
@@ -17,8 +18,11 @@ void main() async {
 
   // Mobile Ads
   await MobileAds.instance.initialize();
+  
+  // Preferences
+  Preferences.init();
 
-  AdUtils.instance.configure(test: false);
+  AdUtils.instance.configure(test: true); // Cambiar a false en PRO
 
   runApp(const AppState());
 }

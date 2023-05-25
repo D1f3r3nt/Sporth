@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sporth/preferences/preferences.dart';
 
 import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
@@ -19,13 +20,14 @@ class _PermisosPageState extends State<PermisosPage> {
     final Size size = MediaQuery.of(context).size;
 
     notNow() {
+        Preferences.isFirstTime = false;
         Navigator.pushReplacementNamed(context, INITIAL);
     }
 
     agree() async {
-        bool check = await _positionProvider.checkAll(context);
-        if (!check) return;
-      
+        await _positionProvider.checkAll(context);
+
+        Preferences.isFirstTime = false;
         Navigator.pushReplacementNamed(context, INITIAL);
     }
 
