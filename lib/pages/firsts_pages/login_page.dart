@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                   textInputType: TextInputType.emailAddress,
                   placeholder: 'Email',
                   controller: _emailController,
-                  fillColor: ColorsUtils.lightblue,
+                  fillColor: ColorsUtils.white,
                   validator: (value) {
                     if (value == null || value.isEmpty) return 'Pon un valor';
                     if (!_emailRegex.hasMatch(value)) return 'Pon un email';
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                   password: true,
                   placeholder: 'Contraseña',
                   controller: _passwordController,
-                  fillColor: ColorsUtils.lightblue,
+                  fillColor: ColorsUtils.white,
                   validator: (value) {
                     if (value == null || value.isEmpty) return 'Pon un valor';
                     if (value.length < 6) return 'La contraseña ha ser mas grande que 6';
