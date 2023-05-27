@@ -24,6 +24,13 @@ class _DetailsPageState extends State<DetailsPage> {
         .isEmpty;
   }
 
+  bool anyAnfitrionisCurrent(ChatRequest chat, UserRequest currentUser) {
+    for (UserRequest user in chat.anfitriones) {
+      if (user.idUser == currentUser.idUser) return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -107,7 +114,7 @@ class _DetailsPageState extends State<DetailsPage> {
         chat = chat.copyWith(idChat: idChat);
         
       } else {
-        if (!chat.anfitriones.contains(currentUser.idUser)) {
+        if (!anyAnfitrionisCurrent(chat, currentUser)) {
           chat.anfitriones.add(currentUser);
           await chatProvider.updateChat(chat);
         }
