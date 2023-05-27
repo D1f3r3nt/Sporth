@@ -15,7 +15,7 @@ class GoogleAuth {
     final googleUser = await _googleSingIn.signIn(); // Muestra la pantalla de login con Google
 
     if (googleUser == null) {
-      return;
+      throw Exception();
     }
     _user = googleUser;
 

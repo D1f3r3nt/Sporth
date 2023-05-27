@@ -27,7 +27,7 @@ class ChatService {
     return await _chatService.anyChatUser(idUser, idOtherUser);
   }
 
-  Future<void> saveChat(ChatRequest newChat) async {
+  Future<String> saveChat(ChatRequest newChat) async {
     return await _chatService.saveChat(newChat);
   }
 

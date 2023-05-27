@@ -48,13 +48,15 @@ class ChatRepository {
     }
   }
 
-  Future<void> saveChat(ChatRequest chat) async {
+  Future<String> saveChat(ChatRequest chat) async {
     Uri url = Uri.https(URL_BASE, CHAT_SAVE);
 
     http.Response response = await http.post(url, body: chat.toRawJson());
 
     if (response.statusCode != 200) {
       throw Exception('Error with call');
+    } else {
+      return response.body;
     }
   }
 

@@ -17,7 +17,11 @@ class ButtonGoogleInput extends StatelessWidget {
     final GoogleAuth googleAuth = GoogleAuth();
 
     loginGoogle() async {
-      await googleAuth.login();
+      try {
+        await googleAuth.login();
+      } catch (e) {
+        Toast.error('Algo ha ido mal');
+      }
 
       User user = FirebaseAuth.instance.currentUser!;
 

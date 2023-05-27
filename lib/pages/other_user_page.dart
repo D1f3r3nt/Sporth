@@ -3,7 +3,6 @@ import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/repository/repository.dart';
 import 'package:sporth/service/service.dart';
-import 'package:sporth/utils/toast.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -64,7 +63,9 @@ class _OtherUserPageState extends State<OtherUserPage> {
 
       String chatId = await chatProvider.anyChatUser(currentUser.idUser, otherUser.idUser);
 
-      if (chatId.isEmpty) await chatProvider.saveChat(chat);
+      if (chatId.isEmpty) chatId = await chatProvider.saveChat(chat);
+      
+      chat = chat.copyWith(idChat: chatId);
 
       Navigator.pushReplacementNamed(context, CHAT_PERSONAL, arguments: chat);
     }
