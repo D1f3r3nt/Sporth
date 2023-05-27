@@ -28,20 +28,23 @@ class CardEvent extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: eventRequest.imagen.contains('http') ? NetworkImage(eventRequest.imagen) : AssetImage('image/banners/${eventRequest.imagen}') as ImageProvider,
-                  fit: BoxFit.cover,
+            Hero(
+              tag: eventRequest.id!,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: eventRequest.imagen.contains('http') ? NetworkImage(eventRequest.imagen) : AssetImage('image/banners/${eventRequest.imagen}') as ImageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(
+                    strokeAlign: BorderSide.strokeAlignCenter,
+                    width: 2.0,
+                    color: ColorsUtils.grey,
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(
-                  strokeAlign: BorderSide.strokeAlignCenter,
-                  width: 2.0,
-                  color: ColorsUtils.grey,
-                ),
+                height: 200,
               ),
-              height: 200,
             ),
             Container(
               height: 65,

@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:sporth/preferences/preferences.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/repository/user_repository.dart';
@@ -37,9 +36,7 @@ class Gateway extends StatelessWidget {
     return const Scaffold(
       backgroundColor: ColorsUtils.blue,
       body: Center(
-          child: CircularProgressIndicator.adaptive(
-        color: ColorsUtils.white,
-      )),
+          child: CircularProgressIndicator.adaptive()),
     );
   }
 }
