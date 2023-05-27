@@ -124,7 +124,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                     children: [
                       Expanded(
                         flex: 4,
-                        child: Slider(
+                        child: Slider.adaptive(
                           value: double.parse(searchProvider.search.maxPersonas.toString()),
                           activeColor: ColorsUtils.creme,
                           inactiveColor: ColorsUtils.grey,
@@ -153,7 +153,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                     children: [
                       Expanded(
                         flex: 3,
-                        child: Slider(
+                        child: Slider.adaptive(
                           value: double.parse(searchProvider.search.precio.toString()),
                           activeColor: ColorsUtils.creme,
                           inactiveColor: ColorsUtils.grey,
