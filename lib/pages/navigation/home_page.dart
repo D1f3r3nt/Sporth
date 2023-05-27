@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> {
                       child: ListView.builder(
                         padding:
                         const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
+                        physics: const BouncingScrollPhysics(),
                         itemCount: events.length,
                         itemBuilder: (context, index) {
                           if (index > 0 && index % 2 == 0) {
