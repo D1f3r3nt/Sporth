@@ -119,14 +119,17 @@ class _DetailsPageState extends State<DetailsPage> {
               Positioned(
                 width: size.width,
                 height: size.height * 0.3,
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: eventRequest.imagen.contains('http')
-                          ? NetworkImage(eventRequest.imagen)
-                          : AssetImage('image/banners/${eventRequest.imagen}')
-                              as ImageProvider,
-                      fit: BoxFit.cover,
+                child: Hero(
+                  tag: eventRequest.id!,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: eventRequest.imagen.contains('http')
+                            ? NetworkImage(eventRequest.imagen)
+                            : AssetImage('image/banners/${eventRequest.imagen}')
+                                as ImageProvider,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
