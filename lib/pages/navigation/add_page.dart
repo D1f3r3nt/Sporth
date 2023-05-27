@@ -452,7 +452,7 @@ class _AddPageState extends State<AddPage> {
                                       'Precio',
                                       style: TextUtils.kanit_18_black,
                                     ),
-                                    Switch(
+                                    Switch.adaptive(
                                       value: _precio,
                                       onChanged: (value) => setState(() {
                                         _precio = value;
@@ -487,7 +487,7 @@ class _AddPageState extends State<AddPage> {
                                       'Privado',
                                       style: TextUtils.kanit_18_black,
                                     ),
-                                    Switch(
+                                    Switch.adaptive(
                                       value: _privado,
                                       onChanged: (value) => setState(() {
                                         _privado = value;

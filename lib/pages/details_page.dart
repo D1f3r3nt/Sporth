@@ -303,7 +303,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               const SizedBox(width: 10.0),
                               IconButton(
                                 onPressed: tapShare,
-                                icon: const Icon(Icons.share),
+                                icon: Icon(Icons.adaptive.share),
                               ),
                             ],
                           ),

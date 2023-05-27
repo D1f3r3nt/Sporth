@@ -138,28 +138,3 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 }
-
-/*
-(eventos.isEmpty)
-                  ? Image.asset(
-                      'image/no_hay_eventos.png',
-                      height: size.height * 0.4,
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
-                      itemCount: eventos.length,
-                      itemBuilder: (context, index) {
-                        if (index > 0 && index % 2 == 0) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              BannerAdCard(width: size.width * 0.85),
-                              const SizedBox(height: 25),
-                              CardPublicacion(eventoDto: eventos[index]),
-                            ],
-                          );
-                        }
-                        return CardPublicacion(eventoDto: eventos[index]);
-                      },
-                    ),
-*/
