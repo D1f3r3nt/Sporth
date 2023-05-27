@@ -27,7 +27,13 @@ class UserTile extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(userRequest.urlImagen),
+            child: ClipOval(
+              child: FadeInImage.assetNetwork(
+                placeholder: 'image/user.png',
+                image: userRequest.urlImagen,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
           const SizedBox(width: 10),
           Text(

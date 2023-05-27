@@ -124,8 +124,14 @@ class _OtherUserPageState extends State<OtherUserPage> {
                     ],
                   ),
                   CircleAvatar(
-                    backgroundImage: NetworkImage(otherUser.urlImagen),
                     radius: 50.0,
+                    child: ClipOval(
+                      child: FadeInImage.assetNetwork(
+                        placeholder: 'image/user.png',
+                        image: otherUser.urlImagen,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                   Column(
                     children: [
