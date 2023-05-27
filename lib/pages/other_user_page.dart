@@ -3,6 +3,7 @@ import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/repository/repository.dart';
 import 'package:sporth/service/service.dart';
+import 'package:sporth/utils/toast.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -49,8 +50,7 @@ class _OtherUserPageState extends State<OtherUserPage> {
         await userService.updateSeguidor(currentUser, otherUser.idUser);
         await userProvider.update();
       } catch (error) {
-        // TODO toast
-        print(error);
+        Toast.error('Error al seguir');
       }
       setState(() {
         waiting = false;
@@ -77,8 +77,7 @@ class _OtherUserPageState extends State<OtherUserPage> {
         await userService.updateDejar(currentUser, otherUser.idUser);
         await userProvider.update();
       } catch (error) {
-        // TODO toast
-        print(error);
+        Toast.error('Error al dejar de seguir');
       }
       setState(() {
         waiting = false;
