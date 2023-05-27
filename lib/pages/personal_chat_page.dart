@@ -59,12 +59,21 @@ class PersonalChatPage extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 20.0, top: 5.0),
                     child: CircleAvatar(
                       backgroundImage: eventosProvider.eventoChat == null
-                          ? NetworkImage(otherUser.urlImagen)
+                          ? null
                           : eventosProvider.eventoChat!.imagen.contains('http')
                               ? NetworkImage(eventosProvider.eventoChat!.imagen)
                               : AssetImage('image/banners/${eventosProvider.eventoChat!.imagen}')
                                   as ImageProvider,
                       radius: 20.0,
+                      child: eventosProvider.eventoChat == null 
+                            ? ClipOval(
+                              child: FadeInImage.assetNetwork(
+                                placeholder: 'image/user.png',
+                                image: otherUser.urlImagen,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : null,
                     ),
                   )
                 ],

@@ -48,8 +48,14 @@ class UserPage extends StatelessWidget {
                   ],
                 ),
                 CircleAvatar(
-                  backgroundImage: NetworkImage(user.urlImagen),
                   radius: 50.0,
+                  child: ClipOval(
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'image/user.png',
+                      image: user.urlImagen,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 Column(
                   children: [
