@@ -42,7 +42,7 @@ const String CHAT_BY_EVENT = 'chat_by_event';
 ///   chat
 /// }
 /// 
-/// RETURN void
+/// RETURN String
 const String CHAT_SAVE = 'chat_save';
 
 /// PATH VARIABLE {

@@ -14,11 +14,21 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  bool waiting = false;
+  bool waitingChat = false;
+  
   bool _containsUser(List<UserRequest> participantes, UserRequest user) {
     return participantes
         .where((element) => element.idUser == user.idUser)
         .toList()
         .isEmpty;
+  }
+
+  bool anyAnfitrionisCurrent(ChatRequest chat, UserRequest currentUser) {
+    for (UserRequest user in chat.anfitriones) {
+      if (user.idUser == currentUser.idUser) return true;
+    }
+    return false;
   }
 
   @override
@@ -37,7 +47,13 @@ class _DetailsPageState extends State<DetailsPage> {
       if (userProvider.currentUser!.idUser == eventRequest.anfitrion.idUser) {
         Snackbar.errorSnackbar(context, 'Este es tu evento');
       } else {
+        setState(() {
+          waiting = true;
+        });
         if (eventRequest.maximo <= eventRequest.participantes.length + 1) {
+          setState(() {
+            waiting = false;
+          });
           Snackbar.errorSnackbar(context, 'El evento esta lleno');
           return;
         }
@@ -46,6 +62,9 @@ class _DetailsPageState extends State<DetailsPage> {
           bool? result = await PopupUtils.dialogTextInput(context, eventRequest.privado!);
           
           if (result == null || !result) {
+            setState(() {
+              waiting = false;
+            });
             Snackbar.errorSnackbar(context, 'Contraseña incorrecta');
             return;
           }
@@ -56,20 +75,32 @@ class _DetailsPageState extends State<DetailsPage> {
         analyticsUtils.registerEvent('Inscribe_to_event', {
           "deporte": deporte.nombre
         });
+        setState(() {
+          waiting = false;
+        });
         Navigator.pop(context);
       }
     }
 
     salir() async {
+        setState(() {
+          waiting = true;
+        });
         await eventosProvider.uninscribe(eventRequest.id!, userProvider.currentUser!.idUser);
         DeportesAsset deporte = await deportesProvider.getDeporteById(eventRequest.deporte);
         analyticsUtils.registerEvent('Uninscribe_to_event', {
           "deporte": deporte.nombre
         });
+        setState(() {
+          waiting = false;
+        });
         Navigator.pop(context);
     }
 
     message() async {
+      setState(() {
+        waitingChat = true;
+      });
       ChatRequest? chat = await chatProvider.getChatByEvent(eventRequest.id!);
 
       if (chat == null) {
@@ -78,15 +109,20 @@ class _DetailsPageState extends State<DetailsPage> {
           idEvent: eventRequest.id!,
         );
 
-        await chatProvider.saveChat(chat);
+        String idChat = await chatProvider.saveChat(chat);
+        
+        chat = chat.copyWith(idChat: idChat);
         
       } else {
-        if (!chat.anfitriones.contains(currentUser.idUser)) {
+        if (!anyAnfitrionisCurrent(chat, currentUser)) {
           chat.anfitriones.add(currentUser);
           await chatProvider.updateChat(chat);
         }
       }
 
+      setState(() {
+        waitingChat = false;
+      });
       eventosProvider.eventoChat = eventRequest;
       Navigator.pushReplacementNamed(context, CHAT_PERSONAL, arguments: chat);
     }
@@ -284,14 +320,18 @@ class _DetailsPageState extends State<DetailsPage> {
                           child: Row(
                             children: [
                               if (!_containsUser(eventRequest.participantes, userProvider.currentUser!))
-                                IconButton(
-                                  onPressed: message,
-                                  icon: const Icon(Icons.chat),
-                                ),
+                                waitingChat 
+                                    ? const Center(child: CircularProgressIndicator(color: ColorsUtils.black))
+                                    :IconButton(
+                                      onPressed: message,
+                                      icon: const Icon(Icons.chat),
+                                    ),
                               if (!_containsUser(eventRequest.participantes, userProvider.currentUser!))
                                 const SizedBox(width: 10.0),
                               Expanded(
-                                child: ButtonInput(
+                                child: waiting 
+                                  ? const Center(child: CircularProgressIndicator())
+                                  : ButtonInput(
                                   text: _containsUser(eventRequest.participantes,
                                           userProvider.currentUser!)
                                       ? 'Inscribirse'
