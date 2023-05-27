@@ -113,7 +113,7 @@ class UserPage extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator.adaptive());
                   } else if (snapshot.hasError) {
-                    return ErrorWidget(snapshot.error as Exception);
+                    return Center(child: Image.asset('image/error_server.png',fit: BoxFit.contain,width: size.width * 0.6,));
                   } else {
                     List<EventRequest> events = snapshot.data!;
                     return events.isEmpty

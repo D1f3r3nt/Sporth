@@ -15,6 +15,7 @@ class ChatsPage extends StatefulWidget {
 class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     final ChatService chatProvider = ChatService();
     final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
@@ -71,7 +72,7 @@ class _ChatsPageState extends State<ChatsPage> {
                               if (snapshot.connectionState == ConnectionState.waiting) {
                                 return const Center(child: CircularProgressIndicator.adaptive());
                               } else if (snapshot.hasError) {
-                                return ErrorWidget(snapshot.error as Exception);
+                                return Center(child: Image.asset('image/error_server.png',fit: BoxFit.contain,width: size.width * 0.6,));
                               } else {
                                 List<ChatRequest> chats = snapshot.data!;
                                 
