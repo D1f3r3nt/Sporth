@@ -98,12 +98,18 @@ class _SettingsPageState extends State<SettingsPage> {
       }
 
       if (_imageFile != null) {
-        String newUrl = await imageRepository.uploadFile(_imageFile!);
-        if (updateUser.imagen.isNotEmpty && updateUser.imagen.contains(NAME_PROYECT_FIREBASE)) {
-          await imageRepository.deleteImage(updateUser.imagen);
+        try {
+          String newUrl = await imageRepository.uploadFile(_imageFile!);
+          if (updateUser.imagen.isNotEmpty &&
+              updateUser.imagen.contains(NAME_PROYECT_FIREBASE)) {
+            await imageRepository.deleteImage(updateUser.imagen);
+          }
+          updateUser = updateUser.copyWith(imagen: newUrl);
+          await userService.updateUser(updateUser);
+        } catch (e) {
+          Toast.error(e.toString().replaceFirst('Exception: ', ''));
+          return;
         }
-        updateUser = updateUser.copyWith(imagen: newUrl);
-        await userService.updateUser(updateUser);
       }
 
       userProvider.currentUser = updateUser;

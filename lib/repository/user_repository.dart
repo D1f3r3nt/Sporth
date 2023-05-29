@@ -99,7 +99,7 @@ class UserRepository {
 
   Future<void> updateLogro(UserRequest user, int idLogro) async {
     Uri url = Uri.https(URL_BASE, USER_LOGRO, {
-      'idLogro': idLogro,
+      'idLogro': idLogro.toString(),
     });
 
     http.Response response = await http.post(url, body: user.toRawJson());
