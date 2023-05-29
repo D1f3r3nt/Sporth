@@ -98,42 +98,47 @@ class _AddPageState extends State<AddPage> {
         if (list.isEmpty) {
           Snackbar.errorSnackbar(context, 'Ponga un deporte');
         } else {
-          String imagen = "";
-          if (_imageFile != null) {
-            imagen = await _imageRepository.uploadFile(_imageFile!);
-          } else {
-            imagen = list.first.imagen;
+          try {
+            String imagen = "";
+            if (_imageFile != null) {
+              imagen = await _imageRepository.uploadFile(_imageFile!);
+            } else {
+              imagen = list.first.imagen;
+            }
+
+            final now = DateTime.now();
+
+            EventRequest evento = EventRequest(
+              name: _nombreController.text,
+              hora: DateTime(now.year, now.month, now.day, _time.hour, _time.minute),
+              dia: _date,
+              ubicacion: _ubicacionesController.text,
+              precio: double.parse(_precioController.text),
+              maximo: int.parse(_maxPersonasController.text),
+              deporte: list.first.id,
+              imagen: imagen,
+              descripcion: _descripcionController.text,
+              anfitrion: UserRequest.only(idUser: currentUser.idUser, nacimiento: DateTime.now()),
+              participantes: [],
+              geo: _geo!,
+              privado: _privadoController.text.isEmpty
+                  ? null
+                  : _privadoController.text,
+            );
+
+            await eventosProvider.saveEvent(evento, currentUser);
+
+            analyticsUtils.registerEvent('Event_create', {
+              "deporte": list.first.nombre,
+              "privado": _privadoController.text,
+              "precio": _precioController.text,
+            });
+
+            Navigator.pushReplacementNamed(context, HOME);
+          } catch (e) {
+            Toast.error(e.toString().replaceFirst('Exception: ', ''));
+            return;
           }
-
-          final now = DateTime.now();
-
-           EventRequest evento = EventRequest(
-            name: _nombreController.text,
-            hora: DateTime(now.year, now.month, now.day, _time.hour, _time.minute),
-            dia: _date,
-            ubicacion: _ubicacionesController.text,
-            precio: double.parse(_precioController.text),
-            maximo: int.parse(_maxPersonasController.text),
-            deporte: list.first.id,
-            imagen: imagen,
-            descripcion: _descripcionController.text,
-            anfitrion: UserRequest.only(idUser: currentUser.idUser, nacimiento: DateTime.now()),
-            participantes: [],
-            geo: _geo!,
-            privado: _privadoController.text.isEmpty
-                ? null
-                : _privadoController.text,
-          );
-
-          await eventosProvider.saveEvent(evento, currentUser);
-          
-          analyticsUtils.registerEvent('Event_create', {
-            "deporte": list.first.nombre,
-            "privado": _privadoController.text,
-            "precio": _precioController.text,
-          });
-          
-          Navigator.pushReplacementNamed(context, HOME);
         }
       }
     }
@@ -289,7 +294,7 @@ class _AddPageState extends State<AddPage> {
                                   placeholder: 'Nombre',
                                   controller: _nombreController,
                                   validator: (value) {
-                                    if (value == null || value.isEmpty)
+                                    if (value == null || value.trim().isEmpty)
                                       return 'Ponga un valor';
                                     return null;
                                   },

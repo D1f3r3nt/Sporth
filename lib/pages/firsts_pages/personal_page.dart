@@ -55,13 +55,21 @@ class _PersonalPageState extends State<PersonalPage> {
 
     continuar() async {
       if (_formKey.currentState!.validate()) {
-        String imagen = '';
+        try {
+          String imagen = '';
 
-        if (_imageFile != null) imagen = await _imageRepository.uploadFile(_imageFile!);
+          if (_imageFile != null)
+            imagen = await _imageRepository.uploadFile(_imageFile!);
 
-        singUPProvider.addPersonal(_nombreController.text.trim(), _apellidosController.text.trim(), imagen, _time, _telefonoController.text.trim());
+          singUPProvider.addPersonal(
+              _nombreController.text.trim(), _apellidosController.text.trim(),
+              imagen, _time, _telefonoController.text.trim());
 
-        Navigator.pushReplacementNamed(context, GUSTOS);
+          Navigator.pushReplacementNamed(context, GUSTOS);
+        } catch (e) {
+          Toast.error(e.toString().replaceFirst('Exception: ', ''));
+          return;
+        }
       }
     }
 
