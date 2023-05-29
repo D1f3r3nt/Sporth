@@ -38,6 +38,8 @@ class _AddPageState extends State<AddPage> {
   GeograficoDto? _miGeo;
   bool _precio = false;
   bool _privado = false;
+  bool _waitingSubida = false;
+  bool _waitingLocation = false;
 
   Future<void> _pickImageFromGallery() async {
     final pickedfile = await _pickerImage.pickImage(source: ImageSource.gallery);
@@ -80,17 +82,26 @@ class _AddPageState extends State<AddPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
-    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
-    final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
+    final Size size = MediaQuery
+        .of(context)
+        .size;
+    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(
+        context);
+    final UserRequest currentUser = Provider
+        .of<UserProvider>(context)
+        .currentUser!;
+    final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<
+        GoogleAutocompleteProvider>(context);
     final PositionService positionProvider = PositionService();
     final List<DeportesDto> listDeportes = deportesProvider.deportesAdd;
-    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(
+        context);
     final AnalyticsUtils analyticsUtils = AnalyticsUtils();
 
     _dateController.text = DateFormat('dd/MM/yyyy').format(_date);
-    _timeController.text = '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
+    _timeController.text =
+    '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(
+        2, '0')}';
 
     subirEvento() async {
       if (_formKey.currentState!.validate()) {
@@ -98,6 +109,9 @@ class _AddPageState extends State<AddPage> {
         if (list.isEmpty) {
           Snackbar.errorSnackbar(context, 'Ponga un deporte');
         } else {
+          setState(() {
+            _waitingSubida = true;
+          });
           try {
             String imagen = "";
             if (_imageFile != null) {
@@ -110,7 +124,8 @@ class _AddPageState extends State<AddPage> {
 
             EventRequest evento = EventRequest(
               name: _nombreController.text,
-              hora: DateTime(now.year, now.month, now.day, _time.hour, _time.minute),
+              hora: DateTime(
+                  now.year, now.month, now.day, _time.hour, _time.minute),
               dia: _date,
               ubicacion: _ubicacionesController.text,
               precio: double.parse(_precioController.text),
@@ -118,7 +133,8 @@ class _AddPageState extends State<AddPage> {
               deporte: list.first.id,
               imagen: imagen,
               descripcion: _descripcionController.text,
-              anfitrion: UserRequest.only(idUser: currentUser.idUser, nacimiento: DateTime.now()),
+              anfitrion: UserRequest.only(
+                  idUser: currentUser.idUser, nacimiento: DateTime.now()),
               participantes: [],
               geo: _geo!,
               privado: _privadoController.text.isEmpty
@@ -137,12 +153,18 @@ class _AddPageState extends State<AddPage> {
             Navigator.pushReplacementNamed(context, HOME);
           } catch (e) {
             Toast.error(e.toString().replaceFirst('Exception: ', ''));
+            setState(() {
+              _waitingSubida = false;
+            });
             return;
           }
         }
+        setState(() {
+          _waitingSubida = false;
+        });
       }
     }
-    
+
     scrollTo(double position) {
       _scrollController.animateTo(
         position,
@@ -150,13 +172,14 @@ class _AddPageState extends State<AddPage> {
         curve: Curves.easeOut,
       );
     }
-    
+
 
     atras() {
       Navigator.pushReplacementNamed(context, HOME);
     }
 
-    addImage() => showModalBottomSheet(
+    addImage() =>
+        showModalBottomSheet(
           context: context,
           useSafeArea: true,
           isScrollControlled: true,
@@ -179,11 +202,11 @@ class _AddPageState extends State<AddPage> {
     tapDescription() {
       scrollTo(550);
     }
-    
+
     tapPrecio() {
       scrollTo(650);
     }
-    
+
     tapPassword() {
       scrollTo(800);
     }
@@ -200,10 +223,22 @@ class _AddPageState extends State<AddPage> {
     }
 
     miUbicacion() async {
+      setState(() {
+        _waitingLocation = true;
+      });
+      
       _geo = _miGeo ?? await positionProvider.getPosition(context);
-      if (_geo == null) return;
-      _ubicacionesController.text =
-          await _googleDetailsProvider.getNameByGeolocation(_geo!);
+      if (_geo == null) {
+        setState(() {
+          _waitingLocation = false;
+        });
+        return;
+      }
+      
+      _ubicacionesController.text = await _googleDetailsProvider.getNameByGeolocation(_geo!);
+      setState(() {
+        _waitingLocation = false;
+      });
     }
 
     String subtitle(List<Term> terms) {
@@ -396,7 +431,9 @@ class _AddPageState extends State<AddPage> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8.0, horizontal: 20.0),
-                                  child: ButtonInput(
+                                  child: _waitingLocation 
+                                      ? const Center(child: CircularProgressIndicator(color: ColorsUtils.lightblue,))
+                                      : ButtonInput(
                                     text: 'Mi ubicacion',
                                     color: ColorsUtils.lightblue,
                                     style: TextUtils.kanit_18_whtie,
@@ -524,7 +561,9 @@ class _AddPageState extends State<AddPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 30.0, bottom: 70.0),
-                          child: ButtonInput(
+                          child: _waitingSubida
+                          ? const Center(child: CircularProgressIndicator(color: ColorsUtils.black,))
+                          : ButtonInput(
                             text: 'SUBIR',
                             funcion: subirEvento,
                           ),
