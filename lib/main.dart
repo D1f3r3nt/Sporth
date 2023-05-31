@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -6,6 +7,11 @@ import 'package:sporth/preferences/preferences.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/routes/routes.dart';
 import 'package:sporth/utils/utils.dart';
+// Background Handler
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,11 +24,15 @@ void main() async {
 
   // Mobile Ads
   await MobileAds.instance.initialize();
+  AdUtils.instance.configure(test: true); // Cambiar a false en PRO
   
   // Preferences
   Preferences.init();
-
-  AdUtils.instance.configure(test: true); // Cambiar a false en PRO
+  
+  // Cloud Messaging
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  print(await FirebaseMessaging.instance.getToken());
 
   runApp(const AppState());
 }
