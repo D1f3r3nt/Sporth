@@ -15,6 +15,7 @@ const String SETTINGS = 'settings';
 const String DETAILS = 'details';
 const String PERMISOS = 'permisos';
 const String TUTORIAL = 'tutorial';
+const String MAP = 'map';
 
 // Call variable
 

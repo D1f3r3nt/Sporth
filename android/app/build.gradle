@@ -54,7 +54,7 @@ android {
     defaultConfig {
         applicationId "com.diferent.sporth"
         
-        minSdkVersion 19
+        minSdkVersion 20
         multiDexEnabled true
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
