@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/repository/chat_repository.dart';
 import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
@@ -139,6 +138,10 @@ class _DetailsPageState extends State<DetailsPage> {
       });
     }
 
+    tapLocation() {
+      Navigator.pushNamed(context, MAP, arguments: eventRequest.geo);
+    }
+
     atras() => Navigator.pop(context);
 
     return Scaffold(
@@ -217,19 +220,22 @@ class _DetailsPageState extends State<DetailsPage> {
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                const Icon(Icons.location_on_outlined),
-                                SizedBox(
-                                  width: size.width * 0.45,
-                                  child: Text(
-                                    eventRequest.ubicacion,
-                                    style: TextUtils.kanit_18_black,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
+                            GestureDetector(
+                              onTap: tapLocation,
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.location_on_outlined),
+                                  SizedBox(
+                                    width: size.width * 0.45,
+                                    child: Text(
+                                      eventRequest.ubicacion,
+                                      style: TextUtils.kanit_18_black,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),

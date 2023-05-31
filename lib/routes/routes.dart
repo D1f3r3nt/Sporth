@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sporth/pages/map_page.dart';
 
 import 'package:sporth/pages/pages.dart';
 import 'package:sporth/utils/utils.dart';
@@ -21,4 +22,5 @@ Map<String, WidgetBuilder> getRoutes = {
   DETAILS: (context) => const DetailsPage(),
   PERMISOS: (context) => const PermisosPage(),
   TUTORIAL: (context) => const TutorialPage(),
+  MAP: (context) => const MapPage(),
 };
