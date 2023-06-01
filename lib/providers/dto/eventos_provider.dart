@@ -3,7 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/service/service.dart';
-import 'package:sporth/repository/event_repository.dart';
+import 'package:sporth/repository/repository.dart';
 
 class EventosProvider extends ChangeNotifier {
   final EventRepository _eventService = EventRepository();

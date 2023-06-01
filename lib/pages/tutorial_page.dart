@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:sporth/utils/color_utils.dart';
-import 'package:sporth/utils/strings.dart';
-import 'package:sporth/utils/text_utils.dart';
+import 'package:sporth/utils/utils.dart';
 
 class TutorialPage extends StatelessWidget {
   const TutorialPage({Key? key}) : super(key: key);

@@ -13,6 +13,7 @@ export './navigation/search_page.dart';
 export './navigation/user_page.dart'; 
 export 'chats_page.dart'; 
 export 'details_page.dart'; 
+export 'map_page.dart'; 
 export 'other_user_page.dart'; 
 export 'permisos_page.dart'; 
 export 'personal_chat_page.dart'; 

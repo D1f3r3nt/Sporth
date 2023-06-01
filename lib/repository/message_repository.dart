@@ -1,5 +1,5 @@
 import 'package:sporth/models/models.dart';
-import 'package:sporth/utils/strings.dart';
+import 'package:sporth/utils/utils.dart';
 
 import 'package:http/http.dart' as http;
 

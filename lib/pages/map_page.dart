@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:sporth/models/dto/geografico_dto.dart';
-import 'package:sporth/utils/color_utils.dart';
+import 'package:sporth/models/models.dart';
+import 'package:sporth/utils/utils.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});

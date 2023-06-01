@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sporth/models/models.dart';
-import 'package:sporth/service/ui/logros_service.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/repository/repository.dart';
 
 class ChatService {

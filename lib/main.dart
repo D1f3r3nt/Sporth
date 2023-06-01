@@ -7,6 +7,7 @@ import 'package:sporth/preferences/preferences.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/routes/routes.dart';
 import 'package:sporth/utils/utils.dart';
+
 // Background Handler
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {

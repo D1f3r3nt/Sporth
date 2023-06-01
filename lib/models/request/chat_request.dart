@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:sporth/models/request/user_request.dart';
+import 'package:sporth/models/models.dart';
 
 ChatRequest chatRequestFromJson(String str) => ChatRequest.fromJson(json.decode(str));
 

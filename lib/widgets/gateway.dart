@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sporth/preferences/preferences.dart';
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/repository/user_repository.dart';
+import 'package:sporth/repository/repository.dart';
 
 import 'package:sporth/utils/utils.dart';
 

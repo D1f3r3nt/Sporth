@@ -4,7 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:sporth/models/models.dart';
-import 'package:sporth/utils/strings.dart';
+import 'package:sporth/utils/utils.dart';
 
 class EventRepository {
   Future<List<EventRequest>> getFilterEvents(SearchDto searchDto) async {

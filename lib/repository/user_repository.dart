@@ -1,7 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:sporth/models/models.dart';
-
-import '../utils/utils.dart';
+import 'package:sporth/utils/utils.dart';
 
 class UserRepository {
 

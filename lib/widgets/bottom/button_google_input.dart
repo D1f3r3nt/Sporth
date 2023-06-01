@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/repository/user_repository.dart';
+import 'package:sporth/repository/repository.dart';
 import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 

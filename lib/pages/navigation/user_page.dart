@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
 import 'package:sporth/utils/utils.dart';
-import 'package:sporth/widgets/cards/banner_ad_card.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class UserPage extends StatelessWidget {

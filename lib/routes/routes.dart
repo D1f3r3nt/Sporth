@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/pages/map_page.dart';
 
 import 'package:sporth/pages/pages.dart';
 import 'package:sporth/utils/utils.dart';

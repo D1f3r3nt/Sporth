@@ -6,6 +6,7 @@ export './bottom/button_input.dart';
 export './bottom/select_image_bottom.dart'; 
 export './buttons/form_input.dart'; 
 export './buttons/gustos_buttons.dart'; 
+export './buttons/link_input.dart'; 
 export './buttons/pop_button.dart'; 
 export './buttons/search_deporte.dart'; 
 export './buttons/text_input.dart'; 

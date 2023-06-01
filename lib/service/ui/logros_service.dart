@@ -1,6 +1,5 @@
 import 'package:sporth/models/models.dart';
-import 'package:sporth/repository/event_repository.dart';
-import 'package:sporth/repository/user_repository.dart';
+import 'package:sporth/repository/repository.dart';
 
 class LogrosService {
   UserRepository _userService = UserRepository();

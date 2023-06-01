@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sporth/models/asset/logros_asset.dart';
+import 'package:sporth/models/models.dart';
 import 'package:sporth/utils/utils.dart';
 
 class CardAchievement extends StatelessWidget {
