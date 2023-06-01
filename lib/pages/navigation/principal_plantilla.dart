@@ -13,11 +13,9 @@ class PrincipalPlantilla extends StatelessWidget {
     final BottomNavProvider bottomNavProvider = Provider.of<BottomNavProvider>(context);
     final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final UserDto user = userProvider.currentUser!;
-    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
+    final UserRequest user = userProvider.currentUser!;
 
     chats() {
-      chatProvider.refresh();
       Navigator.pushReplacementNamed(context, CHATS);
     }
 
@@ -39,8 +37,10 @@ class PrincipalPlantilla extends StatelessWidget {
         case 1:
           return const SearchPage();
 
-        case 3:
-          return const CalendarPage();
+        case 3: {
+          eventosProvider.getEventsByUserParticipation(user.idUser);
+          return const CalendarPage(); 
+        }
 
         case 4:
           return const UserPage();

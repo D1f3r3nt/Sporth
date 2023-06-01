@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -12,72 +13,133 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  bool _containsUser(List<UserDto> participantes, UserDto user) {
+  bool waiting = false;
+  bool waitingChat = false;
+  
+  bool _containsUser(List<UserRequest> participantes, UserRequest user) {
     return participantes
         .where((element) => element.idUser == user.idUser)
         .toList()
         .isEmpty;
   }
 
+  bool anyAnfitrionisCurrent(ChatRequest chat, UserRequest currentUser) {
+    for (UserRequest user in chat.anfitriones) {
+      if (user.idUser == currentUser.idUser) return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final EventoDto eventoDto =
-        ModalRoute.of(context)!.settings.arguments as EventoDto;
+    final EventRequest eventRequest = ModalRoute.of(context)!.settings.arguments as EventRequest;
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final EventosProvider eventosProvider =
-        Provider.of<EventosProvider>(context);
-    final ShareProvider shareProvider = ShareProvider();
-    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
-    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
+    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
+    final ShareService shareProvider = ShareService();
+    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final ChatService chatProvider = ChatService();
+    final AnalyticsUtils analyticsUtils = AnalyticsUtils();
 
     inscribirse() async {
-      if (userProvider.currentUser!.idUser == eventoDto.anfitrion.idUser) {
+      if (userProvider.currentUser!.idUser == eventRequest.anfitrion.idUser) {
         Snackbar.errorSnackbar(context, 'Este es tu evento');
       } else {
-        await eventosProvider.inscribe(
-            eventoDto.id, userProvider.currentUser!.idUser);
-        eventosProvider.refresh();
+        setState(() {
+          waiting = true;
+        });
+        if (eventRequest.maximo <= eventRequest.participantes.length + 1) {
+          setState(() {
+            waiting = false;
+          });
+          Snackbar.errorSnackbar(context, 'El evento esta lleno');
+          return;
+        }
+        
+        if (eventRequest.privado != null) {
+          bool? result = await PopupUtils.dialogTextInput(context, eventRequest.privado!);
+          
+          if (result == null || !result) {
+            setState(() {
+              waiting = false;
+            });
+            Snackbar.errorSnackbar(context, 'Contraseña incorrecta');
+            return;
+          }
+        } 
+        
+        await eventosProvider.inscribe(eventRequest.id!, userProvider.currentUser!.idUser);
+        DeportesAsset deporte = await deportesProvider.getDeporteById(eventRequest.deporte);
+        analyticsUtils.registerEvent('Inscribe_to_event', {
+          "deporte": deporte.nombre
+        });
+        setState(() {
+          waiting = false;
+        });
         Navigator.pop(context);
       }
     }
 
+    salir() async {
+        setState(() {
+          waiting = true;
+        });
+        await eventosProvider.uninscribe(eventRequest.id!, userProvider.currentUser!.idUser);
+        DeportesAsset deporte = await deportesProvider.getDeporteById(eventRequest.deporte);
+        analyticsUtils.registerEvent('Uninscribe_to_event', {
+          "deporte": deporte.nombre
+        });
+        setState(() {
+          waiting = false;
+        });
+        Navigator.pop(context);
+    }
+
     message() async {
-      ChatApi? chat = await chatProvider.getChatByEvent(eventoDto.id);
-      ChatDto chatDto;
+      setState(() {
+        waitingChat = true;
+      });
+      ChatRequest? chat = await chatProvider.getChatByEvent(eventRequest.id!);
 
       if (chat == null) {
-        ChatApi newChat = ChatApi(
-          anfitriones: [currentUser.idUser, eventoDto.anfitrion.idUser],
-          idEvent: eventoDto.id,
+        chat = ChatRequest(
+          anfitriones: [currentUser, eventRequest.anfitrion],
+          idEvent: eventRequest.id!,
         );
 
-        String chatId = await chatProvider.saveChat(newChat);
-
-        chatDto = await ChatMapper.INSTANCE
-            .chatApiToChatDto(newChat.copyWith(idChat: chatId));
+        String idChat = await chatProvider.saveChat(chat);
+        
+        chat = chat.copyWith(idChat: idChat);
+        
       } else {
-        if (chat.anfitriones.contains(currentUser.idUser)) {
-          chatDto = await ChatMapper.INSTANCE.chatApiToChatDto(chat);
-        } else {
-          chat.anfitriones.add(currentUser.idUser);
+        if (!anyAnfitrionisCurrent(chat, currentUser)) {
+          chat.anfitriones.add(currentUser);
           await chatProvider.updateChat(chat);
-
-          chatDto = await ChatMapper.INSTANCE.chatApiToChatDto(chat);
         }
       }
 
-      eventosProvider.eventoChat = eventoDto;
-      Navigator.pushReplacementNamed(context, CHAT_PERSONAL,
-          arguments: chatDto);
+      setState(() {
+        waitingChat = false;
+      });
+      eventosProvider.eventoChat = eventRequest;
+      Navigator.pushReplacementNamed(context, CHAT_PERSONAL, arguments: chat);
     }
 
     showPeople() {
-      PopupUtils.dialogScrollUsers(context, eventoDto.participantes);
+      PopupUtils.dialogScrollUsers(context, eventRequest.participantes);
     }
 
-    tapShare() {
-      shareProvider.shareEvent(eventoDto.imagen, eventoDto.name);
+    tapShare() async {
+      shareProvider.shareEvent(eventRequest.imagen, eventRequest.name);
+      DeportesAsset deporte = await deportesProvider.getDeporteById(eventRequest.deporte);
+      analyticsUtils.registerEvent('Share_event', {
+        "deporte": deporte.nombre
+      });
+    }
+
+    tapLocation() {
+      Navigator.pushNamed(context, MAP, arguments: eventRequest.geo);
     }
 
     atras() => Navigator.pop(context);
@@ -96,14 +158,17 @@ class _DetailsPageState extends State<DetailsPage> {
               Positioned(
                 width: size.width,
                 height: size.height * 0.3,
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: eventoDto.imagen.contains('http')
-                          ? NetworkImage(eventoDto.imagen)
-                          : AssetImage('image/banners/${eventoDto.imagen}')
-                              as ImageProvider,
-                      fit: BoxFit.cover,
+                child: Hero(
+                  tag: eventRequest.id!,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: eventRequest.imagen.contains('http')
+                            ? NetworkImage(eventRequest.imagen)
+                            : AssetImage('image/banners/${eventRequest.imagen}')
+                                as ImageProvider,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -133,10 +198,10 @@ class _DetailsPageState extends State<DetailsPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        UserTile(userDto: eventoDto.anfitrion),
+                        UserTile(userRequest: eventRequest.anfitrion),
                         const SizedBox(height: 5.0),
                         Text(
-                          eventoDto.name,
+                          eventRequest.name,
                           style: TextUtils.kanitItalic_24_black,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
@@ -150,24 +215,27 @@ class _DetailsPageState extends State<DetailsPage> {
                                 const Icon(Icons.access_time),
                                 const SizedBox(width: 10),
                                 Text(
-                                  eventoDto.timeFormat,
+                                  eventRequest.timeFormat,
                                   style: TextUtils.kanit_18_black,
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                const Icon(Icons.location_on_outlined),
-                                SizedBox(
-                                  width: size.width * 0.45,
-                                  child: Text(
-                                    eventoDto.ubicacion,
-                                    style: TextUtils.kanit_18_black,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
+                            GestureDetector(
+                              onTap: tapLocation,
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.location_on_outlined),
+                                  SizedBox(
+                                    width: size.width * 0.45,
+                                    child: Text(
+                                      eventRequest.ubicacion,
+                                      style: TextUtils.kanit_18_black,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -179,11 +247,11 @@ class _DetailsPageState extends State<DetailsPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  eventoDto.dia.day.toString(),
+                                  eventRequest.dia.day.toString(),
                                   style: TextUtils.kanitItalic_24_blue,
                                 ),
                                 Text(
-                                  eventoDto.month,
+                                  eventRequest.month,
                                   style: TextUtils.kanit_16_grey,
                                 ),
                               ],
@@ -192,9 +260,9 @@ class _DetailsPageState extends State<DetailsPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  (eventoDto.precio == 0)
+                                  (eventRequest.precio == 0)
                                       ? 'Free'
-                                      : '${eventoDto.precio} €',
+                                      : '${eventRequest.precio} €',
                                   style: TextUtils.kanitItalic_24_blue,
                                 ),
                                 const Text(
@@ -207,7 +275,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  eventoDto.maximo.toString(),
+                                  eventRequest.maximo.toString(),
                                   style: TextUtils.kanitItalic_24_blue,
                                 ),
                                 const Text(
@@ -223,7 +291,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ToastCard(
-                              nombre: eventoDto.deporte.nombre,
+                              nombre: deportesProvider.deportes.where((element) => element.id == eventRequest.deporte).first.nombre, 
                               active: true,
                             ),
                             GestureDetector(
@@ -233,7 +301,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                   const Icon(Icons.people),
                                   const SizedBox(width: 5.0),
                                   Text(
-                                    eventoDto.participantes.length.toString(),
+                                    eventRequest.participantes.length.toString(),
                                     style: TextUtils.kanit_16_black,
                                   ),
                                   const SizedBox(width: 10.0),
@@ -247,7 +315,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           child: ListView(
                             children: [
                               Text(
-                                eventoDto.descripcion,
+                                eventRequest.descripcion,
                                 style: TextUtils.kanit_16_black,
                               ),
                             ],
@@ -257,23 +325,34 @@ class _DetailsPageState extends State<DetailsPage> {
                           height: 80.0,
                           child: Row(
                             children: [
+                              if (!_containsUser(eventRequest.participantes, userProvider.currentUser!))
+                                waitingChat 
+                                    ? const Center(child: CircularProgressIndicator(color: ColorsUtils.black))
+                                    :IconButton(
+                                      onPressed: message,
+                                      icon: const Icon(Icons.chat),
+                                    ),
+                              if (!_containsUser(eventRequest.participantes, userProvider.currentUser!))
+                                const SizedBox(width: 10.0),
                               Expanded(
-                                child: ButtonInput(
-                                  text: _containsUser(eventoDto.participantes,
+                                child: waiting 
+                                  ? const Center(child: CircularProgressIndicator())
+                                  : ButtonInput(
+                                  text: _containsUser(eventRequest.participantes,
                                           userProvider.currentUser!)
                                       ? 'Inscribirse'
-                                      : 'Chat',
+                                      : 'Salir',
                                   funcion: _containsUser(
-                                          eventoDto.participantes,
+                                      eventRequest.participantes,
                                           userProvider.currentUser!)
                                       ? inscribirse
-                                      : message,
+                                      : salir,
                                 ),
                               ),
                               const SizedBox(width: 10.0),
                               IconButton(
                                 onPressed: tapShare,
-                                icon: const Icon(Icons.share),
+                                icon: Icon(Icons.adaptive.share),
                               ),
                             ],
                           ),

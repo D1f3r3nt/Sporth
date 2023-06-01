@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -17,7 +18,7 @@ class PersonalPage extends StatefulWidget {
 
 class _PersonalPageState extends State<PersonalPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final ImageRepository _imageRepository = ImageRepository();
+  final ImageService _imageRepository = ImageService();
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _apellidosController = TextEditingController();
   final TextEditingController _telefonoController = TextEditingController();
@@ -54,13 +55,21 @@ class _PersonalPageState extends State<PersonalPage> {
 
     continuar() async {
       if (_formKey.currentState!.validate()) {
-        String imagen = '';
+        try {
+          String imagen = '';
 
-        if (_imageFile != null) imagen = await _imageRepository.uploadFile(_imageFile!);
+          if (_imageFile != null)
+            imagen = await _imageRepository.uploadFile(_imageFile!);
 
-        singUPProvider.addPersonal(_nombreController.text.trim(), _apellidosController.text.trim(), imagen, _time, _telefonoController.text.trim());
+          singUPProvider.addPersonal(
+              _nombreController.text.trim(), _apellidosController.text.trim(),
+              imagen, _time, _telefonoController.text.trim());
 
-        Navigator.pushReplacementNamed(context, GUSTOS);
+          Navigator.pushReplacementNamed(context, GUSTOS);
+        } catch (e) {
+          Toast.error(e.toString().replaceFirst('Exception: ', ''));
+          return;
+        }
       }
     }
 

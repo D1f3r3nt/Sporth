@@ -1,51 +1,99 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sporth/models/models.dart';
-import 'package:sporth/providers/dto/logros_provider_impl.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
+import 'package:sporth/repository/event_repository.dart';
 
 class EventosProvider extends ChangeNotifier {
-  final DatabaseEvento _databaseEvento = DatabaseEvento();
-  final LogrosProviderImpl _logrosProviderImpl = LogrosProviderImpl();
+  final EventRepository _eventService = EventRepository();
+  final LogrosService _logrosProviderImpl = LogrosService();
+  final PositionService _positionService = PositionService();
 
-  List<EventoDto> allEvents = [];
-  List<EventoDto> filteredEventos = [];
-  List<EventoDto> eventsByUser = [];
-  EventoDto? eventoChat;
+  EventRequest? eventoChat;
+  List<EventRequest> eventCalendar = [];
 
-  Future<void> refresh() async {
-    allEvents = await _databaseEvento.getAllEventos();
+  Future<List<EventRequest>> getAllEvents(BuildContext context) async {
+    UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
+    List<EventRequest> listEvents = await _eventService.getAllEvents();
+    
+    bool isEnabled = await _positionService.isEnabled();
+    GeograficoDto? geo;
+    if (isEnabled) geo = await _positionService.getPosition(context);
+    
+    listEvents.sort((a, b) {
+      int compare = _seguidosComparision(currentUser, a, b);
+      
+      if (compare != 0) {
+        return compare;
+      }
+      
+      if (geo != null) {
+        compare = _ubicacion(geo, a, b);
+      }
+      
+      return compare;
+    });
+    
+    return listEvents;
+  }
+
+  Future<List<EventRequest>> getEventsByUser(String idUser) async {
+    return await _eventService.getEventsByAnfitrion(idUser);
+  }
+
+  void getEventsByUserParticipation(String idUser) async {
+    var list = await _eventService.getEventsByAnfitrion(idUser);
+    var list2 = await _eventService.getEventsByParticipante(idUser);
+    
+    eventCalendar = [];
+    eventCalendar.addAll(list);
+    eventCalendar.addAll(list2);
     notifyListeners();
   }
 
-  void getAllEventos() async {
-    if (allEvents.isEmpty) {
-      allEvents = await _databaseEvento.getAllEventos();
-    }
-    notifyListeners();
-  }
-  
-  void getEventosByUser(String idUser) async {
-    eventsByUser = await _databaseEvento.getEventsDtoByAnfitrion(idUser);
-    notifyListeners();
+  Future<List<EventRequest>> getFilteredEvents(SearchDto searchDto) async {
+    return await _eventService.getFilterEvents(searchDto);
   }
 
-  void getFilteredEventos(SearchDto searchDto) async {
-    filteredEventos = await _databaseEvento.getFilterEventos(searchDto);
-    notifyListeners();
-  }
-
-  Future<EventoDto> getEvento(String idEvento) async {
-    EventoApi eventoApi = await _databaseEvento.getEvento(idEvento);
-    return await EventoMapper.INSTANCE
-        .eventoApiToEventoDto(idEvento, eventoApi);
+  Future<EventRequest> getEvent(String idEvento) async {
+    return await _eventService.getEvent(idEvento);
   }
 
   Future<void> inscribe(String idEvento, String idUser) async {
-    await _databaseEvento.inscribe(idEvento, idUser);
+    await _eventService.inscribe(idEvento, idUser);
   }
 
-  Future<void> saveEvento(EventoApi evento, UserDto user) async {
-    await _databaseEvento.saveEvento(evento);
+  Future<void> uninscribe(String idEvento, String idUser) async {
+    await _eventService.uninscribe(idEvento, idUser);
+  }
+
+  Future<void> saveEvent(EventRequest evento, UserRequest user) async {
+    await _eventService.saveEvent(evento);
     await _logrosProviderImpl.getEventLogro(user);
   }
+
+  int _seguidosComparision(UserRequest currentUser, EventRequest a, EventRequest b) {
+    bool flagA = _isFollowers(currentUser, a);
+    bool flagB = _isFollowers(currentUser, b);
+
+    if (flagA && !flagB) {
+      return 1;
+    } else if (!flagA && flagB) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+  
+  int _ubicacion(GeograficoDto geo, EventRequest a, EventRequest b) {
+    double distanceA = Geolocator.distanceBetween(geo.lat, geo.lng, a.geo.lat, a.geo.lng);
+    double distanceB = Geolocator.distanceBetween(geo.lat, geo.lng, b.geo.lat, b.geo.lng);
+
+    if (distanceA > distanceB) return 1;
+    if (distanceA < distanceB) return -1;
+    return 0;
+  }
+
+  bool _isFollowers(UserRequest currentUser, EventRequest a) => currentUser.seguidos.contains(a.anfitrion.idUser);
 }

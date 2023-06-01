@@ -37,5 +37,18 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-5475010456455777~8185566373" />
-    </application>
+       <meta-data
+           android:name="firebase_messaging_auto_init_enabled"
+           android:value="false" />
+       <meta-data
+           android:name="firebase_analytics_collection_enabled"
+           android:value="false" />
+       <!-- Para el icono de la notificacion -->
+       <meta-data
+           android:name="com.google.firebase.messaging.default_notification_icon"
+           android:resource="@drawable/ic_stat_logo_transparente" />
+       <!-- Para la pantalla de Google Maps -->
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyCCUp-ccTjSHctnF102V-MZnwL8YCgBAcU"/>
+   </application>
 </manifest>

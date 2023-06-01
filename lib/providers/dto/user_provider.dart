@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 
 import 'package:sporth/models/models.dart';
+import 'package:sporth/repository/repository.dart';
 
 class UserProvider extends ChangeNotifier {
-  UserDto? _currentUser;
+  final UserRepository _userRepository = UserRepository();
+  UserRequest? _currentUser;
 
-  UserDto? get currentUser => _currentUser;
+  UserRequest? get currentUser => _currentUser;
 
-  set currentUser(UserDto? user) {
+  set currentUser(UserRequest? user) {
     _currentUser = user;
+    notifyListeners();
+  }
+  
+  Future<void> update() async {
+    currentUser = await _userRepository.getUser(currentUser!.idUser);
     notifyListeners();
   }
 }

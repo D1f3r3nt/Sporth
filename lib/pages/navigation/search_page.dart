@@ -15,7 +15,6 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _nombreController = TextEditingController();
-  final DatabaseEvento databaseEvento = DatabaseEvento();
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +29,6 @@ class _SearchPageState extends State<SearchPage> {
       if (b.selected) return 1;
       return 0;
     });
-
-    eventosProvider.getFilteredEventos(searchProvider.search);
-
-    final eventos = eventosProvider.filteredEventos;
 
     filter() => showModalBottomSheet(
           context: context,
@@ -102,28 +97,40 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             Expanded(
-              child: (eventos.isEmpty)
-                  ? Image.asset(
-                      'image/no_hay_eventos.png',
-                      height: size.height * 0.4,
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
-                      itemCount: eventos.length,
-                      itemBuilder: (context, index) {
-                        if (index > 0 && index % 2 == 0) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              BannerAdCard(width: size.width * 0.85),
-                              const SizedBox(height: 25),
-                              CardPublicacion(eventoDto: eventos[index]),
-                            ],
-                          );
-                        }
-                        return CardPublicacion(eventoDto: eventos[index]);
-                      },
-                    ),
+              child: FutureBuilder<List<EventRequest>>(
+                future: eventosProvider.getFilteredEvents(searchProvider.search),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator.adaptive());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Image.asset('image/error_server.png',fit: BoxFit.contain,width: size.width * 0.6,));
+                  } else {
+                    List<EventRequest> events = snapshot.data!;
+                    return events.isEmpty
+                        ? Image.asset(
+                          'image/no_hay_eventos.png',
+                          height: size.height * 0.4,
+                        )
+                        : ListView.builder(
+                          padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 10.0),
+                          itemCount: events.length,
+                          itemBuilder: (context, index) {
+                            if (index > 0 && index % 2 == 0) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  BannerAdCard(width: size.width * 0.85),
+                                  const SizedBox(height: 25),
+                                  CardPublicacion(eventRequest: events[index]),
+                                ],
+                              );
+                            }
+                            return CardPublicacion(eventRequest: events[index]);
+                          },
+                        );
+                  }
+                },
+              ),
             )
           ],
         ),

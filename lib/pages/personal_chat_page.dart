@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -11,17 +13,14 @@ class PersonalChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ChatDto currentChat =
-        ModalRoute.of(context)!.settings.arguments as ChatDto;
-    final ChatProvider chatProvider = Provider.of<ChatProvider>(context);
-    final EventosProvider eventosProvider =
-        Provider.of<EventosProvider>(context);
-    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
+    final ChatRequest currentChat = ModalRoute.of(context)!.settings.arguments as ChatRequest;
 
-    chatProvider.getChat(currentChat.idChat!);
-
-    List<MensajeDto> mensajes = chatProvider.mensajes;
-    UserDto? otherUser = currentChat.anfitriones
+    final UserRequest currentUser = Provider.of<UserProvider>(context).currentUser!;
+    
+    final ChatService chatProvider = ChatService();
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
+    
+    UserRequest? otherUser = currentChat.anfitriones
         .where((user) => user.idUser != currentUser.idUser)
         .toList()
         .first;
@@ -31,10 +30,11 @@ class PersonalChatPage extends StatelessWidget {
       Navigator.pushReplacementNamed(context, CHATS);
     }
 
-    enviar() async {
-      chatProvider.sendMessage(
-          currentChat.idChat!, messageController.text, currentUser);
-      messageController.text = '';
+    enviar() {
+      FocusScope.of(context).unfocus();
+      
+      chatProvider.sendMessage(currentChat.idChat!, messageController.text, currentUser);
+      messageController.clear();
     }
 
     return Scaffold(
@@ -59,13 +59,21 @@ class PersonalChatPage extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 20.0, top: 5.0),
                     child: CircleAvatar(
                       backgroundImage: eventosProvider.eventoChat == null
-                          ? NetworkImage(otherUser.urlImagen)
+                          ? null
                           : eventosProvider.eventoChat!.imagen.contains('http')
                               ? NetworkImage(eventosProvider.eventoChat!.imagen)
-                              : AssetImage(
-                                      'image/banners/${eventosProvider.eventoChat!.imagen}')
+                              : AssetImage('image/banners/${eventosProvider.eventoChat!.imagen}')
                                   as ImageProvider,
                       radius: 20.0,
+                      child: eventosProvider.eventoChat == null 
+                            ? ClipOval(
+                              child: FadeInImage.assetNetwork(
+                                placeholder: 'image/user.png',
+                                image: otherUser.urlImagen,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : null,
                     ),
                   )
                 ],
@@ -93,29 +101,45 @@ class PersonalChatPage extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: mensajes.isEmpty
-                            ? Center(
-                                child:
-                                    Image.asset('image/no_tienes_mensajes.png'))
-                            : ListView.builder(
-                                reverse: true,
-                                itemCount: mensajes.length,
-                                itemBuilder: (context, index) {
-                                  MensajeDto mensaje = mensajes[index];
-                                  String? user;
-                                  if (eventosProvider.eventoChat != null &&
-                                      mensaje.editor.idUser !=
-                                          currentUser.idUser) {
-                                    user = mensaje.editor.username;
-                                  }
-                                  return ChatMessage(
-                                    ourMessage: mensaje.editor.idUser ==
-                                        currentUser.idUser,
-                                    message: mensaje.mensaje,
-                                    user: user,
-                                  );
-                                },
-                              ),
+                        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                              stream: chatProvider.getMensajes(currentChat.idChat!),
+                              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return const Center(child: CircularProgressIndicator.adaptive());
+                                } else {
+                                  dynamic data = snapshot.data;
+                                  List<dynamic> mensajes = data.docs.map((e) => MensajeApi.fromJson(e.data())).toList();
+                                  
+                                  
+                                 return mensajes.isEmpty
+                                      ? Center(
+                                            child:
+                                            Image.asset('image/no_tienes_mensajes.png'),
+                                        )
+                                      : ListView.builder(
+                                        reverse: true,
+                                        itemCount: mensajes.length,
+                                        itemBuilder: (context, index) {
+                                          MensajeApi mensaje = mensajes[index];
+                                          String? user;
+                                          /*
+                                          if (eventosProvider.eventoChat != null &&
+                                              mensaje.editor != currentUser.idUser) {
+                                            user = mensaje.editor.username;
+                                          }
+                                          */
+                                           
+                                          return ChatMessage(
+                                            ourMessage: mensaje.editor == currentUser.idUser,
+                                            message: mensaje.mensaje,
+                                            user: user,
+                                          );
+                                        },
+                                      );
+                                }
+                              },
+                        ),
                       ),
                       SizedBox(
                         height: 80.0,

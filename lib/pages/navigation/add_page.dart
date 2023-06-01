@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
-import 'package:sporth/utils/decimal_formatter.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -19,8 +19,8 @@ class AddPage extends StatefulWidget {
 class _AddPageState extends State<AddPage> {
   final ImagePicker _pickerImage = ImagePicker();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GoogleDetailsProvider _googleDetailsProvider = GoogleDetailsProvider();
-  final ImageRepository _imageRepository = ImageRepository();
+  final GoogleDetailsService _googleDetailsProvider = GoogleDetailsService();
+  final ImageService _imageRepository = ImageService();
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _ubicacionesController = TextEditingController();
   final TextEditingController _maxPersonasController = TextEditingController();
@@ -38,6 +38,8 @@ class _AddPageState extends State<AddPage> {
   GeograficoDto? _miGeo;
   bool _precio = false;
   bool _privado = false;
+  bool _waitingSubida = false;
+  bool _waitingLocation = false;
 
   Future<void> _pickImageFromGallery() async {
     final pickedfile = await _pickerImage.pickImage(source: ImageSource.gallery);
@@ -73,21 +75,33 @@ class _AddPageState extends State<AddPage> {
         element.selected = false;
       }
       listDeportes[index].selected = !listDeportes[index].selected;
+      
+      _maxPersonasController.text = listDeportes[index].players.toString();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(context);
-    final UserDto currentUser = Provider.of<UserProvider>(context).currentUser!;
-    final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
-    final PositionProvider positionProvider = PositionProvider();
+    final Size size = MediaQuery
+        .of(context)
+        .size;
+    final DeportesProvider deportesProvider = Provider.of<DeportesProvider>(
+        context);
+    final UserRequest currentUser = Provider
+        .of<UserProvider>(context)
+        .currentUser!;
+    final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<
+        GoogleAutocompleteProvider>(context);
+    final PositionService positionProvider = PositionService();
     final List<DeportesDto> listDeportes = deportesProvider.deportesAdd;
-    final EventosProvider eventosProvider = Provider.of<EventosProvider>(context);
+    final EventosProvider eventosProvider = Provider.of<EventosProvider>(
+        context);
+    final AnalyticsUtils analyticsUtils = AnalyticsUtils();
 
     _dateController.text = DateFormat('dd/MM/yyyy').format(_date);
-    _timeController.text = '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
+    _timeController.text =
+    '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(
+        2, '0')}';
 
     subirEvento() async {
       if (_formKey.currentState!.validate()) {
@@ -95,43 +109,62 @@ class _AddPageState extends State<AddPage> {
         if (list.isEmpty) {
           Snackbar.errorSnackbar(context, 'Ponga un deporte');
         } else {
-          String imagen = "";
-          if (_imageFile != null) {
-            imagen = await _imageRepository.uploadFile(_imageFile!);
-          } else {
-            imagen = list.first.imagen;
+          setState(() {
+            _waitingSubida = true;
+          });
+          try {
+            String imagen = "";
+            if (_imageFile != null) {
+              imagen = await _imageRepository.uploadFile(_imageFile!);
+            } else {
+              imagen = list.first.imagen;
+            }
+
+            final now = DateTime.now();
+
+            EventRequest evento = EventRequest(
+              name: _nombreController.text,
+              hora: DateTime(
+                  now.year, now.month, now.day, _time.hour, _time.minute),
+              dia: _date,
+              ubicacion: _ubicacionesController.text,
+              precio: double.parse(_precioController.text),
+              maximo: int.parse(_maxPersonasController.text),
+              deporte: list.first.id,
+              imagen: imagen,
+              descripcion: _descripcionController.text,
+              anfitrion: UserRequest.only(
+                  idUser: currentUser.idUser, nacimiento: DateTime.now()),
+              participantes: [],
+              geo: _geo!,
+              privado: _privadoController.text.isEmpty
+                  ? null
+                  : _privadoController.text,
+            );
+
+            await eventosProvider.saveEvent(evento, currentUser);
+
+            analyticsUtils.registerEvent('Event_create', {
+              "deporte": list.first.nombre,
+              "privado": _privadoController.text,
+              "precio": _precioController.text,
+            });
+
+            Navigator.pushReplacementNamed(context, HOME);
+          } catch (e) {
+            Toast.error(e.toString().replaceFirst('Exception: ', ''));
+            setState(() {
+              _waitingSubida = false;
+            });
+            return;
           }
-
-          final now = DateTime.now();
-
-          EventoApi evento = EventoApi(
-            name: _nombreController.text,
-            hora: DateTime(now.year, now.month, now.day, _time.hour, _time.minute),
-            dia: _date,
-            ubicacion: _ubicacionesController.text,
-            precio: double.parse(_precioController.text),
-            maximo: int.parse(_maxPersonasController.text),
-            deporte: list.first.id,
-            imagen: imagen,
-            descripcion: _descripcionController.text,
-            anfitrion: currentUser.idUser,
-            participantes: [],
-            geo: _geo!,
-            privado: _privadoController.text.isEmpty
-                ? null
-                : _privadoController.text,
-          );
-
-          await eventosProvider.saveEvento(evento, currentUser);
-
-          // Para traer los eventos del usuario
-          eventosProvider.getEventosByUser(currentUser.idUser);
-          
-          Navigator.pushReplacementNamed(context, HOME);
         }
+        setState(() {
+          _waitingSubida = false;
+        });
       }
     }
-    
+
     scrollTo(double position) {
       _scrollController.animateTo(
         position,
@@ -139,16 +172,14 @@ class _AddPageState extends State<AddPage> {
         curve: Curves.easeOut,
       );
     }
-    
+
 
     atras() {
-      // Para traer los eventos del usuario
-      eventosProvider.getEventosByUser(currentUser.idUser);
-
       Navigator.pushReplacementNamed(context, HOME);
     }
 
-    addImage() => showModalBottomSheet(
+    addImage() =>
+        showModalBottomSheet(
           context: context,
           useSafeArea: true,
           isScrollControlled: true,
@@ -171,11 +202,11 @@ class _AddPageState extends State<AddPage> {
     tapDescription() {
       scrollTo(550);
     }
-    
+
     tapPrecio() {
       scrollTo(650);
     }
-    
+
     tapPassword() {
       scrollTo(800);
     }
@@ -192,10 +223,22 @@ class _AddPageState extends State<AddPage> {
     }
 
     miUbicacion() async {
+      setState(() {
+        _waitingLocation = true;
+      });
+      
       _geo = _miGeo ?? await positionProvider.getPosition(context);
-      if (_geo == null) return;
-      _ubicacionesController.text =
-          await _googleDetailsProvider.getNameByGeolocation(_geo!);
+      if (_geo == null) {
+        setState(() {
+          _waitingLocation = false;
+        });
+        return;
+      }
+      
+      _ubicacionesController.text = await _googleDetailsProvider.getNameByGeolocation(_geo!);
+      setState(() {
+        _waitingLocation = false;
+      });
     }
 
     String subtitle(List<Term> terms) {
@@ -275,7 +318,7 @@ class _AddPageState extends State<AddPage> {
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(
-                              top: 10.0,
+                              top: 15.0,
                               left: 30.0,
                               right: 20.0,
                             ),
@@ -286,7 +329,7 @@ class _AddPageState extends State<AddPage> {
                                   placeholder: 'Nombre',
                                   controller: _nombreController,
                                   validator: (value) {
-                                    if (value == null || value.isEmpty)
+                                    if (value == null || value.trim().isEmpty)
                                       return 'Ponga un valor';
                                     return null;
                                   },
@@ -388,7 +431,9 @@ class _AddPageState extends State<AddPage> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8.0, horizontal: 20.0),
-                                  child: ButtonInput(
+                                  child: _waitingLocation 
+                                      ? const Center(child: CircularProgressIndicator(color: ColorsUtils.lightblue,))
+                                      : ButtonInput(
                                     text: 'Mi ubicacion',
                                     color: ColorsUtils.lightblue,
                                     style: TextUtils.kanit_18_whtie,
@@ -449,7 +494,7 @@ class _AddPageState extends State<AddPage> {
                                       'Precio',
                                       style: TextUtils.kanit_18_black,
                                     ),
-                                    Switch(
+                                    Switch.adaptive(
                                       value: _precio,
                                       onChanged: (value) => setState(() {
                                         _precio = value;
@@ -484,7 +529,7 @@ class _AddPageState extends State<AddPage> {
                                       'Privado',
                                       style: TextUtils.kanit_18_black,
                                     ),
-                                    Switch(
+                                    Switch.adaptive(
                                       value: _privado,
                                       onChanged: (value) => setState(() {
                                         _privado = value;
@@ -516,7 +561,9 @@ class _AddPageState extends State<AddPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 30.0, bottom: 70.0),
-                          child: ButtonInput(
+                          child: _waitingSubida
+                          ? const Center(child: CircularProgressIndicator(color: ColorsUtils.black,))
+                          : ButtonInput(
                             text: 'SUBIR',
                             funcion: subirEvento,
                           ),

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import 'package:sporth/models/models.dart';
 import 'package:sporth/providers/providers.dart';
+import 'package:sporth/service/service.dart';
 import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
@@ -14,7 +15,7 @@ class BottomDesplegate extends StatefulWidget {
 }
 
 class _BottomDesplegateState extends State<BottomDesplegate> {
-  final GoogleDetailsProvider _googleDetailsProvider = GoogleDetailsProvider();
+  final GoogleDetailsService _googleDetailsProvider = GoogleDetailsService();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _ubicacionController = TextEditingController();
@@ -23,6 +24,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
   TimeOfDay? _time;
   GeograficoDto? _geo;
   GeograficoDto? _miGeo;
+  bool _waitingLocation = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -60,7 +62,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
     final SearchProvider searchProvider = Provider.of<SearchProvider>(context);
     final GoogleAutocompleteProvider googleAutocompleteProvider = Provider.of<GoogleAutocompleteProvider>(context);
     final Size size = MediaQuery.of(context).size;
-    final PositionProvider positionProvider = PositionProvider();
+    final PositionService positionProvider = PositionService();
 
     _dateController.text = searchProvider.search.dia == null ? '' : searchProvider.search.dia!;
     _timeController.text = searchProvider.search.hora == null ? '' : searchProvider.search.hora!;
@@ -70,15 +72,25 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
     }
 
     miUbicacion() async {
+      setState(() {
+        _waitingLocation = true;
+      });
+      
       _geo = _miGeo ?? await positionProvider.getPosition(context);
       if (_geo == null) {
         Snackbar.errorSnackbar(context, 'Ha fallado');
+        setState(() {
+          _waitingLocation = false;
+        });
         return;
       }
       searchProvider.ubicacion = _geo!;
       _ubicacionController.text = await _googleDetailsProvider.getNameByGeolocation(_geo!);
       searchProvider.ubiName = _ubicacionController.text;
       googleAutocompleteProvider.cleanData();
+      setState(() {
+        _waitingLocation = false;
+      });
     }
 
     tapOnAutocomplete(GooglePlaceAutocomplete lugar) async {
@@ -123,7 +135,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                     children: [
                       Expanded(
                         flex: 4,
-                        child: Slider(
+                        child: Slider.adaptive(
                           value: double.parse(searchProvider.search.maxPersonas.toString()),
                           activeColor: ColorsUtils.creme,
                           inactiveColor: ColorsUtils.grey,
@@ -152,7 +164,7 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                     children: [
                       Expanded(
                         flex: 3,
-                        child: Slider(
+                        child: Slider.adaptive(
                           value: double.parse(searchProvider.search.precio.toString()),
                           activeColor: ColorsUtils.creme,
                           inactiveColor: ColorsUtils.grey,
@@ -209,7 +221,9 @@ class _BottomDesplegateState extends State<BottomDesplegate> {
                   const SizedBox(height: 5.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
-                    child: ButtonInput(
+                    child: _waitingLocation
+                        ? const Center(child: CircularProgressIndicator(color: ColorsUtils.lightblue,))
+                        : ButtonInput(
                       text: 'Mi ubicacion',
                       color: ColorsUtils.lightblue,
                       style: TextUtils.kanit_18_whtie,

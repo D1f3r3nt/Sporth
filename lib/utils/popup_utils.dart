@@ -4,7 +4,7 @@ import 'package:sporth/utils/utils.dart';
 import 'package:sporth/widgets/widgets.dart';
 
 class PopupUtils {
-  static dialogScrollUsers(BuildContext context, List<UserDto> users) {
+  static dialogScrollUsers(BuildContext context, List<UserRequest> users) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -18,7 +18,7 @@ class PopupUtils {
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: UserTile(userDto: users[index]),
+                  child: UserTile(userRequest: users[index]),
                 );
               },
             ),
@@ -58,6 +58,35 @@ class PopupUtils {
             logro.description,
             style: TextUtils.kanit_16_grey,
           ),
+        );
+      },
+    );
+  }
+  
+  static Future<bool?> dialogTextInput(BuildContext context, String correctText) {
+    TextEditingController controller = TextEditingController();
+    
+    return showDialog<bool>(
+      context: context, 
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+            'Este evento es privado',
+            style: TextUtils.kanit_18_black,
+          ),
+          content: TextField(
+            autofocus: true,
+            decoration: const InputDecoration(hintText: 'Contraseña'),
+            controller: controller,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, controller.text.trim() == correctText);
+              }, 
+              child: const Text('Inscribirse'),
+            )
+          ],
         );
       },
     );

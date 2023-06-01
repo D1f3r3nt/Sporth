@@ -27,6 +27,12 @@ dependencies:
   google_mobile_ads: 3.0.0
   flutter_native_splash: ^2.2.19
   shared_preferences: 2.1.1
+  firebase_analytics: ^10.4.0
+  url_launcher: ^6.1.11
+  introduction_screen: ^3.1.8
+  fluttertoast: ^8.2.2
+  firebase_messaging: ^14.6.2
+  google_maps_flutter: ^2.2.8
   
 flutter_native_splash:
   android: true
@@ -34,7 +40,7 @@ flutter_native_splash:
   web: false
   
   background_image: "image/background_splash.png"
-  image: "image/logo_transparente.png"
+  image: "image/logo_transparente_blanco.png"
 
 dev_dependencies:
   build_runner:
@@ -51,6 +57,7 @@ flutter:
     - image/icons/
     - image/banners/
     - image/logros/
+    - image/tutorial/
     - data/
 
   fonts:

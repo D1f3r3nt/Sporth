@@ -2,86 +2,103 @@
   {
     "id": 1,
     "imagen": "badminton.png",
-    "nombre": "Badminton"
+    "nombre": "Badminton", 
+    "players":  2
   },
   {
     "id": 2,
     "imagen": "baloncesto.png",
-    "nombre": "Baloncesto"
+    "nombre": "Baloncesto",
+    "players":  10
   },
   {
     "id": 3,
     "imagen": "bolos.png",
-    "nombre": "Bolos"
+    "nombre": "Bolos",
+    "players":  2
   },
   {
     "id": 4,
     "imagen": "ciclismo.png",
-    "nombre": "Ciclismo"
+    "nombre": "Ciclismo",
+    "players":  2
   },
   {
     "id": 5,
     "imagen": "crossfit.png",
-    "nombre": "Crossfit"
+    "nombre": "Crossfit",
+    "players":  2
   },
   {
     "id": 6,
     "imagen": "dardos.png",
-    "nombre": "Dardos"
+    "nombre": "Dardos",
+    "players":  2
   },
   {
     "id": 7,
     "imagen": "futbol.png",
-    "nombre": "Futbol"
+    "nombre": "Futbol",
+    "players":  22
   },
   {
     "id": 8,
     "imagen": "futbolin.png",
-    "nombre": "Futbolin"
+    "nombre": "Futbolin",
+    "players":  4
   },
   {
     "id": 9,
     "imagen": "juegos_de_rol.png",
-    "nombre": "Rol"
+    "nombre": "Rol",
+    "players":  6
   },
   {
     "id": 10,
     "imagen": "padel.png",
-    "nombre": "Padel"
+    "nombre": "Padel",
+    "players":  4
   },
   {
     "id": 11,
     "imagen": "ping_pong.png",
-    "nombre": "Ping Pong"
+    "nombre": "Ping Pong",
+    "players":  2
   },
   {
     "id": 12,
     "imagen": "runner.png",
-    "nombre": "Running"
+    "nombre": "Running",
+    "players":  2
   },
   {
     "id": 13,
     "imagen": "senderismo.png",
-    "nombre": "Senderismo"
+    "nombre": "Senderismo",
+    "players":  2
   },
   {
     "id": 14,
     "imagen": "skate.png",
-    "nombre": "Skate"
+    "nombre": "Skate",
+    "players":  2
   },
   {
     "id": 15,
     "imagen": "tenis.png",
-    "nombre": "Tenis"
+    "nombre": "Tenis",
+    "players":  2
   },
   {
     "id": 16,
     "imagen": "volley.png",
-    "nombre": "Volley"
+    "nombre": "Volley",
+    "players":  12
   },
   {
     "id": 17,
     "imagen": "yoga.png",
-    "nombre": "Yoga"
+    "nombre": "Yoga",
+    "players":  2
   }
 ]
