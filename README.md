@@ -1,16 +1,15 @@
-# sporth
+# Sporth
 
-A new Flutter project.
+Sporth is an application that was deployed on Google Play, the main goal of Sporth 
+was to create a social network dedicated to 
+Sporth's main objective was to create a social network dedicated to team sports 
+team sport lovers, to help them to find clubs or groups to do the sport. 
+or groups to perform such sport.
 
-## Getting Started
+This application is developed in Flutter, as we were looking for a fast way to develop an application for both iOS and iOS.
+to develop an application for both iOS and Android.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Sporth has an integrated backend in Firebase, where Firebase Analytics products (statistics) are consumed. 
+Firebase Analytics products (statistics), Firebase Authentication 
+(authentication with Google account), Firebase Database (data storage),
+Firebase Storage (image storage), Firebase Messaging (notifications).
